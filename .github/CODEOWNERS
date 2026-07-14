@@ -1,0 +1,7 @@
+# Changes require review from a WIGTN maintainer.
+* @HyeonsangKim
+
+# Security-sensitive distribution and automation surfaces.
+/.github/ @HyeonsangKim
+/.agents/plugins/ @HyeonsangKim
+/plugins/*/.codex-plugin/ @HyeonsangKim
