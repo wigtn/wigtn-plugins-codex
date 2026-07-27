@@ -4,7 +4,7 @@
 
 **Codex의 자율성은 그대로. WIGTN의 제품 개발 노하우는 필요한 순간에만.**
 
-![Version](https://img.shields.io/badge/version-0.1.0-6C5CE7?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.2.0-6C5CE7?style=for-the-badge)
 ![Skills](https://img.shields.io/badge/skills-8-00B894?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/platform-Codex-111827?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-Apache--2.0-0984E3?style=for-the-badge)
@@ -20,7 +20,7 @@ Codex는 코드 탐색, 설계 판단, 구현과 기본 리뷰를 이미 잘합�
 ```text
 일반 코딩 요청     → Codex가 평소처럼 자유롭게 처리
 제품 워크플로 요청 → 가장 작은 WIGTN 스킬이 자동 선택
-전체 구현 요청     → $verified-delivery를 명시했을 때만 실행
+전체 구현 요청     → qualified $verified-delivery를 명시했을 때만 실행
 ```
 
 핵심 원칙은 간단합니다.
@@ -100,7 +100,40 @@ release-readiness ──── 안전한 커밋·푸시·PR
 
 ### 자동 호출과 명시 호출
 
-대부분의 스킬은 요청 의도가 설명과 일치할 때 Codex가 자동으로 선택합니다. `verified-delivery`만 예외입니다. 일반적인 코딩 요청이 의도치 않게 전체 전달 파이프라인으로 커지는 것을 막기 위해 `$verified-delivery`를 명시해야 합니다.
+대부분의 스킬은 요청 의도가 설명과 일치할 때 Codex가 자동으로 선택합니다. `verified-delivery`만 예외입니다. 일반적인 코딩 요청이 의도치 않게 전체 전달 파이프라인으로 커지는 것을 막기 위해 `$wigtn-plugins-with-codex:verified-delivery`를 명시해야 합니다.
+
+---
+
+## v0.2에서 고도화된 내용
+
+v0.2는 모델을 장문 절차로 감싸는 대신, 결과의 형태와 권한 경계를 더
+정확히 만드는 방향으로 개편했습니다.
+
+| 영역 | 고도화 |
+|---|---|
+| `product-spec` | 생성·검토·deep dive 계약 분리, 조건부 섹션, 안정적인 요구사항 ID, PRD validator |
+| `verified-delivery` | 사전 위험 invariant, failure-focused test, 최종 diff 재검토, 요구사항별 실행 증거 |
+| `acceptance-verifier` | 요구사항마다 code evidence와 executed-test evidence를 분리한 read-only matrix |
+| `release-readiness` | review·prepare·commit·push·PR 권한을 사용자 문장 그대로 분리 |
+| 자동 호출 | 일반 구현·버그 수정·리팩터링은 기본 Codex에 맡기고 heavy workflow 오호출 방지 |
+| 설치 UX | 모든 starter prompt를 설치된 플러그인의 qualified skill name으로 고정 |
+| 검증 | 공식 manifest/skill validator, 저장소 계약, 자연어 trigger 30건을 함께 실행 |
+
+### 검증된 주장과 아직 검증되지 않은 주장
+
+2026년 GPT‑5.5/5.6 Sol 평가가 지지하는 범위는 좁습니다.
+
+| 주장 | 판정 |
+|---|---|
+| 테스트 fixture에서 Product Spec 계약 충족률을 높였다 | 지지됨 |
+| 모호한 완료 요청에서 무단 Git mutation을 막았다 | 지지됨 |
+| 일반 코딩을 token-efficient하게 만든다 | 현재 fixture에서는 반증됨 |
+| `verified-delivery`가 deterministic correctness를 높인다 | 아직 입증되지 않음 |
+| 모든 실제 저장소에 일반화된다 | 아직 입증되지 않음 |
+
+따라서 `verified-delivery`는 “코드를 더 잘 짜는 모드”가 아니라, 중요한
+작업에서 requirement→code→executed check 증거를 남기는 explicit beta로
+제공합니다.
 
 ---
 
@@ -110,7 +143,7 @@ release-readiness ──── 안전한 커밋·푸시·PR
 
 | Claude Code 플러그인 | Codex 플러그인 |
 |---|---|
-| 13개 역할 에이전트와 5개 슬래시 명령 | 하나의 책임을 가진 8개 스킬 |
+| 14개 역할 에이전트와 5개 슬래시 명령 | 하나의 책임을 가진 8개 스킬 |
 | 고정된 병렬 팀 오케스트레이션 | Codex의 기본 탐색·구현 판단 활용 |
 | `/prd`, `/implement`, `/auto-commit` | 자연어 자동 선택과 `$스킬명` 명시 호출 |
 | 숫자 기반 품질 게이트 | 코드·테스트·실행 결과 기반 증거 |
@@ -164,6 +197,10 @@ Claude 전용 도구 이름, 고정 서브에이전트 fan-out, 자동 모델 �
 트리거 fixture는 결정론적인 계약 검사입니다. 실제 자연어 자동 선택은 설치 후 새 Codex 작업에서 별도로 smoke test 해야 합니다.
 
 Pull Request와 `main` 푸시에서는 저장소 계약, 사용 가능한 공식 Codex validator, 트리거 fixture 30건을 검사합니다. `main`에서 플러그인 매니페스트 버전을 올리면 동일 버전의 GitHub tag와 Release가 생성됩니다.
+
+v0.2의 구조·trigger 검증은 완료됐습니다. 실제 저장소 confirmatory study와
+독립 인간 blind review가 완료되기 전까지는 전체 품질 향상 문구를 사용하지
+않습니다.
 
 ---
 

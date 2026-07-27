@@ -21,9 +21,17 @@ if test -f "$plugin_validator" && test -f "$skill_validator"; then
 else
   echo "Codex system validators unavailable; repository contract validation used."
 fi
-grep -q 'allow_implicit_invocation: false' "$plugin/skills/verified-delivery/agents/openai.yaml"
+grep -q 'allow_implicit_invocation: true' "$plugin/skills/verified-delivery/agents/openai.yaml"
+grep -q 'never auto-invoke for ordinary coding' "$plugin/skills/verified-delivery/SKILL.md"
+grep -q '\$wigtn-plugins-with-codex:verified-delivery' "$plugin/skills/verified-delivery/agents/openai.yaml"
 grep -q '커밋해줘' "$plugin/skills/release-readiness/SKILL.md"
 grep -q 'PRD 디깅해줘' "$plugin/skills/product-spec/SKILL.md"
+for config in "$plugin"/skills/*/agents/openai.yaml; do
+  grep -q '\$wigtn-plugins-with-codex:' "$config" || {
+    echo "Unqualified installed-plugin skill prompt: $config"
+    exit 1
+  }
+done
 
 "$repo_root/scripts/run-evals.sh"
 echo "Full validation: PASS"

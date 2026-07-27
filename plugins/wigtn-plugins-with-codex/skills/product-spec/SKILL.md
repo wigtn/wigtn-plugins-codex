@@ -1,38 +1,48 @@
 ---
 name: product-spec
-description: Create, review, or deeply analyze implementation-ready PRDs. Use for “PRD 뽑아줘”, “PRD 검토해줘”, “PRD 디깅해줘”, product requirements, specs, acceptance criteria, feasibility, security, edge-case, or contradiction review. Do not use for ordinary implementation, minor fixes, or general code review.
+description: Create, review, or deeply analyze an actual implementation-ready PRD or product-spec artifact. Use for “PRD 뽑아줘”, “PRD 검토해줘”, “PRD 디깅해줘”, drafting requirements or acceptance criteria, and feasibility, security, edge-case, or contradiction review of a provided spec. Do not use for conceptual explanations of product terms, brainstorming without a requested requirements artifact, ordinary implementation, minor fixes, or general code review.
 ---
 
 # Product Spec
 
-Turn product intent into a traceable implementation contract without making PRD work a gate for ordinary coding.
+Turn product intent into a traceable implementation contract. Do not make PRD
+work a gate for ordinary coding.
 
-## Choose the mode
+## Mode
 
-- **Create**: the user asks for a new PRD, product brief, requirements, or acceptance criteria.
-- **Review**: the user asks to review an existing PRD. Find omissions, contradictions, ambiguity, unverifiable acceptance criteria, and avoidable scope.
-- **Deep dive**: the user asks to “디깅”, challenge, stress-test, or deeply analyze a PRD. Inspect the repository when available and test feasibility, security, failure modes, migrations, operations, data boundaries, and opposing hypotheses.
+- **Create:** read [create contract](references/create-contract.md). Include only
+  applicable sections. Mark each conditional contract `Required` or `N/A` with
+  evidence.
+- **Review:** read [review contract](references/review-contract.md). Emit its
+  contract-audit table, then at most five material findings. Do not rewrite
+  unless asked.
+- **Deep dive:** read the review contract and
+  [deep-dive guide](references/deep-dive.md). Inspect repository evidence when
+  available and label facts, inferences, and open questions.
 
-Do not turn a review or deep dive into a rewrite unless the user asks. Report findings first, ordered by impact, with exact section or requirement IDs.
+## Rules
 
-## Workflow
-
-1. Find applicable repository instructions, existing product docs, adjacent code, routes, schemas, and tests.
-2. Establish the target user, problem, desired outcome, boundaries, and evidence already available.
-3. Ask only about choices that materially change the result and cannot be safely inferred. Record reversible assumptions and continue.
-4. Use stable requirement IDs. Keep solution detail proportional to evidence; do not invent enterprise scale, SLAs, or architecture.
-5. Make acceptance criteria observable and testable. Connect UI requirements to roles, routes, states, and permissions.
-6. In create mode, run the review checklist before saving. In deep-dive mode, use the deep-dive lenses and distinguish facts, inferences, and open questions.
-7. Save a new PRD under the project’s existing docs convention, or default to `docs/product/<feature>-prd.md`. Preserve the source PRD unless the user asked to edit it.
-
-Read [PRD template](references/prd-template.md) when creating. Read [review checklist](references/review-checklist.md) for every mode. Read [deep-dive guide](references/deep-dive.md) only for deep-dive requests.
+- Use stable requirement IDs and observable acceptance criteria.
+- Treat server authorization, ownership, and tenancy as product behavior where
+  applicable. UI hiding is not authorization.
+- Do not invent scale, SLA numbers, architecture, analytics, or compliance
+  requirements without evidence.
+- Keep the contract proportional to the brief. Avoid repeated requirements,
+  speculative policy, and exhaustive low-impact edge-case catalogs.
+- Ask only about decisions that materially change implementation or release.
+  Record reversible assumptions and continue.
+- Preserve source documents unless the user asks to edit them.
+- In reviews, `Present` means the required artifact exists, not that it is
+  flawless. Report defects in that artifact as findings; do not relabel it
+  `Missing`.
+- Omit low/nit findings. Group related medium findings and return no more than
+  five material findings, ordered by impact with exact section or requirement
+  IDs.
+- After saving a PRD, run `python3 scripts/validate-prd.py <path>` from this
+  skill directory. Report failures; never weaken the contract to make it pass.
 
 ## Completion
 
-Return the file path, important assumptions, and unresolved decisions. After creating a PRD, end with concise optional next steps instead of automatically running them:
-
-- **권장:** “이 PRD 디깅해줘” — 저장소 적합성, 누락, 모순, 보안과 엣지케이스 심층 검토
-- **UI가 있으면:** “이 PRD로 화면정의서 만들어줘”
-- **구현 준비가 됐으면:** explicitly invoke `$verified-delivery` or ask for ordinary implementation
-
-Do not claim validation beyond the evidence actually inspected.
+Return the artifact or findings, important assumptions, unresolved decisions,
+and validator result when run. Do not claim validation beyond inspected
+evidence.

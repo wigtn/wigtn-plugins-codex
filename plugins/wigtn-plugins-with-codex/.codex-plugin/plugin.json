@@ -1,18 +1,22 @@
 {
   "name": "wigtn-plugins-with-codex",
-  "version": "0.1.0",
-  "description": "Thin, evidence-first product workflows for Codex: PRDs, screen specs, acceptance verification, safe release actions, diagrams, and WIGTN presentations.",
+  "version": "0.2.0",
+  "description": "Thin, evidence-first product workflows for Codex: PRD contracts, screen specs, acceptance evidence, explicit verified delivery, safe release actions, diagrams, and WIGTN presentations.",
   "author": {
     "name": "WIGTN"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "WIGTN Plugins for Codex",
-    "shortDescription": "Product specs, verification, and delivery workflows.",
-    "longDescription": "Adds focused WIGTN product-development skills while leaving ordinary Codex coding unconstrained.",
+    "shortDescription": "Product contracts, verification, and safe delivery.",
+    "longDescription": "Adds focused WIGTN contracts and authority boundaries while leaving ordinary Codex coding unconstrained. Verified delivery is explicit-only.",
     "developerName": "WIGTN",
     "category": "Productivity",
     "capabilities": [],
-    "defaultPrompt": "Help me choose the smallest WIGTN workflow that fits this task."
+    "defaultPrompt": [
+      "Turn this idea into an implementation-ready PRD.",
+      "Verify this implementation against its requirements.",
+      "Review these changes and prepare the requested Git action."
+    ]
   }
 }

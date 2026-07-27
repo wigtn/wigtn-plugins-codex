@@ -135,11 +135,17 @@ def main() -> int:
             if not description:
                 errors.append(f"{name}: description is required")
             yaml_text = agent_yaml.read_text(encoding="utf-8")
-            if f"Use ${name}" not in yaml_text:
-                errors.append(f"{name}: default_prompt must explicitly mention ${name}")
-            expected_policy = "false" if name == "verified-delivery" else "true"
-            if f"allow_implicit_invocation: {expected_policy}" not in yaml_text:
-                errors.append(f"{name}: invocation policy must be {expected_policy}")
+            qualified_name = f"$wigtn-plugins-with-codex:{name}"
+            if f"Use {qualified_name}" not in yaml_text:
+                errors.append(
+                    f"{name}: default_prompt must explicitly mention {qualified_name}"
+                )
+            if "allow_implicit_invocation: true" not in yaml_text:
+                errors.append(f"{name}: skill must remain discoverable in the catalog")
+            if name == "verified-delivery" and "never auto-invoke for ordinary coding" not in description:
+                errors.append(
+                    "verified-delivery: description must preserve the explicit-only boundary"
+                )
         if description_total > 4000:
             errors.append(f"skill description budget exceeded: {description_total}/4000")
 
