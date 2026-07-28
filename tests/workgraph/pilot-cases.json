@@ -1,0 +1,157 @@
+[
+  {
+    "id": "auth-lockout",
+    "title": "Account lockout lifecycle",
+    "requirements": [
+      ["FR-01", "Track failed sign-in attempts per account."],
+      ["FR-02", "Lock the account after the configured threshold."],
+      ["FR-03", "Allow an administrator to unlock the account."]
+    ],
+    "paths": ["src/auth/store.py", "src/auth/service.py", "tests/test_lockout.py"],
+    "verification": "python3 -m unittest tests.test_lockout",
+    "dependency_required": true,
+    "high_risk_required": true
+  },
+  {
+    "id": "tenant-delete",
+    "title": "Tenant deletion authorization",
+    "requirements": [
+      ["FR-01", "Only tenant owners may request tenant deletion."],
+      ["FR-02", "Deletion must be recorded before asynchronous cleanup starts."],
+      ["FR-03", "Cleanup must never access another tenant's records."]
+    ],
+    "paths": ["src/tenants/delete.ts", "src/jobs/cleanup.ts", "tests/tenant-delete.test.ts"],
+    "verification": "npm test -- tenant-delete",
+    "dependency_required": true,
+    "high_risk_required": true
+  },
+  {
+    "id": "api-idempotency",
+    "title": "Payment request idempotency",
+    "requirements": [
+      ["FR-01", "Accept an idempotency key for payment creation."],
+      ["FR-02", "Return the original result for a repeated key and payload."],
+      ["FR-03", "Reject a repeated key with a different payload."]
+    ],
+    "paths": ["src/payments/api.go", "src/payments/store.go", "src/payments/api_test.go"],
+    "verification": "go test ./src/payments/...",
+    "dependency_required": true,
+    "high_risk_required": true
+  },
+  {
+    "id": "upload-states",
+    "title": "Upload screen states",
+    "requirements": [
+      ["FR-01", "Show upload progress without blocking navigation."],
+      ["FR-02", "Allow a failed upload to be retried."],
+      ["FR-03", "Show a completed file in the list exactly once."]
+    ],
+    "paths": ["src/screens/Upload.tsx", "src/hooks/useUpload.ts", "src/screens/Upload.test.tsx"],
+    "verification": "npm test -- Upload",
+    "dependency_required": false,
+    "high_risk_required": false
+  },
+  {
+    "id": "schema-migration",
+    "title": "Backward-compatible schema migration",
+    "requirements": [
+      ["FR-01", "Add the preference column without locking reads."],
+      ["FR-02", "Backfill existing rows before making the column required."],
+      ["FR-03", "Provide a tested rollback for each migration phase."]
+    ],
+    "paths": ["migrations/20260728_preference.sql", "scripts/backfill_preference.py", "tests/test_migration.py"],
+    "verification": "python3 -m unittest tests.test_migration",
+    "dependency_required": true,
+    "high_risk_required": true
+  },
+  {
+    "id": "webhook-retry",
+    "title": "Webhook retry state machine",
+    "requirements": [
+      ["FR-01", "Persist every delivery attempt."],
+      ["FR-02", "Retry transient failures with a bounded schedule."],
+      ["FR-03", "Never retry a terminal client rejection."]
+    ],
+    "paths": ["src/webhooks/delivery.py", "src/webhooks/worker.py", "tests/test_webhook_retry.py"],
+    "verification": "pytest tests/test_webhook_retry.py",
+    "dependency_required": true,
+    "high_risk_required": false
+  },
+  {
+    "id": "cache-invalidation",
+    "title": "Cache invalidation after writes",
+    "requirements": [
+      ["FR-01", "Invalidate the item cache after a successful write."],
+      ["FR-02", "Do not invalidate when the write transaction rolls back."]
+    ],
+    "paths": ["src/items/service.ts", "src/items/cache.ts", "tests/items-cache.test.ts"],
+    "verification": "npm test -- items-cache",
+    "dependency_required": false,
+    "high_risk_required": false
+  },
+  {
+    "id": "role-transition",
+    "title": "Membership role transitions",
+    "requirements": [
+      ["FR-01", "An owner may promote a member to administrator."],
+      ["FR-02", "The final owner cannot demote themselves."],
+      ["FR-03", "Every role transition must be audited."]
+    ],
+    "paths": ["src/memberships/service.rb", "src/audit/events.rb", "spec/memberships_spec.rb"],
+    "verification": "bundle exec rspec spec/memberships_spec.rb",
+    "dependency_required": true,
+    "high_risk_required": true
+  },
+  {
+    "id": "offline-draft",
+    "title": "Offline draft synchronization",
+    "requirements": [
+      ["FR-01", "Save editor changes locally while offline."],
+      ["FR-02", "Sync the draft after connectivity returns."],
+      ["FR-03", "Surface a conflict instead of overwriting a newer server revision."]
+    ],
+    "paths": ["src/editor/drafts.ts", "src/editor/sync.ts", "src/editor/sync.test.ts"],
+    "verification": "npm test -- editor-sync",
+    "dependency_required": true,
+    "high_risk_required": false
+  },
+  {
+    "id": "rate-limit",
+    "title": "Per-tenant API rate limit",
+    "requirements": [
+      ["FR-01", "Apply limits independently per tenant."],
+      ["FR-02", "Return a retry-after value when a request is rejected."],
+      ["FR-03", "Internal health checks must not consume tenant quota."]
+    ],
+    "paths": ["src/middleware/rate_limit.go", "src/middleware/tenant.go", "src/middleware/rate_limit_test.go"],
+    "verification": "go test ./src/middleware/...",
+    "dependency_required": true,
+    "high_risk_required": true
+  },
+  {
+    "id": "export-cancel",
+    "title": "Cancelable data export",
+    "requirements": [
+      ["FR-01", "Create large exports as background jobs."],
+      ["FR-02", "Allow the requesting user to cancel a running export."],
+      ["FR-03", "Delete partial output after cancellation."]
+    ],
+    "paths": ["src/exports/jobs.py", "src/exports/storage.py", "tests/test_export_cancel.py"],
+    "verification": "pytest tests/test_export_cancel.py",
+    "dependency_required": true,
+    "high_risk_required": false
+  },
+  {
+    "id": "feature-rollback",
+    "title": "Feature rollout and rollback",
+    "requirements": [
+      ["FR-01", "Enable the feature for a configured percentage of accounts."],
+      ["FR-02", "Keep account assignment stable during the rollout."],
+      ["FR-03", "Disable the feature globally without a deployment."]
+    ],
+    "paths": ["src/features/assignment.ts", "src/features/config.ts", "tests/feature-rollout.test.ts"],
+    "verification": "npm test -- feature-rollout",
+    "dependency_required": true,
+    "high_risk_required": false
+  }
+]

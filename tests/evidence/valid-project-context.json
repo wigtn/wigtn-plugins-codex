@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "requirement_sources": [
+    "docs/PRD.md",
+    "openspec/changes/invite/spec.md"
+  ],
+  "verification_commands": [
+    "python3 -m unittest -v",
+    "npm run typecheck"
+  ],
+  "protected_paths": [
+    "notes/user-draft.txt",
+    ".env"
+  ],
+  "prd_profile": "auto",
+  "evidence_path": ".wigtn/evidence.json",
+  "lifecycle_profile": "flow",
+  "workgraph_path": ".wigtn/workgraph.json"
+}

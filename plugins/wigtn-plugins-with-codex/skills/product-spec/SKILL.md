@@ -10,9 +10,13 @@ work a gate for ordinary coding.
 
 ## Mode
 
+- If `.wigtn/project.json` exists, validate it and read
+  [project context](../../references/project-context.md). An explicit user
+  profile overrides `prd_profile`; missing context changes nothing.
 - **Create:** read [create contract](references/create-contract.md). Include only
-  applicable sections. Mark each conditional contract `Required` or `N/A` with
-  evidence.
+  applicable sections. Use its Compact profile when the user explicitly asks
+  for a concise, brief, or MVP PRD; otherwise use Full. Mark Full conditional
+  contracts `Required` or `N/A` with evidence.
 - **Review:** read [review contract](references/review-contract.md). Emit its
   contract-audit table, then at most five material findings. Do not rewrite
   unless asked.
@@ -29,6 +33,12 @@ work a gate for ordinary coding.
   requirements without evidence.
 - Keep the contract proportional to the brief. Avoid repeated requirements,
   speculative policy, and exhaustive low-impact edge-case catalogs.
+- Respect an explicit request for a concise artifact. Use Compact rather than
+  shrinking a Full artifact cosmetically. Compact allows no more than eight
+  material FRs and ten acceptance criteria.
+- Do not promote plausible product choices—identity matching, token rotation,
+  retry policy, route shape, or similar—into requirements. Keep unsupported
+  choices as compact open decisions.
 - Ask only about decisions that materially change implementation or release.
   Record reversible assumptions and continue.
 - Preserve source documents unless the user asks to edit them.
@@ -39,10 +49,21 @@ work a gate for ordinary coding.
   five material findings, ordered by impact with exact section or requirement
   IDs.
 - After saving a PRD, run `python3 scripts/validate-prd.py <path>` from this
-  skill directory. Report failures; never weaken the contract to make it pass.
+  skill directory. The validator reads the profile marker. Report failures;
+  never weaken the contract to make it pass.
+- Do not create a machine-readable evidence sidecar for an ordinary PRD answer.
+  When the user requests a saved evidence artifact, an existing
+  `.wigtn/evidence.json` must be continued, or a cross-session handoff is
+  required, read [the shared evidence contract](../../references/evidence-contract.md).
+  A product spec does not prove implementation: record its requirements as
+  `not-verifiable` until code and executed-check evidence exists.
+- When the user explicitly asks to continue from the PRD into a saved
+  implementation plan, hand off stable requirement IDs to `work-planner`.
+  Do not create implementation tasks inside the PRD itself.
 
 ## Completion
 
 Return the artifact or findings, important assumptions, unresolved decisions,
 and validator result when run. Do not claim validation beyond inspected
-evidence.
+evidence. When a shared evidence artifact was written, validate it with
+`python3 ../../scripts/validate-evidence.py <path>` from this skill directory.

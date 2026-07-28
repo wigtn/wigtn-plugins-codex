@@ -17,7 +17,7 @@ if test -f "$plugin_validator" && test -f "$skill_validator"; then
     python3 "$skill_validator" "$skill"
     skill_count=$((skill_count + 1))
   done
-  test "$skill_count" -eq 8 || { echo "Expected 8 skills, found $skill_count"; exit 1; }
+  test "$skill_count" -eq 9 || { echo "Expected 9 skills, found $skill_count"; exit 1; }
 else
   echo "Codex system validators unavailable; repository contract validation used."
 fi
@@ -26,6 +26,10 @@ grep -q 'never auto-invoke for ordinary coding' "$plugin/skills/verified-deliver
 grep -q '\$wigtn-plugins-with-codex:verified-delivery' "$plugin/skills/verified-delivery/agents/openai.yaml"
 grep -q '커밋해줘' "$plugin/skills/release-readiness/SKILL.md"
 grep -q 'PRD 디깅해줘' "$plugin/skills/product-spec/SKILL.md"
+python3 "$repo_root/scripts/check-verified-delivery-routing.py"
+python3 "$repo_root/scripts/check-external-results.py"
+python3 "$repo_root/scripts/check-featurebench-selection.py"
+python3 "$repo_root/scripts/check-featurebench-results.py"
 for config in "$plugin"/skills/*/agents/openai.yaml; do
   grep -q '\$wigtn-plugins-with-codex:' "$config" || {
     echo "Unqualified installed-plugin skill prompt: $config"

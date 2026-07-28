@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "benchmark": {
+    "name": "SWE-Skills-Bench",
+    "repository": "https://github.com/GeniusHTX/SWE-Skills-Bench",
+    "commit": "95b3ce519fcb58d0b19e90a5b6e5165211dc6dd1"
+  },
+  "task": {
+    "batch": "batch1",
+    "id": "tdd-workflow",
+    "target_repository": "https://github.com/tdd-starters/python",
+    "target_commit": "a1a2d04ae69bd50aba9dac2783737dfda8f048c9",
+    "external_test": "tests/batch1/test_tdd_workflow.py",
+    "test_count": 14
+  },
+  "runtime": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "codex_cli": "0.145.0",
+    "sandbox": "workspace-write",
+    "approval_policy": "never",
+    "user_config": false,
+    "project_rules": false,
+    "network_during_evaluation": false,
+    "docker_image": "zhangyiiiiii/swe-skills-bench-python",
+    "docker_digest": "sha256:51d40310cdf44d00b3e383af1c4467bc460e6a3a25fedb1f9fab6a8d7b77b974"
+  },
+  "results": {
+    "baseline_before_agent": {
+      "passed": 0,
+      "total": 14
+    },
+    "bare": {
+      "passed": 11,
+      "total": 14,
+      "wall_time_seconds": 190,
+      "output_tokens": 7372,
+      "commands": 8
+    },
+    "plugin": {
+      "passed": 11,
+      "total": 14,
+      "wall_time_seconds": 234,
+      "output_tokens": 10726,
+      "commands": 11
+    },
+    "explicit": {
+      "passed": 11,
+      "total": 14,
+      "wall_time_seconds": 218,
+      "output_tokens": 9656,
+      "commands": 10
+    },
+    "oracle_audit": {
+      "interpretable_tests": 11,
+      "task_oracle_mismatch_tests": 3,
+      "mismatch": "The task does not specify a public keyword name, while the test requires promo_categories."
+    },
+    "post_policy_behavior_recheck": {
+      "purpose": "Check whether the revised evidence policy narrows completion claims; not a quality comparison arm.",
+      "passed": 11,
+      "total": 14,
+      "wall_time_seconds": 290,
+      "output_tokens": 10793,
+      "observed_change": "The final answer explicitly disclosed the unspecified public signature and absence of hidden or external checks.",
+      "remaining_gap": "Functional requirements were still labeled Verified from an agent-authored red-green check."
+    }
+  },
+  "arms": [
+    {
+      "id": "bare",
+      "candidate_skills": false,
+      "explicit_invocation": false
+    },
+    {
+      "id": "plugin",
+      "candidate_skills": true,
+      "explicit_invocation": false
+    },
+    {
+      "id": "explicit",
+      "candidate_skills": true,
+      "explicit_invocation": true
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "artifact_type": "acceptance",
+  "source_artifacts": [
+    {
+      "kind": "prd",
+      "path": "docs/PRD.md"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "FR-01",
+      "text": "The validator accepts a complete evidence artifact.",
+      "status": "verified",
+      "code_evidence": [
+        {
+          "path": "plugins/wigtn-plugins-with-codex/scripts/validate-evidence.py",
+          "line_start": 94,
+          "line_end": 141,
+          "symbol": "EvidenceValidator.validate"
+        }
+      ],
+      "check_ids": [
+        "CHK-01"
+      ],
+      "gaps": []
+    },
+    {
+      "id": "FR-02",
+      "text": "A remote branch policy is configured.",
+      "status": "not-verifiable",
+      "code_evidence": [],
+      "check_ids": [],
+      "gaps": [
+        "Remote repository policy was not inspected."
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "CHK-01",
+      "command": "python3 scripts/check-evidence-contract.py",
+      "status": "passed",
+      "exit_code": 0,
+      "test_names": [
+        "valid acceptance artifact"
+      ]
+    }
+  ],
+  "release_authority": {
+    "source_request": "",
+    "commit": false,
+    "push": false,
+    "pull_request": false,
+    "deploy": false
+  },
+  "external_actions": [
+    {
+      "action": "commit",
+      "status": "not-performed",
+      "evidence": ""
+    }
+  ],
+  "limitations": [
+    "This fixture validates the contract, not a production repository."
+  ],
+  "metadata": {
+    "fixture": true
+  }
+}

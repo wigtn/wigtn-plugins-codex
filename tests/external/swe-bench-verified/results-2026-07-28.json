@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "benchmark": "princeton-nlp/SWE-bench_Verified",
+  "dataset_revision": "c104f840cc67f8b6eec6f759ebc8b2693d585d4a",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "high",
+  "codex_cli": "0.145.0",
+  "candidate_snapshot": "5d05c052009edf96113a2965399c4efde69ffc926392a5faa52403f74b5eb2a6",
+  "runs": [
+    {
+      "task": "astropy__astropy-12907",
+      "arm": "bare",
+      "trial": 1,
+      "wall_seconds": 126.88,
+      "output_tokens": 4669,
+      "commands": 15,
+      "official_resolved": true,
+      "patch_sha256": "e181ccb86189feb4cfb09be2e21c871c8f55d86550149141f5dcb486d535f1be"
+    },
+    {
+      "task": "astropy__astropy-12907",
+      "arm": "plugin",
+      "trial": 1,
+      "wall_seconds": 163.46,
+      "output_tokens": 5613,
+      "commands": 12,
+      "official_resolved": true,
+      "patch_sha256": "62d06cff2d726d1b6f3948057c864ec4ece3a807d97737681b2b46e1e3596a40"
+    },
+    {
+      "task": "astropy__astropy-12907",
+      "arm": "plugin",
+      "trial": 2,
+      "wall_seconds": 230.85,
+      "output_tokens": 7235,
+      "commands": 13,
+      "official_resolved": true,
+      "patch_sha256": "07c5f48878a65fd1e7a4da04d4682ef582212543deba37477d8719f2315bb350"
+    },
+    {
+      "task": "astropy__astropy-12907",
+      "arm": "bare",
+      "trial": 2,
+      "wall_seconds": 125.02,
+      "output_tokens": 4321,
+      "commands": 19,
+      "official_resolved": true,
+      "patch_sha256": "955ad11c4400b223af97993ded10795985f9401a472b3529868a7c100712af34"
+    },
+    {
+      "task": "pytest-dev__pytest-10051",
+      "arm": "bare",
+      "trial": 1,
+      "wall_seconds": 115.4,
+      "output_tokens": 2905,
+      "commands": 10,
+      "official_resolved": true,
+      "patch_sha256": "3a63946d39c42a9142e50a3a0fa7e99631ba2bc099e92b46ccae6012971d7ddd"
+    },
+    {
+      "task": "pytest-dev__pytest-10051",
+      "arm": "plugin",
+      "trial": 1,
+      "wall_seconds": 383.17,
+      "output_tokens": 10196,
+      "commands": 20,
+      "official_resolved": true,
+      "patch_sha256": "dd12412fd94e8c3b3c4eafa3b6f84749aa353bab237ee6340ffdc85f283372a7"
+    },
+    {
+      "task": "pytest-dev__pytest-10051",
+      "arm": "plugin",
+      "trial": 2,
+      "wall_seconds": 374.39,
+      "output_tokens": 10745,
+      "commands": 26,
+      "official_resolved": true,
+      "patch_sha256": "9831a83269a484742c2792392d41f6fb7f8faa8e01f349271cadb685b603fc92"
+    },
+    {
+      "task": "pytest-dev__pytest-10051",
+      "arm": "bare",
+      "trial": 2,
+      "wall_seconds": 103.16,
+      "output_tokens": 2724,
+      "commands": 10,
+      "official_resolved": true,
+      "patch_sha256": "579f290f203b52225fbbeef269e5328336f55dedcab25a10b6b4e7b803397d20"
+    }
+  ],
+  "paired_summary": {
+    "pairs": 4,
+    "bare_resolved": 4,
+    "plugin_resolved": 4,
+    "discordant_pairs": 0,
+    "quality_lift_observed": false,
+    "overall_median": {
+      "bare_wall_seconds": 120.21,
+      "plugin_wall_seconds": 302.62,
+      "wall_overhead_percent": 151.7,
+      "bare_output_tokens": 3613,
+      "plugin_output_tokens": 8715.5,
+      "output_overhead_percent": 141.2,
+      "bare_commands": 12.5,
+      "plugin_commands": 16.5,
+      "command_overhead_percent": 32.0
+    }
+  },
+  "post_reform_forward_test": {
+    "task": "pytest-dev__pytest-10051",
+    "snapshot": "05165fa2e0cee54388a4148294dfb80b3c3bf92237a4d46d5b7b98ef1ab1615f",
+    "official_resolved": true,
+    "output_tokens": 4466,
+    "commands": 10,
+    "pre_reform_plugin_median_output_tokens": 10470.5,
+    "pre_reform_plugin_median_commands": 23,
+    "output_reduction_percent": 57.3,
+    "command_reduction_percent": 56.5,
+    "wall_seconds": 1026.06,
+    "wall_excluded_reason": "model stream disconnected and retried after a roughly 16-minute idle timeout"
+  },
+  "gpt_5_5_exploratory_replication": {
+    "task": "pytest-dev__pytest-10051",
+    "model": "gpt-5.5",
+    "reasoning_effort": "high",
+    "codex_cli": "0.145.0",
+    "plugin_snapshot": "05165fa2e0cee54388a4148294dfb80b3c3bf92237a4d46d5b7b98ef1ab1615f",
+    "design": "single post-reform bare-versus-plugin pair; exploratory, not confirmatory",
+    "runs": [
+      {
+        "arm": "bare",
+        "trial": 1,
+        "wall_seconds": 142,
+        "output_tokens": 4799,
+        "commands": 26,
+        "official_resolved": true,
+        "patch_sha256": "d9e02f7f7f633a0d1e60d5538ae4909ad4533439fd4c788eadc13aa128540e87"
+      },
+      {
+        "arm": "plugin",
+        "trial": 1,
+        "wall_seconds": 83,
+        "output_tokens": 3143,
+        "commands": 14,
+        "official_resolved": true,
+        "patch_sha256": "fb43fdd85613fdf20eef7196985557a710d0b6666c4b52637270f0be31d21940"
+      }
+    ],
+    "observed_delta_percent": {
+      "wall_seconds": -41.5,
+      "output_tokens": -34.5,
+      "commands": -46.2
+    },
+    "interpretation": "Both arms officially resolved. This one pair supports post-reform noninterference and shows that pre-reform overhead is not inevitable; it does not establish a speed or quality advantage."
+  },
+  "excluded_candidates": [
+    {
+      "source": "SWE-Skills-Bench",
+      "task": "xlsx",
+      "reason": "required jdcal dependency missing; four failures followed by seven skips"
+    },
+    {
+      "source": "SWE-Skills-Bench",
+      "task": "python-anti-patterns",
+      "reason": "clean base already passes 10/10"
+    },
+    {
+      "source": "SWE-Skills-Bench",
+      "task": "fix",
+      "reason": "loose-equality regex falsely matches strict !== expressions"
+    },
+    {
+      "source": "SWE-Skills-Bench",
+      "task": "tdd-workflow",
+      "reason": "three of fourteen tests require an unspecified promo_categories parameter; audited 11/11 retained as diagnostic only"
+    },
+    {
+      "source": "SWE-bench Verified",
+      "task": "psf__requests-2931",
+      "reason": "official instance image unavailable; gold precheck could not run"
+    }
+  ]
+}

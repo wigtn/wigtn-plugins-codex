@@ -17,6 +17,29 @@ def heading(pattern: str, text: str) -> bool:
     return has(rf"^#{{1,4}}\s+[^\n]*(?:{pattern})", text)
 
 
+def section_body(pattern: str, text: str) -> str:
+    match = re.search(
+        rf"^#{{1,4}}\s+[^\n]*(?:{pattern})[^\n]*\n"
+        r"(?P<body>.*?)(?=^#{1,4}\s+|\Z)",
+        text,
+        re.I | re.M | re.S,
+    )
+    return match.group("body") if match else ""
+
+
+def stable_table_ids(body: str) -> set[str]:
+    ids: set[str] = set()
+    for line in body.splitlines():
+        if not line.lstrip().startswith("|"):
+            continue
+        first_cell = (
+            line.strip().strip("|").split("|", 1)[0].strip().strip("`")
+        )
+        if re.fullmatch(r"[A-Z][A-Z0-9_-]*-[0-9]{2,}", first_cell, re.I):
+            ids.add(first_cell.upper())
+    return ids
+
+
 def applicability(text: str) -> dict[str, tuple[str, str]]:
     match = re.search(
         r"^#{1,4}\s+[^\n]*(?:Applicability|적용성|적용\s*범위)[^\n]*\n"
@@ -51,6 +74,11 @@ def find_row(
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("prd", type=Path)
+    parser.add_argument(
+        "--profile",
+        choices=("auto", "compact", "full"),
+        default="auto",
+    )
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
     text = args.prd.read_text(encoding="utf-8", errors="ignore")
@@ -60,16 +88,49 @@ def main() -> int:
         if not ok:
             failures.append({"code": code, "message": message})
 
+    marker = re.search(
+        r"<!--\s*wigtn-prd-profile:\s*(compact|full)\s*-->",
+        text,
+        re.I,
+    )
+    declared_profile = marker.group(1).casefold() if marker else None
+    profile = (
+        args.profile
+        if args.profile != "auto"
+        else declared_profile or "full"
+    )
+    if args.profile != "auto" and declared_profile is not None:
+        require(
+            "profile-mismatch",
+            declared_profile == args.profile,
+            f"Document declares {declared_profile}, not {args.profile}.",
+        )
+    if profile == "compact":
+        require(
+            "profile-marker",
+            declared_profile == "compact",
+            "Compact PRDs must declare <!-- wigtn-prd-profile: compact -->.",
+        )
+
     rows = applicability(text)
-    require("applicability", bool(rows), "Applicability ledger is missing.")
     require("problem", heading(r"context|problem|배경|문제", text), "Problem section is missing.")
     require("goals", heading(r"goals?|목표", text), "Goals section is missing.")
     require("non-goals", heading(r"non[- ]?goals?|비목표|제외", text), "Non-goals section is missing.")
     require("roles", heading(r"users?|roles?|사용자|역할|권한", text), "Roles section is missing.")
+    functional_body = section_body(
+        r"functional\s+requirements?|기능\s*요구사항",
+        text,
+    )
+    acceptance_body = section_body(
+        r"acceptance(?:\s+criteria)?|수용(?:\s+기준)?|인수(?:\s+기준)?",
+        text,
+    )
+    fr_ids = stable_table_ids(functional_body)
+    ac_ids = stable_table_ids(acceptance_body)
     require(
         "fr",
-        len(set(re.findall(r"\bFR-[A-Z0-9-]+\b", text, re.I))) >= 1,
-        "No stable FR ID.",
+        len(fr_ids) >= 1,
+        "No stable material requirement ID in the functional-requirements table.",
     )
     require(
         "authorization",
@@ -82,16 +143,46 @@ def main() -> int:
         has(r"^\|[^\n]*(?:Given|전제)[^\n]*(?:When|행동)[^\n]*(?:Then|결과)", text),
         "Acceptance criteria need precondition/action/result columns.",
     )
+    delivery_heading = heading(
+        r"delivery|release condition|구현\s*단계|출시\s*단계|"
+        r"전달\s*계획|출시\s*계획|구현\s*계획|릴리스\s*조건",
+        text,
+    )
+    delivery_body = section_body(
+        r"delivery|release condition|구현\s*단계|출시\s*단계|"
+        r"전달\s*계획|출시\s*계획|구현\s*계획|릴리스\s*조건",
+        text,
+    )
+    mapped_requirement = any(
+        re.search(rf"\b{re.escape(requirement_id)}\b", delivery_body, re.I)
+        for requirement_id in fr_ids
+    )
+    delivery_mapping = (
+        has(r"(?:Phase|단계|주\s*차)", delivery_body)
+        and mapped_requirement
+        if profile == "full"
+        else has(r"(?:Requirement\s*IDs?|요구사항\s*ID)", delivery_body)
+        and mapped_requirement
+    )
     require(
         "delivery",
-        heading(
-            r"delivery|구현\s*단계|출시\s*단계|전달\s*계획|출시\s*계획|구현\s*계획",
-            text,
-        )
-        and has(r"(?:Phase|단계|주\s*차).{0,400}\bFR-[A-Z0-9-]+\b", text)
-        and has(r"(?:exit|종료|완료|검증|통과)", text),
+        delivery_heading
+        and delivery_mapping
+        and has(r"(?:exit|종료|완료|검증|통과|pass)", text),
         "Delivery needs requirement IDs and verifiable exit conditions.",
     )
+
+    if profile == "compact":
+        require(
+            "compact-fr-budget",
+            len(fr_ids) <= 8,
+            "Compact PRDs allow at most 8 material requirement IDs.",
+        )
+        require(
+            "compact-ac-budget",
+            1 <= len(ac_ids) <= 10,
+            "Compact PRDs need 1–10 stable AC IDs.",
+        )
 
     conditional = (
         (
@@ -102,7 +193,12 @@ def main() -> int:
         (("state", "상태"), r"state matrix|상태 매트릭스", "State matrix"),
         (("flow", "흐름"), r"user.*flow|system.*flow|사용자.*흐름|시스템.*흐름", "Mermaid flow"),
     )
+    if profile == "full":
+        require("applicability", bool(rows), "Applicability ledger is missing.")
+
     for terms, section_pattern, label in conditional:
+        if profile != "full":
+            break
         row = find_row(rows, *terms)
         require(
             f"{terms[0]}-applicability",
@@ -161,7 +257,11 @@ def main() -> int:
                 "Required flow must be Mermaid.",
             )
 
-    result = {"valid": not failures, "failures": failures}
+    result = {
+        "valid": not failures,
+        "profile": profile,
+        "failures": failures,
+    }
     if args.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))
     elif failures:

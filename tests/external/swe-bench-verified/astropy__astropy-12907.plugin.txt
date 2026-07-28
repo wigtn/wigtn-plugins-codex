@@ -1,0 +1,44 @@
+Fix the following issue in this repository. Work autonomously, preserve unrelated behavior, and run the most relevant repository tests you can. The official evaluator and reference patch are hidden; do not look for them.
+
+You must use the frozen WIGTN verified-delivery skill at `.wigtn-eval/plugin/skills/verified-delivery/SKILL.md`. Read it completely and follow its evidence rules. The `.wigtn-eval` directory is evaluation infrastructure: do not modify it and do not include it in the solution.
+
+Modeling's `separability_matrix` does not compute separability correctly for nested CompoundModels
+
+Consider the following model:
+
+```python
+from astropy.modeling import models as m
+from astropy.modeling.separable import separability_matrix
+
+cm = m.Linear1D(10) & m.Linear1D(5)
+```
+
+Its separability matrix is a diagonal:
+
+```python
+>>> separability_matrix(cm)
+array([[ True, False],
+       [False,  True]])
+```
+
+A non-nested compound model also behaves as expected:
+
+```python
+>>> separability_matrix(m.Pix2Sky_TAN() & m.Linear1D(10) & m.Linear1D(5))
+array([[ True,  True, False, False],
+       [ True,  True, False, False],
+       [False, False,  True, False],
+       [False, False, False,  True]])
+```
+
+But nesting the compound model gives:
+
+```python
+>>> separability_matrix(m.Pix2Sky_TAN() & cm)
+array([[ True,  True, False, False],
+       [ True,  True, False, False],
+       [False, False,  True,  True],
+       [False, False,  True,  True]])
+```
+
+The last two inputs and outputs should remain separable.

@@ -1,0 +1,6 @@
+interface:
+  display_name: "WIGTN Work Planner"
+  short_description: "Turn requirements into a dependency-aware WorkGraph"
+  default_prompt: "Use $wigtn-plugins-with-codex:work-planner to turn these requirements into a dependency-aware implementation plan."
+policy:
+  allow_implicit_invocation: true

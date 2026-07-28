@@ -20,7 +20,17 @@ When wording is ambiguous about a consequential mutation, stop before that mutat
 
 ## Workflow
 
-1. Read repository instructions. Inspect `git status`, branch, upstream, staged diff, unstaged diff, and untracked files.
+0. If `.wigtn/project.json` exists, validate it and read
+   [project context](../../references/project-context.md). Never stage its
+   protected paths unless the current request explicitly includes them.
+   If `.wigtn/workgraph.json` exists, validate it and inspect release-gate
+   status. A ready gate is prerequisite evidence, not permission for Git or
+   remote actions.
+1. Read repository instructions. Run
+   `python3 ../../scripts/inspect-release-state.py <repository>` from this skill
+   directory to capture branch, upstream, operations, conflicts, staged,
+   unstaged, and untracked paths without mutation. Then inspect the relevant
+   staged and unstaged diffs.
 2. Separate task changes from pre-existing or unrelated user work. Never silently include unrelated files.
 3. Review for correctness, regression, security, and missing tests. Findings need severity, confidence, file/line, and impact.
 4. Run relevant repository-defined verification. Record exact commands and results.
@@ -28,3 +38,14 @@ When wording is ambiguous about a consequential mutation, stop before that mutat
 6. Report commit hash, pushed branch, or PR URL only after success.
 
 Read [Git safety](references/git-safety.md) before any staging, commit, push, or PR operation. Never force-push, hard-reset, delete branches, amend, or rewrite history without explicit authorization.
+
+## Machine-readable handoff
+
+Do not create state for an ordinary release request. When the user requests a
+saved release artifact, an existing `.wigtn/evidence.json` must be continued,
+or a cross-session handoff is required, read
+[the shared evidence contract](../../references/evidence-contract.md). The
+artifact records authority; it never grants authority. Mark an external action
+`performed` only after success and retain its commit, branch, or URL evidence.
+Validate a written artifact with
+`python3 ../../scripts/validate-evidence.py <path>` from this skill directory.

@@ -1,0 +1,355 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wigtn.com/schemas/workgraph/1.0",
+  "title": "WIGTN WorkGraph",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "graph_id",
+    "revision",
+    "sources",
+    "requirements",
+    "artifacts",
+    "tasks",
+    "checks",
+    "release_gates",
+    "metadata"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "graph_id": {
+      "type": "string",
+      "pattern": "^WG-[A-Z0-9_-]+$"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/requirement"
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/task"
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/check"
+      }
+    },
+    "release_gates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/release_gate"
+      }
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "repo_path": {
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "pattern": "(^/|^[A-Za-z]:[\\\\/]|(^|[\\\\/])\\.\\.([\\\\/]|$)|://)"
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "path", "sha256"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^SRC-[A-Z0-9_-]+$"
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "$ref": "#/$defs/repo_path"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source_id",
+        "text",
+        "source_sha256",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_-]*-[0-9]{2,}$"
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^SRC-[A-Z0-9_-]+$"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "status": {
+          "enum": ["active", "stale", "retired"]
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "path", "requirement_ids", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ART-[A-Z0-9_-]+$"
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "$ref": "#/$defs/repo_path"
+        },
+        "requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "status": {
+          "enum": ["draft", "ready", "stale", "retired"]
+        }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "requirement_ids",
+        "artifact_ids",
+        "depends_on",
+        "intended_paths",
+        "protected_paths",
+        "risk",
+        "status",
+        "check_ids",
+        "blocker",
+        "evidence_refs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^TASK-[A-Z0-9_-]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requirement_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "artifact_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "intended_paths": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/repo_path"
+          },
+          "uniqueItems": true
+        },
+        "protected_paths": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/repo_path"
+          },
+          "uniqueItems": true
+        },
+        "risk": {
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "ready",
+            "in-progress",
+            "blocked",
+            "implemented",
+            "verified",
+            "stale",
+            "retired"
+          ]
+        },
+        "check_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "blocker": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/repo_path"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "task_ids",
+        "requirement_ids",
+        "command",
+        "status",
+        "evidence_ref"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^CHK-[0-9]{2,}$"
+        },
+        "task_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "requirement_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "command": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": ["pending", "passed", "failed", "skipped", "stale"]
+        },
+        "evidence_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/repo_path"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "release_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "requires_task_ids",
+        "requires_requirement_ids",
+        "status",
+        "authority_actions"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^GATE-[A-Z0-9_-]+$"
+        },
+        "requires_task_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "requires_requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "status": {
+          "enum": ["blocked", "ready", "released", "stale"]
+        },
+        "authority_actions": {
+          "type": "array",
+          "items": {
+            "enum": ["commit", "push", "pull_request", "deploy"]
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

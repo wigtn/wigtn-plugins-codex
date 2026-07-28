@@ -1,0 +1,4 @@
+Use $wigtn-plugins-with-codex:verified-delivery for this implementation.
+Treat the requirements below as the acceptance contract. Implement the task,
+run the repository checks you can discover, and report only evidence you
+actually observed.

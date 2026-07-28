@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "frozen_at": "2026-07-28T16:20:00+09:00",
+  "benchmark": "LiberCoders/FeatureBench",
+  "split": "fast",
+  "dataset_revision": "e99d6efdfe511ea832c1b5735c536129561ec96a",
+  "harness_revision": "445dcbaec0b2e136061b0acb54e753c0a9f1888e",
+  "selection_salt": "wigtn-feature-v1-2026-07-28",
+  "selection_rule": "eligible tasks sorted by sha256(salt + ':' + instance_id), then first task per unique repository",
+  "primary_model": {
+    "id": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "codex_cli": "0.145.0"
+  },
+  "plugin_snapshot": {
+    "root": "plugins/wigtn-plugins-with-codex",
+    "hash_algorithm": "sha256 of newline-joined '<file_sha256>  <relative_path>' records sorted by relative_path",
+    "digest": "55112de0cf0a392efc0a2eecd4d196b6e2d54ecaf1b31a5416525a8fc58c145d"
+  },
+  "pilot_size": 4,
+  "selected_instances": [
+    "mwaskom__seaborn.7001ebe7.test_relational.f23eb542.lv1",
+    "sphinx-doc__sphinx.e347e59c.test_build_gettext.2721e644.lv1",
+    "mlflow__mlflow.93dab383.test_mlflow.d1847ff9.lv1",
+    "python__mypy.8e2ce962.testconstraints.db380fe7.lv1"
+  ],
+  "candidate_order": [
+    {
+      "rank": 1,
+      "instance_id": "mwaskom__seaborn.7001ebe7.test_relational.f23eb542.lv1",
+      "repository": "mwaskom/seaborn",
+      "rank_digest": "0564fac8d1fe9c13f5b1ea340d9c82b0ed02c232ff98666c7c4d82dbb14f9aec",
+      "prompt_chars": 17574,
+      "oracle_precheck": "pass",
+      "gold_resolved": true,
+      "gold_pass_rate": 1.0,
+      "clean_base_resolved": false,
+      "clean_base_f2p_pass_rate": 0.0,
+      "image_digest": "sha256:fe27a1a5205fa0939453e79d0f40c74cb402bad8ea1d42fff7de5e2106e77ce1"
+    },
+    {
+      "rank": 2,
+      "instance_id": "sphinx-doc__sphinx.e347e59c.test_build_gettext.2721e644.lv1",
+      "repository": "sphinx-doc/sphinx",
+      "rank_digest": "08da9eef4270b05466b2cd2df3af837b6156aba13127b6e4d2f58dac4cf5ae22",
+      "prompt_chars": 10535,
+      "oracle_precheck": "pass",
+      "gold_resolved": true,
+      "gold_pass_rate": 1.0,
+      "clean_base_resolved": false,
+      "clean_base_f2p_pass_rate": 0.0,
+      "image_digest": "sha256:15b434473e16386e33c864d8b7f4a3bddb9c5585961758c0ed0f06b51b3f0268"
+    },
+    {
+      "rank": 3,
+      "instance_id": "mlflow__mlflow.93dab383.test_mlflow.d1847ff9.lv1",
+      "repository": "mlflow/mlflow",
+      "rank_digest": "0a3ad935e5976710a9e3783ce5fe8d1e66312990d006d45be272b8b923459705",
+      "prompt_chars": 20428,
+      "oracle_precheck": "pass",
+      "gold_resolved": true,
+      "gold_pass_rate": 1.0,
+      "clean_base_resolved": false,
+      "clean_base_f2p_pass_rate": 0.0,
+      "image_digest": "sha256:5a63b594bc99a6dcd876289974979606b276edd49e966020111db3590c40add4"
+    },
+    {
+      "rank": 4,
+      "instance_id": "pandas-dev__pandas.82fa2715.test_sample.5d2ba03e.lv1",
+      "repository": "pandas-dev/pandas",
+      "rank_digest": "0daad9b2835cafd1fbef112567a4fc53ada23a57c65576c09eae0c707d312dbf",
+      "prompt_chars": 19686,
+      "oracle_precheck": "excluded",
+      "exclusion_class": "infrastructure",
+      "exclusion_reason": "gold F2P triggered a full Cython rebuild and cc1 was killed at the 7.7 GB container memory limit",
+      "image_digest": "sha256:e484ae407255b4c2c481a842e476c3c3285d2032738adf0abd410fb5f776dab7"
+    },
+    {
+      "rank": 5,
+      "instance_id": "python__mypy.8e2ce962.testconstraints.db380fe7.lv1",
+      "repository": "python/mypy",
+      "rank_digest": "0e9ad62f42c246974ef6e99423885d1b0979aa5cc536e62bf6bde67924406323",
+      "prompt_chars": 6857,
+      "oracle_precheck": "pass",
+      "promoted_after_rank": 4,
+      "gold_resolved": true,
+      "gold_pass_rate": 1.0,
+      "clean_base_resolved": false,
+      "clean_base_f2p_pass_rate": 0.2,
+      "image_digest": "sha256:132f20b7c4a8bb55fc71a914c81f659fe47c0581698edf23ee64ebb83437c7ca"
+    },
+    {
+      "rank": 6,
+      "instance_id": "pydantic__pydantic.e1dcaf9e.test_types_self.3ae7e16d.lv1",
+      "repository": "pydantic/pydantic",
+      "rank_digest": "12422b6c0ea431a4c95caf1ab6e5df0ef875cfc457046c4c4a810ab6ce93ea50",
+      "prompt_chars": 33081,
+      "oracle_precheck": "reserve"
+    },
+    {
+      "rank": 7,
+      "instance_id": "scikit-learn__scikit-learn.5741bac9.test_arff_parser.ecde431a.lv1",
+      "repository": "scikit-learn/scikit-learn",
+      "rank_digest": "1db978a57e43141674d04214689d7b5dfd602c73db2b02a180743402659cbf41",
+      "prompt_chars": 10992,
+      "oracle_precheck": "reserve"
+    },
+    {
+      "rank": 8,
+      "instance_id": "sympy__sympy.c1097516.test_puiseux.cd575f09.lv1",
+      "repository": "sympy/sympy",
+      "rank_digest": "1fa6ec6b198d97a8c93a6f498babf8108a0afae23002f0970366490216abbf58",
+      "prompt_chars": 66665,
+      "oracle_precheck": "reserve"
+    }
+  ]
+}

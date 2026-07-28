@@ -20,6 +20,7 @@ EXPECTED_SKILLS = {
     "release-readiness",
     "handdrawn-diagram",
     "wigtn-presentation",
+    "work-planner",
 }
 SEMVER = re.compile(r"^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$")
 
@@ -100,6 +101,9 @@ def main() -> int:
             errors.append("plugin version must be SemVer")
         if manifest.get("skills") != "./skills/":
             errors.append("plugin manifest skills path must be ./skills/")
+        default_prompts = manifest.get("interface", {}).get("defaultPrompt", [])
+        if not isinstance(default_prompts, list) or not 1 <= len(default_prompts) <= 3:
+            errors.append("plugin interface.defaultPrompt must contain 1 to 3 prompts")
         for unsupported in ("apps", "mcpServers", "hooks"):
             if unsupported in manifest:
                 errors.append(f"plugin manifest contains unsupported MVP field: {unsupported}")
@@ -148,6 +152,63 @@ def main() -> int:
                 )
         if description_total > 4000:
             errors.append(f"skill description budget exceeded: {description_total}/4000")
+
+        evidence_paths = [
+            plugin_root / "schemas" / "evidence-contract.schema.json",
+            plugin_root / "scripts" / "validate-evidence.py",
+            plugin_root / "scripts" / "import-requirements.py",
+            plugin_root / "scripts" / "inspect-evidence.py",
+            plugin_root / "scripts" / "validate-project-context.py",
+            plugin_root / "scripts" / "validate-screen-spec.py",
+            plugin_root / "scripts" / "inspect-release-state.py",
+            plugin_root / "schemas" / "workgraph.schema.json",
+            plugin_root / "scripts" / "workgraph_core.py",
+            plugin_root / "scripts" / "validate-workgraph.py",
+            plugin_root / "scripts" / "migrate-workgraph.py",
+            plugin_root / "scripts" / "wigtn.py",
+            plugin_root / "references" / "evidence-contract.md",
+            plugin_root / "schemas" / "project-context.schema.json",
+        ]
+        for path in evidence_paths:
+            if not path.is_file():
+                errors.append(
+                    f"missing Evidence Contract component: {path.relative_to(ROOT)}"
+                )
+        if evidence_paths[0].is_file():
+            try:
+                evidence_schema = load_json(evidence_paths[0])
+            except ValueError as exc:
+                errors.append(str(exc))
+            else:
+                if evidence_schema.get("$id") != (
+                    "https://wigtn.com/schemas/evidence-contract/1.0"
+                ):
+                    errors.append("Evidence Contract schema $id must identify version 1.0")
+                schema_version = (
+                    evidence_schema.get("properties", {})
+                    .get("schema_version", {})
+                    .get("const")
+                )
+                if schema_version != "1.0":
+                    errors.append("Evidence Contract schema_version must be 1.0")
+        workgraph_schema_path = plugin_root / "schemas" / "workgraph.schema.json"
+        if workgraph_schema_path.is_file():
+            try:
+                workgraph_schema = load_json(workgraph_schema_path)
+            except ValueError as exc:
+                errors.append(str(exc))
+            else:
+                if workgraph_schema.get("$id") != (
+                    "https://wigtn.com/schemas/workgraph/1.0"
+                ):
+                    errors.append("WorkGraph schema $id must identify version 1.0")
+                workgraph_version = (
+                    workgraph_schema.get("properties", {})
+                    .get("schema_version", {})
+                    .get("const")
+                )
+                if workgraph_version != "1.0":
+                    errors.append("WorkGraph schema_version must be 1.0")
 
     if errors:
         print("Repository validation: FAIL")

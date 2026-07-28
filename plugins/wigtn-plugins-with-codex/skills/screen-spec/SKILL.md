@@ -21,7 +21,15 @@ Create five connected artifacts under `docs/product/screens/<feature>/`:
 4. Cover states that apply: loading, empty, error, success, unauthorized, validation, offline, and destructive confirmation.
 5. Keep the wireframe grayscale with semantic status colors only. It validates structure and interaction, not brand direction.
 6. If browser control is available, open the HTML and verify desktop and mobile widths, overflow, readable labels, and navigational links. Fix discovered defects before reporting completion.
-7. Return file links and verification results without pasting every artifact into the conversation.
+7. Run `python3 ../../scripts/validate-screen-spec.py
+   docs/product/screens/<feature>/` from this skill directory. Fix unresolved
+   template tokens, missing artifacts, broken wireframe anchors, and
+   cross-artifact requirement drift before completion.
+8. Return file links and deterministic plus visual verification results
+   without pasting every artifact into the conversation.
+9. When a `.wigtn/workgraph.json` lifecycle already exists, preserve its
+   requirement IDs and let `work-planner` register the screen bundle as an
+   artifact. Do not mark implementation tasks verified from screen output.
 
 Use the templates in `assets/templates/`. Read [state checklist](references/state-checklist.md) while writing screen states and [handoff checklist](references/handoff-checklist.md) before completion.
 

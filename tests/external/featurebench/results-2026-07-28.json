@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "study": "FeatureBench quality-lift pilot",
+  "protocol": "docs/FEATUREBENCH-LIFT-PROTOCOL-2026-07-28-KO.md",
+  "selection_manifest": "tests/external/featurebench/selection-2026-07-28.json",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "high",
+  "primary_pairs": [
+    {
+      "instance": "mwaskom__seaborn.7001ebe7.test_relational.f23eb542.lv1",
+      "bare": {"resolved": false, "pass_rate": 0.1176, "commands": 15, "web_searches": 1, "input_tokens": 1076811, "output_tokens": 10290, "changed_files": 1, "insertions": 127, "deletions": 124},
+      "plugin": {"resolved": true, "pass_rate": 1.0, "commands": 45, "web_searches": 0, "input_tokens": 5187890, "output_tokens": 23998, "changed_files": 8, "insertions": 627, "deletions": 26},
+      "raw_outcome": "positive-discordant",
+      "integrity": "invalid-reference-leakage",
+      "integrity_evidence": [
+        "plugin event command 56 inspected /private/tmp/wigtn-featurebench/.venv/lib/python3.12/site-packages/seaborn/_base.py",
+        "plugin event commands 62, 77, 79-92 diffed workspace files against installed seaborn source",
+        "plugin event commands 172-174 inspected the installed axisgrid.py implementation"
+      ],
+      "adjudicated_outcome": "excluded"
+    },
+    {
+      "instance": "sphinx-doc__sphinx.e347e59c.test_build_gettext.2721e644.lv1",
+      "bare": {"resolved": false, "pass_rate": 0.0769, "commands": 19, "web_searches": 0, "input_tokens": 1414017, "output_tokens": 10258, "changed_files": 2, "insertions": 32, "deletions": 34},
+      "plugin": {"resolved": false, "pass_rate": 0.0769, "commands": 31, "web_searches": 15, "input_tokens": 4860294, "output_tokens": 17329, "changed_files": 2, "insertions": 33, "deletions": 34},
+      "raw_outcome": "tie-unresolved",
+      "integrity": "eligible",
+      "adjudicated_outcome": "tie-unresolved"
+    },
+    {
+      "instance": "mlflow__mlflow.93dab383.test_mlflow.d1847ff9.lv1",
+      "bare": {"resolved": false, "pass_rate": 0.0, "commands": 21, "web_searches": 0, "input_tokens": 1719343, "output_tokens": 11961, "changed_files": 4, "insertions": 258, "deletions": 253},
+      "plugin": {"resolved": false, "pass_rate": 0.0, "commands": 73, "web_searches": 14, "input_tokens": 10832808, "output_tokens": 30132, "changed_files": 9, "insertions": 385, "deletions": 9},
+      "raw_outcome": "tie-unresolved",
+      "integrity": "eligible-with-host-cache-risk",
+      "adjudicated_outcome": "tie-unresolved"
+    },
+    {
+      "instance": "python__mypy.8e2ce962.testconstraints.db380fe7.lv1",
+      "bare": {"resolved": false, "pass_rate": 0.3, "commands": 7, "web_searches": 0, "input_tokens": 202769, "output_tokens": 2516, "changed_files": 1, "insertions": 12, "deletions": 1},
+      "plugin": {"resolved": false, "pass_rate": 0.3, "commands": 11, "web_searches": 0, "input_tokens": 462982, "output_tokens": 5352, "changed_files": 2, "insertions": 20, "deletions": 1},
+      "raw_outcome": "tie-unresolved",
+      "integrity": "eligible",
+      "adjudicated_outcome": "tie-unresolved"
+    }
+  ],
+  "reverse_order_repeat": {
+    "instance": "mwaskom__seaborn.7001ebe7.test_relational.f23eb542.lv1",
+    "order": ["plugin", "bare"],
+    "plugin": {"resolved": false, "pass_rate": 0.1176, "commands": 34, "web_searches": 0, "input_tokens": 2589068, "output_tokens": 26460, "changed_files": 1, "insertions": 130, "deletions": 130},
+    "bare": {"resolved": false, "pass_rate": 0.1176, "commands": 13, "web_searches": 0, "input_tokens": 814760, "output_tokens": 7671, "changed_files": 1, "insertions": 120, "deletions": 1},
+    "outcome": "tie-unresolved",
+    "replicates_primary_positive": false
+  },
+  "summary": {
+    "raw_primary_positive_discordant": 1,
+    "raw_primary_negative_discordant": 0,
+    "raw_primary_ties": 3,
+    "integrity_eligible_primary_pairs": 3,
+    "eligible_positive_discordant": 0,
+    "eligible_negative_discordant": 0,
+    "eligible_ties": 3,
+    "replicated_positive_tasks": 0,
+    "selected_tasks": 4,
+    "general_quality_lift_supported": false
+  },
+  "protocol_deviations": [
+    "Codex ran on the host with workspace-write instead of inside the official task container.",
+    "The host exposed benchmark and package environments outside the task workspace; prompt-only isolation did not prevent reference inspection.",
+    "Docker-based repository tests were unavailable to the agent during implementation and were run only by the official evaluator."
+  ],
+  "claim": "No reproducible positive quality lift was observed. The only raw positive pair was invalidated by reference-source leakage and failed reverse-order replication."
+}

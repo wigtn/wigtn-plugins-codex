@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "requirement_sources": [
+    "../outside.md"
+  ],
+  "verification_commands": [
+    ""
+  ],
+  "protected_paths": [],
+  "prd_profile": "everything",
+  "evidence_path": "/tmp/evidence.json",
+  "unknown": true
+}

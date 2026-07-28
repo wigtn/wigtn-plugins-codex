@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "artifact_type": "release",
+  "source_artifacts": [],
+  "requirements": [],
+  "checks": [],
+  "release_authority": {
+    "source_request": "",
+    "commit": false,
+    "push": false,
+    "pull_request": false,
+    "deploy": false
+  },
+  "external_actions": [
+    {
+      "action": "push",
+      "status": "performed",
+      "evidence": "origin/codex/example"
+    }
+  ],
+  "limitations": []
+}

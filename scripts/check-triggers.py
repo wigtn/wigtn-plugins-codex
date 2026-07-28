@@ -8,6 +8,14 @@ import sys
 RULES = {
     "product-spec": ("prd", "제품 요구사항", "기획서"),
     "screen-spec": ("화면정의", " ia", "user flow", "wireframe", "와이어프레임", "개발 핸드오프"),
+    "work-planner": (
+        "구현 task",
+        "작업 순서",
+        "dependency로 쪼개",
+        "resume plan",
+        "workgraph 작업",
+        "구현 계획 세워서 저장",
+    ),
     "acceptance-verifier": ("요구사항을 만족", "요구사항 반영", "acceptance criteria", "fr별"),
     "design-direction": ("ui 디자인 방향", "visual direction"),
     "handdrawn-diagram": ("손그림", "sketch diagram", "handdrawn"),

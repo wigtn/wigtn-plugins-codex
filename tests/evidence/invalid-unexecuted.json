@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "artifact_type": "delivery",
+  "source_artifacts": [],
+  "requirements": [
+    {
+      "id": "AC-01",
+      "text": "The implementation is verified.",
+      "status": "verified",
+      "code_evidence": [
+        {
+          "path": "src/example.py",
+          "line_start": 1,
+          "line_end": 3
+        }
+      ],
+      "check_ids": [
+        "CHK-01"
+      ],
+      "gaps": []
+    }
+  ],
+  "checks": [
+    {
+      "id": "CHK-01",
+      "command": "pytest",
+      "status": "skipped",
+      "exit_code": null,
+      "test_names": []
+    }
+  ],
+  "release_authority": {
+    "source_request": "",
+    "commit": false,
+    "push": false,
+    "pull_request": false,
+    "deploy": false
+  },
+  "external_actions": [],
+  "limitations": []
+}

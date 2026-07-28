@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wigtn.com/schemas/project-context/1.0",
+  "title": "WIGTN Project Context",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "requirement_sources",
+    "verification_commands",
+    "protected_paths",
+    "prd_profile",
+    "evidence_path"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "requirement_sources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "verification_commands": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "protected_paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "prd_profile": {
+      "enum": [
+        "auto",
+        "compact",
+        "full"
+      ]
+    },
+    "evidence_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lifecycle_profile": {
+      "enum": [
+        "lite",
+        "flow",
+        "studio"
+      ]
+    },
+    "workgraph_path": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

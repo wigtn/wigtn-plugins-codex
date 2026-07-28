@@ -1,11 +1,40 @@
 # PRD Create Contract
 
-Use the smallest implementation-ready contract. Preserve the three
+Choose one profile. Never emit both.
+
+## Compact
+
+Use when the user explicitly asks for a concise, brief, or MVP PRD. Start with
+the exact marker so the validator applies the smaller contract:
+
+```markdown
+<!-- wigtn-prd-profile: compact -->
+# <Feature> PRD
+## Problem and scope
+## Goals and non-goals
+## Users, roles, authorization, and data boundaries
+## Functional requirements
+| ID | Requirement | Priority |
+## Acceptance criteria
+| ID | Requirement | Given | When | Then | Verification |
+## Assumptions and open decisions
+## Release condition
+| Requirement IDs | Verifiable exit condition |
+```
+
+Use at most eight material FRs and ten ACs. Do not add applicability, page,
+state-matrix, flow, risk, or phased-delivery sections unless the user switches
+to Full. A Compact PRD is smaller, not less testable.
+
+## Full
+
+Use by default or when the user requests full detail. Preserve the three
 applicability row names and table shapes so the deterministic validator can
 check them. Mark each conditional row `Required` or `N/A` with a concrete
 reason.
 
 ```markdown
+<!-- wigtn-prd-profile: full -->
 # <Feature> PRD
 ## Applicability
 | Contract | Required / N/A | Evidence |
@@ -54,3 +83,7 @@ Describe necessary behavior, not a preferred implementation unless the
 constraint is real. Avoid duplicate FRs and ACs, speculative enterprise policy,
 exhaustive edge-case catalogs, and open decisions that do not affect
 implementation or release.
+
+A plausible policy is not evidence: move unprovided identity, token, retry,
+route, or expiry choices to one-line open decisions instead of silently
+adopting them.

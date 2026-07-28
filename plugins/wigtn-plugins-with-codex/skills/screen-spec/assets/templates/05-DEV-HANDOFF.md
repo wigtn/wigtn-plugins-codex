@@ -1,7 +1,7 @@
 # Dev Handoff — {feature-name}
 
 > **Generated from**: 01-IA.md + 02-USER-FLOW.md + 03-SCREEN-SPEC.md + 04-WIREFRAME.html
-> **Target**: `/implement {feature-name}`
+> **Target**: `$wigtn-plugins-with-codex:verified-delivery {feature-name}`
 > **Created**: {YYYY-MM-DD}
 
 ## 1. FR ↔ Screen ↔ Component Mapping
@@ -94,9 +94,9 @@ Task Plan(`docs/todo_plan/PLAN_{feature-name}.md`)에 반영할 순서:
 
 **규칙**: 이 질문들은 구현 전에 결정하거나, 결정 보류 시 명확한 미결정 사항으로 기록한다. 사용자 요청 없이 코드 TODO를 자동 생성하지 않는다.
 
-## 8. Acceptance Mapping for /implement
+## 8. Acceptance Mapping for Verified Delivery
 
-`/implement`가 PRD Acceptance Criteria(§2.2)를 task로 분해할 때 참조:
+`verified-delivery`가 PRD Acceptance Criteria를 구현·검증할 때 참조:
 
 | Scenario | Implementation Tasks |
 |----------|---------------------|
