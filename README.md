@@ -4,8 +4,8 @@
 
 **Codex의 자율성은 그대로. WIGTN Plugin의 제품 개발 계약은 필요한 순간에만.**
 
-![Version](https://img.shields.io/badge/version-0.3.0-6C5CE7?style=for-the-badge)
-![Skills](https://img.shields.io/badge/skills-9-00B894?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.4.0-6C5CE7?style=for-the-badge)
+![Skills](https://img.shields.io/badge/skills-10-00B894?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/platform-Codex-111827?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-Apache--2.0-0984E3?style=for-the-badge)
 
@@ -88,7 +88,7 @@ release-readiness ──── 안전한 커밋·푸시·PR
 
 ---
 
-## 포함된 9개 스킬
+## 포함된 10개 스킬
 
 | 스킬 | 하는 일 | 자연어 호출 예시 | 호출 정책 |
 |---|---|---|---|
@@ -101,10 +101,22 @@ release-readiness ──── 안전한 커밋·푸시·PR
 | `release-readiness` | 변경 범위를 보존하며 검증, 커밋, 푸시, PR 수행 | “커밋해줘”, “PR 올려줘” | 자동·제한적 |
 | `handdrawn-diagram` | Mermaid handDrawn 소스와 검증된 SVG·PNG 생성 | “손그림 아키텍처 만들어줘” | 자동 |
 | `wigtn-presentation` | WIGTN 잉크 네이비와 퍼플 점을 적용한 브랜드 발표자료 생성 | “WIGTN 발표자료 만들어줘” | 자동·제한적 |
+| `knowledge-wiki` | 허용된 Codex 세션의 재사용 가능한 지식을 안전 게이트를 거쳐 개인 위키에 축적 | “세션 지식 위키 설정해줘” | 자동·옵트인 |
 
 ### 자동 호출과 명시 호출
 
 대부분의 스킬은 요청 의도가 설명과 일치할 때 Codex가 자동으로 선택합니다. `verified-delivery`만 예외입니다. 일반적인 코딩 요청이 의도치 않게 전체 전달 파이프라인으로 커지는 것을 막기 위해 `$wigtn-plugins-with-codex:verified-delivery`를 명시해야 합니다.
+
+---
+
+## v0.4.0: 옵트인 Knowledge Wiki
+
+v0.4.0은 허용된 저장소의 Codex 세션에서 재사용 가능한 기술 지식만
+일반화해 팀 위키의 `per-user/` 영역에 축적합니다. 설치만으로는 동작하지
+않으며, 별도 설정에서 `enabled: true`와 좁은 `include` 범위를 지정해야 합니다.
+시크릿·개인정보·조직 식별 정보는 결정론 검사와 독립 LLM 감사를 모두
+통과해야 하고, `shared/` 자동 게시와 기존 미push 커밋이 있는 상태의 push는
+차단합니다.
 
 ---
 
@@ -222,6 +234,7 @@ Claude 전용 도구 이름, 고정 서브에이전트 fan-out, 자동 모델 �
 │   └── MIGRATION.md
 ├── plugins/wigtn-plugins-with-codex/
 │   ├── .codex-plugin/plugin.json
+│   ├── hooks/hooks.json
 │   ├── references/
 │   ├── schemas/
 │   ├── scripts/
@@ -234,7 +247,8 @@ Claude 전용 도구 이름, 고정 서브에이전트 fan-out, 자동 모델 �
 │       ├── verified-delivery/
 │       ├── release-readiness/
 │       ├── handdrawn-diagram/
-│       └── wigtn-presentation/
+│       ├── wigtn-presentation/
+│       └── knowledge-wiki/
 ├── scripts/
 └── tests/
 ```

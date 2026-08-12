@@ -19,6 +19,7 @@ EXPECTED_SKILLS = {
     "verified-delivery",
     "release-readiness",
     "handdrawn-diagram",
+    "knowledge-wiki",
     "wigtn-presentation",
     "work-planner",
 }

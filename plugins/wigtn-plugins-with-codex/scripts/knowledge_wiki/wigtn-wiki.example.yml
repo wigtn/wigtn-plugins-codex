@@ -1,0 +1,8 @@
+# Optional repository-local marker.
+# A marker opts this repository into the configured wiki target even when it is
+# outside the global include list. Global enabled:false and exclude still win.
+enabled: true
+project: generalized-project-label
+
+# To disable only this repository, use exactly:
+# enabled: false

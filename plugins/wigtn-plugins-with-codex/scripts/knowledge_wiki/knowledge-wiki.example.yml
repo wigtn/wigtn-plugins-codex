@@ -1,0 +1,26 @@
+# Copy only after deciding the authorized scope.
+# Recommended path: ~/.config/wigtn/knowledge-wiki-codex.yml
+
+enabled: true
+
+wiki:
+  # Existing local clone; this plugin does not clone automatically.
+  path: ~/Dev/wigtn-team-wiki
+  subdir: per-user/your-github-id
+
+# Keep this as narrow as possible. Home or / is never an acceptable team scope.
+include:
+  - ~/Dev/wigtn-owned-repositories
+
+exclude:
+  - ~/Dev/wigtn-owned-repositories/customer-nda
+  - ~/Dev/wigtn-team-wiki
+
+publish:
+  # First verify local commits. Enable only with explicit remote-sharing intent.
+  push: false
+
+codex:
+  # Optional. Empty uses the current Codex default model.
+  model: ""
+  timeout_seconds: 120

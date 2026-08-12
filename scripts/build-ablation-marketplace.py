@@ -107,8 +107,13 @@ def build(destination: Path, variant: str) -> None:
         create_placebo(skills)
     elif variant == "full8":
         shutil.rmtree(skills / "work-planner")
+        # Historical evaluation arm: keep the frozen nine-skill candidate minus
+        # work-planner. New post-study skills must not silently change this arm.
+        shutil.rmtree(skills / "knowledge-wiki")
     elif variant == "full9":
-        pass
+        # Historical evaluation arm: preserve the frozen v0.3 candidate even as
+        # the shipping plugin gains later skills.
+        shutil.rmtree(skills / "knowledge-wiki")
     else:
         raise ValueError(f"unsupported variant: {variant}")
 
