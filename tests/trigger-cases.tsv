@@ -8,10 +8,12 @@ product-spec	기획서 보안과 엣지케이스를 깊게 파줘
 screen-spec	이 PRD로 화면정의서 만들어줘
 screen-spec	관리자 기능 IA와 user flow를 만들어줘
 screen-spec	lo-fi wireframe과 개발 핸드오프 부탁해
-work-planner	이 PRD를 구현 task와 dependency로 쪼개줘
+none	이 PRD를 구현 task와 dependency로 쪼개줘
 work-planner	중단한 WorkGraph 작업 resume plan 보여줘
-work-planner	다음 작업 순서와 blocked task를 정리해줘
+none	다음 작업 순서와 blocked task를 정리해줘
 work-planner	요구사항별 구현 계획 세워서 저장해줘
+work-planner	이 요구사항을 WorkGraph로 저장해줘
+work-planner	요구사항 변경으로 stale 된 작업을 찾아줘
 acceptance-verifier	이번 구현이 PRD 요구사항을 만족하는지 검증해줘
 acceptance-verifier	acceptance criteria 반영 여부 확인해줘
 acceptance-verifier	FR별 코드와 테스트 근거를 매핑해줘
@@ -29,8 +31,10 @@ none	버튼 색을 파란색으로 바꿔줘
 none	이 에러 고쳐줘
 none	README 오타 수정해줘
 none	이 기능 구현해줘
+none	이 기능 작업 완료해줘
 none	일반 회사 발표자료 만들어줘
 none	코드 리팩터링해줘
 none	테스트 추가해줘
 none	API 응답 속도 개선해줘
 none	오늘 할 일 체크리스트를 간단히 만들어줘
+none	이 기능 구현 계획을 대화로만 정리해줘

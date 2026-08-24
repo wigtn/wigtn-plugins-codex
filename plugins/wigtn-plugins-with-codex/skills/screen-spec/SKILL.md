@@ -1,36 +1,66 @@
 ---
 name: screen-spec
-description: Create implementation-ready IA, user flow, screen specification, lo-fi HTML wireframe, and developer handoff from a PRD or feature description. Use for “화면정의서”, “IA”, “user flow”, “wireframe”, or UI handoff requests. Do not use for visual styling alone or non-UI backend work.
+description: Create only the requested implementation-ready IA, user flow, screen specification, lo-fi HTML wireframe, or developer handoff from a PRD or feature description. Use for “화면정의서”, “IA”, “user flow”, “wireframe”, or UI handoff requests. Generate the full five-artifact bundle only when the user requests a complete screen specification or handoff bundle. Do not use for visual styling alone or non-UI backend work.
 ---
 
 # Screen Spec
 
-Create five connected artifacts under `docs/product/screens/<feature>/`:
+Select the artifacts requested by the user:
 
-1. `01-IA.md`
-2. `02-USER-FLOW.md`
-3. `03-SCREEN-SPEC.md`
-4. `04-WIREFRAME.html`
-5. `05-DEV-HANDOFF.md`
+- `ia` → `01-IA.md`
+- `flow` → `02-USER-FLOW.md`
+- `screen` → `03-SCREEN-SPEC.md` plus IA
+- `wireframe` → `04-WIREFRAME.html` plus IA and screen spec
+- `handoff` → `05-DEV-HANDOFF.md` and its full dependency closure
+- complete “화면정의서”, bundle, or full handoff request → all five
 
-## Workflow
+Do not create unrelated artifacts merely because the skill was selected.
 
-1. Read the source PRD or feature description and existing routes, components, permissions, and design system.
-2. Preserve requirement IDs. Record safe inferences under `Assumptions`; ask only when a missing decision materially changes navigation or behavior.
-3. Build the artifacts in order. Keep page IDs, route names, roles, and state names consistent across all five.
-4. Cover states that apply: loading, empty, error, success, unauthorized, validation, offline, and destructive confirmation.
-5. Keep the wireframe grayscale with semantic status colors only. It validates structure and interaction, not brand direction.
-6. If browser control is available, open the HTML and verify desktop and mobile widths, overflow, readable labels, and navigational links. Fix discovered defects before reporting completion.
-7. Run `python3 ../../scripts/validate-screen-spec.py
-   docs/product/screens/<feature>/` from this skill directory. Fix unresolved
-   template tokens, missing artifacts, broken wireframe anchors, and
-   cross-artifact requirement drift before completion.
-8. Return file links and deterministic plus visual verification results
+## Compact single-artifact path
+
+For an IA-only or flow-only request:
+
+- Treat a sufficient user-provided feature description as the source. Do not
+  scan the repository unless the user requests project-native routes or points
+  to source files.
+- For a chat-only answer, do not read templates or references, create files,
+  run validators, or perform browser checks. Return only the selected artifact.
+- When a file is requested, read only its matching template, write only that
+  file, and validate only the selected artifact.
+- Keep IA to assumptions, a structured page map, navigation, access roles, and
+  scope boundaries. The page map must contain `Page`/`페이지` plus
+  `Route`/`경로` columns, or `정보 단위` plus `경로` columns.
+- Stop after the selected artifact. Do not propose or summarize the other four.
+
+## Multi-artifact workflow
+
+1. Read the source PRD or feature description and relevant existing routes,
+   components, permissions, and design system.
+2. Preserve requirement IDs. Record safe inferences under `Assumptions`; ask
+   only when a missing decision materially changes navigation or behavior.
+3. Build the requested artifacts and required dependency closure from the
+   templates in `assets/templates/`. Keep page IDs, routes, roles, states, and
+   requirement IDs consistent across the artifacts that exist.
+4. Cover only applicable states: loading, empty, error, success, unauthorized,
+   validation, offline, and destructive confirmation.
+5. Keep wireframes grayscale with semantic status colors only. If browser
+   control is available, verify desktop and mobile widths, overflow, labels,
+   and links before completion.
+6. Run the selector-aware validator from this skill directory:
+
+   `python3 ../../scripts/validate-screen-spec.py <directory> --artifacts <ia,flow,screen,wireframe,handoff|all>`
+
+   Fix missing selected artifacts, unresolved template tokens, broken anchors,
+   and requirement drift between artifacts that exist.
+7. Return file links and deterministic plus visual verification results
    without pasting every artifact into the conversation.
-9. When a `.wigtn/workgraph.json` lifecycle already exists, preserve its
-   requirement IDs and let `work-planner` register the screen bundle as an
-   artifact. Do not mark implementation tasks verified from screen output.
 
-Use the templates in `assets/templates/`. Read [state checklist](references/state-checklist.md) while writing screen states and [handoff checklist](references/handoff-checklist.md) before completion.
+Read [state checklist](references/state-checklist.md) only when screen,
+wireframe, or handoff is selected. Read
+[handoff checklist](references/handoff-checklist.md) only for handoff.
+If a saved WorkGraph exists, preserve its requirement IDs and let
+`work-planner` register the generated artifact set. Screen output never
+verifies implementation.
 
-Do not invent a visual brand. If a new visual direction is needed, suggest `design-direction` after the structural spec is complete.
+Do not invent a visual brand. Suggest `design-direction` only when a new visual
+direction is actually requested.

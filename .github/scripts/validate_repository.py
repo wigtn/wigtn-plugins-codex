@@ -19,7 +19,6 @@ EXPECTED_SKILLS = {
     "verified-delivery",
     "release-readiness",
     "handdrawn-diagram",
-    "knowledge-wiki",
     "wigtn-presentation",
     "work-planner",
 }
@@ -63,8 +62,8 @@ def main() -> int:
     if marketplace.get("name") != "wigtn":
         errors.append("marketplace name must be 'wigtn'")
     entries = marketplace.get("plugins", [])
-    if len(entries) != 1:
-        errors.append(f"marketplace must contain exactly one plugin, found {len(entries)}")
+    if len(entries) != 2:
+        errors.append(f"marketplace must contain exactly two plugins, found {len(entries)}")
         entries = []
 
     plugin_root: Path | None = None
@@ -145,14 +144,19 @@ def main() -> int:
                 errors.append(
                     f"{name}: default_prompt must explicitly mention {qualified_name}"
                 )
-            if "allow_implicit_invocation: true" not in yaml_text:
-                errors.append(f"{name}: skill must remain discoverable in the catalog")
+            expected_policy = (
+                "allow_implicit_invocation: false"
+                if name == "verified-delivery"
+                else "allow_implicit_invocation: true"
+            )
+            if expected_policy not in yaml_text:
+                errors.append(f"{name}: invocation policy mismatch")
             if name == "verified-delivery" and "never auto-invoke for ordinary coding" not in description:
                 errors.append(
                     "verified-delivery: description must preserve the explicit-only boundary"
                 )
-        if description_total > 4000:
-            errors.append(f"skill description budget exceeded: {description_total}/4000")
+        if description_total > 3200:
+            errors.append(f"core skill description budget exceeded: {description_total}/3200")
 
         evidence_paths = [
             plugin_root / "schemas" / "evidence-contract.schema.json",
@@ -210,6 +214,44 @@ def main() -> int:
                 )
                 if workgraph_version != "1.0":
                     errors.append("WorkGraph schema_version must be 1.0")
+
+    if entries:
+        wiki_entries = [
+            entry for entry in entries
+            if entry.get("name") == "wigtn-knowledge-wiki"
+        ]
+        if len(wiki_entries) != 1:
+            errors.append("marketplace must contain wigtn-knowledge-wiki exactly once")
+        else:
+            wiki_source = wiki_entries[0].get("source", {})
+            wiki_root = (ROOT / str(wiki_source.get("path", ""))).resolve()
+            try:
+                wiki_manifest = load_json(wiki_root / ".codex-plugin" / "plugin.json")
+            except ValueError as exc:
+                errors.append(str(exc))
+                wiki_manifest = {}
+            if wiki_root.name != "wigtn-knowledge-wiki" or not wiki_root.is_dir():
+                errors.append("knowledge-wiki source directory must exist and match")
+            if wiki_manifest.get("name") != "wigtn-knowledge-wiki":
+                errors.append("knowledge-wiki manifest name mismatch")
+            if wiki_manifest.get("skills") != "./skills/":
+                errors.append("knowledge-wiki manifest skills path must be ./skills/")
+            wiki_skills = wiki_root / "skills"
+            wiki_names = {path.name for path in wiki_skills.iterdir() if path.is_dir()}
+            if wiki_names != {"knowledge-wiki"}:
+                errors.append("knowledge-wiki plugin must contain exactly one skill")
+            wiki_yaml = wiki_skills / "knowledge-wiki" / "agents" / "openai.yaml"
+            if not wiki_yaml.is_file() or (
+                "Use $wigtn-knowledge-wiki:knowledge-wiki"
+                not in wiki_yaml.read_text(encoding="utf-8")
+            ):
+                errors.append("knowledge-wiki default prompt must use its qualified name")
+            if not (wiki_root / "hooks" / "hooks.json").is_file():
+                errors.append("knowledge-wiki plugin must contain its Stop hook")
+            if not (wiki_root / "scripts" / "knowledge_wiki" / "capture.py").is_file():
+                errors.append("knowledge-wiki capture script is missing")
+            if (ROOT / "plugins" / "wigtn-plugins-with-codex" / "hooks").exists():
+                errors.append("core plugin must not contain hooks")
 
     if errors:
         print("Repository validation: FAIL")

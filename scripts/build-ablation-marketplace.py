@@ -90,9 +90,18 @@ def build(destination: Path, variant: str) -> None:
     marketplace = destination / ".agents" / "plugins"
     target_plugin = destination / "plugins" / PLUGIN_NAME
     marketplace.mkdir(parents=True)
-    shutil.copy2(
-        ROOT / ".agents" / "plugins" / "marketplace.json",
-        marketplace / "marketplace.json",
+    source_marketplace = json.loads(
+        (ROOT / ".agents" / "plugins" / "marketplace.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    source_marketplace["plugins"] = [
+        entry
+        for entry in source_marketplace.get("plugins", [])
+        if entry.get("name") == PLUGIN_NAME
+    ]
+    (marketplace / "marketplace.json").write_text(
+        json.dumps(source_marketplace, indent=2) + "\n", encoding="utf-8"
     )
     shutil.copytree(PLUGIN, target_plugin)
 
@@ -107,13 +116,10 @@ def build(destination: Path, variant: str) -> None:
         create_placebo(skills)
     elif variant == "full8":
         shutil.rmtree(skills / "work-planner")
-        # Historical evaluation arm: keep the frozen nine-skill candidate minus
-        # work-planner. New post-study skills must not silently change this arm.
-        shutil.rmtree(skills / "knowledge-wiki")
+        # Historical evaluation shape: the current core nine minus work-planner.
     elif variant == "full9":
-        # Historical evaluation arm: preserve the frozen v0.3 candidate even as
-        # the shipping plugin gains later skills.
-        shutil.rmtree(skills / "knowledge-wiki")
+        # Current core-nine catalog without the separately installed Wiki plugin.
+        pass
     else:
         raise ValueError(f"unsupported variant: {variant}")
 

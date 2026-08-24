@@ -315,9 +315,10 @@ wigtn-plugins-with-codex/
 
 #### 목적
 
-PRD 또는 명확한 기능 설명에서 프론트엔드 구현에 필요한 5종 산출물을 만든다.
+PRD 또는 명확한 기능 설명에서 사용자가 요청한 화면 산출물과 필요한
+dependency closure만 만든다. 전체 화면정의서 요청일 때만 5종 번들을 만든다.
 
-#### 필수 산출물
+#### 사용 가능한 산출물
 
 ```text
 docs/product/screens/<feature>/
@@ -355,14 +356,16 @@ docs/product/screens/<feature>/
 
 | Requirement | Status | Code evidence | Test evidence | Gap |
 |---|---|---|---|---|
-| AC-EXAMPLE-01 | Satisfied | `path:line` | `command` PASS | - |
+| AC-EXAMPLE-01 | `verified` | `path:line` | `command` PASS | - |
 
-상태는 다음 네 가지만 사용한다.
+대화와 machine-readable artifact에서 다음 canonical 상태를 동일하게 사용한다.
 
-- `Satisfied`
-- `Partially satisfied`
-- `Not satisfied`
-- `Not verifiable`
+- `verified`
+- `implemented-not-executed`
+- `partially-verified`
+- `not-satisfied`
+- `not-verifiable`
+- `not-applicable`
 
 #### 규칙
 
@@ -598,7 +601,7 @@ MVP 평가가 안정된 후 `0.2.0` 후보로 추가한다.
 
 | ID | 요구사항 |
 |---|---|
-| FR-201 | screen-spec은 5종 산출물을 정해진 디렉터리에 생성해야 한다. |
+| FR-201 | screen-spec은 요청한 산출물과 필요한 dependency closure만 생성하며, 전체 화면정의서 요청에서는 5종 번들을 생성해야 한다. |
 | FR-202 | 모든 화면은 관련 FR 또는 사용자 목표와 연결되어야 한다. |
 | FR-203 | 중요한 화면 상태와 권한 분기를 검토해야 한다. |
 | FR-204 | wireframe은 lo-fi 구조 검증용이어야 하며 브랜드 스타일을 임의 결정하지 않아야 한다. |
@@ -610,7 +613,7 @@ MVP 평가가 안정된 후 `0.2.0` 후보로 추가한다.
 |---|---|
 | FR-301 | acceptance-verifier는 요구사항별 상태와 코드 근거를 출력해야 한다. |
 | FR-302 | 실행한 검증 명령과 종료 결과를 기록해야 한다. |
-| FR-303 | 근거가 부족한 요구사항은 PASS 대신 `Not verifiable`로 표시해야 한다. |
+| FR-303 | 근거가 부족한 요구사항은 PASS 대신 `not-verifiable`로 표시해야 한다. |
 | FR-304 | 사용자의 수정 요청 없이 코드를 변경하지 않아야 한다. |
 | FR-305 | 요구사항 밖에서 발견한 문제를 별도 섹션으로 분리해야 한다. |
 
@@ -696,7 +699,7 @@ MVP 평가가 안정된 후 `0.2.0` 후보로 추가한다.
 |---|---|---|
 | E-01 | “OAuth 기능 PRD 뽑아줘” | product-spec 자동 호출, 구현 가능한 PRD |
 | E-02 | “버튼 색을 파란색으로 바꿔줘” | 무거운 스킬 미호출, 최소 수정 |
-| E-03 | “이 PRD로 화면정의서 만들어줘” | 5종 산출물과 렌더 검증 |
+| E-03 | “이 PRD로 화면정의서 만들어줘” | 전체 5종 산출물과 렌더 검증 |
 | E-04 | “이번 diff가 FR을 모두 만족하는지 검증해줘” | requirement-evidence matrix |
 | E-05 | 명시적 verified-delivery 구현 | 계획 과잉 없이 구현·검증 완료 |
 | E-06 | “변경 리뷰하고 커밋 준비해줘” | 범위 보존, 실제 검증, 명시 권한 준수 |
@@ -833,7 +836,7 @@ MVP는 다음 상태일 때 완료로 본다.
 - [ ] 각 스킬에 positive/negative trigger와 invocation policy가 정의되어 있다.
 - [ ] “PRD 뽑아줘”로 product-spec이 자연어 자동 호출된다.
 - [ ] 단순 코드 수정에서 무거운 스킬이 호출되지 않는다.
-- [ ] screen-spec 5종 산출물이 생성되고 wireframe이 시각 검증된다.
+- [ ] screen-spec은 요청 산출물과 dependency closure만 만들고 전체 요청에서는 5종 번들을 생성한다.
 - [ ] acceptance-verifier가 요구사항과 코드·테스트 근거를 연결한다.
 - [ ] 사용자 요청 없는 commit, push, PR, issue, deploy가 발생하지 않는다.
 - [ ] E-01~E-15 평가와 표현 변형 출시 게이트를 통과한다.

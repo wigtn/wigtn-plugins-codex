@@ -15,22 +15,22 @@ SKILL = (
     / "SKILL.md"
 )
 EVIDENCE = SKILL.parent / "references" / "delivery-evidence.md"
+POLICY = SKILL.parent / "agents" / "openai.yaml"
 
 
 def main() -> int:
     skill = SKILL.read_text(encoding="utf-8")
     evidence = EVIDENCE.read_text(encoding="utf-8")
+    policy = POLICY.read_text(encoding="utf-8")
     required = {
         "explicit boundary": "never auto-invoke for ordinary coding",
-        "fast route": "## Fast path",
-        "assurance route": "## Assurance path",
-        "risk gate": "auth, tenancy, secret, migration, persistence, concurrency",
-        "bounded checks": "at most one relevant repository suite",
-        "native oracle non-duplication": "Do not build an alternate harness when native",
-        "no fast-path state": "Do not create stable IDs, WorkGraph state, evidence JSON",
-        "multi-interface census": "make a compact coverage census",
+        "single workflow": "## Workflow",
+        "risk gate": "auth, tenancy, secrets, migration, persistence, concurrency",
+        "proportional evidence": "only when the request names multiple material requirements",
+        "native oracle non-duplication": "Do not duplicate a passing repository oracle",
+        "no default state": "Do not create stable IDs, WorkGraph state, or evidence JSON by default",
+        "multi-interface census": "Use a compact coverage census",
         "reference isolation": "Do not inspect or copy another checkout",
-        "search stop rule": "diagnostic cycles without new evidence",
         "leakage invalidates evidence": "A clean evaluator pass does not",
         "matrix suppression": "Do not manufacture a matrix for a one-line fix",
     }
@@ -43,13 +43,13 @@ def main() -> int:
         )
         if phrase not in corpus:
             failures.append(f"{label}: missing {phrase!r}")
+    if "allow_implicit_invocation: false" not in policy:
+        failures.append("explicit policy: allow_implicit_invocation must be false")
+    if "## Fast path" in skill or "## Assurance path" in skill:
+        failures.append("legacy route headings must be removed")
     if failures:
         print("Verified-delivery routing: FAIL")
         print("\n".join(failures))
-        return 1
-    if skill.index("## Fast path") > skill.index("## Assurance path"):
-        print("Verified-delivery routing: FAIL")
-        print("fast path must be presented before assurance path")
         return 1
     print(f"Verified-delivery routing: PASS ({len(required)} contracts)")
     return 0

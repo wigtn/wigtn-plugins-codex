@@ -1,0 +1,21 @@
+{
+  "name": "wigtn-knowledge-wiki",
+  "version": "0.5.0",
+  "description": "Opt-in, gated Codex session knowledge capture for an explicitly authorized personal wiki namespace.",
+  "author": {
+    "name": "WIGTN"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "WIGTN Knowledge Wiki",
+    "shortDescription": "Opt-in gated Codex knowledge capture.",
+    "longDescription": "Captures reusable session knowledge only for globally authorized repositories and publishes only to a configured per-user wiki namespace after deterministic and semantic safety gates.",
+    "developerName": "WIGTN",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "Configure opt-in WIGTN knowledge capture for this repository.",
+      "Diagnose the current WIGTN knowledge-wiki gates without exposing transcript content."
+    ]
+  }
+}

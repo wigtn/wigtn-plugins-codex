@@ -11,10 +11,13 @@ This repository is a selective rewrite, not a directory-for-directory port.
 
 ## Rewritten
 
-- Claude commands and role agents are replaced by eight Codex skills.
+- Claude commands and role agents are replaced by nine selective Codex skills.
 - `prd-reviewer` and `parallel-digging-coordinator` become create, review, and deep-dive modes inside `product-spec`.
 - `auto-commit` and PR review logic become `release-readiness`, with natural-language scope mapping and no numeric quality gate.
-- `/implement` becomes explicit-only `verified-delivery`; ordinary coding remains free of plugin ceremony.
+- `/implement` becomes explicit-only, proportional `verified-delivery`; ordinary coding remains free of plugin ceremony.
+- The opt-in Knowledge Wiki and its Stop hook ship as the separate
+  `wigtn-knowledge-wiki` plugin, so installing the core plugin never installs a
+  global hook.
 
 The 2026 GPT-5.5/5.6 Sol study supports this split: all four implementation
 arms passed 12/12 visible and hidden tests, while explicit verified delivery
@@ -25,4 +28,6 @@ authority contract remains mandatory.
 
 ## Not migrated
 
-- Claude-specific tool names, commands, fixed subagent fan-out, team-memory protocol, lifecycle hooks, model routing, automatic dependency installation, and destructive rollback.
+- Claude-specific tool names, commands, fixed subagent fan-out, team-memory
+  protocol, core-plugin lifecycle hooks, model routing, automatic dependency
+  installation, and destructive rollback.

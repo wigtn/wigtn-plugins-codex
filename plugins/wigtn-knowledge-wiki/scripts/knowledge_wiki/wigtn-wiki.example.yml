@@ -1,0 +1,8 @@
+# Optional repository-local marker.
+# A marker can disable capture for this repository or provide a generalized
+# project label. It cannot opt a repository into the global include list,
+# select a wiki target, or enable push.
+project: generalized-project-label
+
+# To disable only this repository, use exactly:
+# enabled: false

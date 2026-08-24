@@ -2,10 +2,10 @@
 
 # WIGTN Plugin for Codex
 
-**Codex의 자율성은 그대로. WIGTN Plugin의 제품 개발 계약은 필요한 순간에만.**
+**Codex의 자율성은 그대로. PRD·작업 계획·검증·Git 권한은 필요한 순간에만.**
 
-![Version](https://img.shields.io/badge/version-0.4.0-6C5CE7?style=for-the-badge)
-![Skills](https://img.shields.io/badge/skills-10-00B894?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.5.0-6C5CE7?style=for-the-badge)
+![Skills](https://img.shields.io/badge/core_skills-9-00B894?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/platform-Codex-111827?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-Apache--2.0-0984E3?style=for-the-badge)
 
@@ -15,12 +15,15 @@
 
 ## 왜 WIGTN Plugin for Codex인가요?
 
-Codex는 코드 탐색, 설계 판단, 구현과 기본 리뷰를 이미 잘합니다. WIGTN 플러그인은 그 능력을 무거운 절차로 감싸지 않습니다. 대신 PRD, 화면정의, 인수조건 검증, 안전한 릴리스처럼 **제품 개발에 반복적으로 필요한 작업 계약**만 스킬로 제공합니다.
+Codex는 코드 탐색, 설계 판단, 구현과 기본 리뷰를 이미 잘합니다. WIGTN
+Plugin은 그 능력을 무거운 절차로 감싸지 않습니다. 대신 PRD 필수 항목,
+화면정의 산출물, 요구사항별 실행 근거, commit·push·PR 권한처럼
+**결과가 명확한 규칙**만 skill로 제공합니다.
 
 ```text
-일반 코딩 요청     → Codex가 평소처럼 자유롭게 처리
-제품 워크플로 요청 → 가장 작은 WIGTN 스킬이 자동 선택
-전체 구현 요청     → qualified $verified-delivery를 명시했을 때만 실행
+일반 코딩 요청       → Codex가 평소처럼 자유롭게 처리
+PRD·명세·검증 요청  → 해당 WIGTN skill 선택
+전체 구현·검증 요청 → qualified $verified-delivery를 명시했을 때만 실행
 ```
 
 핵심 원칙은 간단합니다.
@@ -39,6 +42,12 @@ GitHub 마켓플레이스를 등록하고 플러그인을 설치하세요.
 ```bash
 codex plugin marketplace add wigtn/wigtn-plugins-codex
 codex plugin add wigtn-plugins-with-codex@wigtn
+```
+
+세션 지식 자동 축적이 필요한 사용자만 별도 hook 플러그인을 설치합니다.
+
+```bash
+codex plugin add wigtn-knowledge-wiki@wigtn
 ```
 
 Codex 앱에서는 Plugins를 열어 WIGTN 마켓플레이스를 선택한 뒤 플러그인을 설치하고 새 작업을 시작하면 됩니다. 설치 후에는 별도 명령을 외울 필요 없이 자연어로 요청하세요.
@@ -88,20 +97,19 @@ release-readiness ──── 안전한 커밋·푸시·PR
 
 ---
 
-## 포함된 10개 스킬
+## 포함된 9개 Core 스킬
 
 | 스킬 | 하는 일 | 자연어 호출 예시 | 호출 정책 |
 |---|---|---|---|
 | `product-spec` | 구현 가능한 PRD 생성, 리뷰, 딥다이브 | “PRD 뽑아줘” | 자동 |
-| `screen-spec` | IA, User Flow, 화면 명세, lo-fi HTML 와이어프레임, 개발 핸드오프 | “화면정의서 만들어줘” | 자동 |
-| `work-planner` | 요구사항을 dependency-aware task·check WorkGraph로 변환 | “구현 계획과 작업 순서 세워줘” | 자동 |
+| `screen-spec` | 요청한 IA, User Flow, 화면 명세, lo-fi HTML 와이어프레임 또는 개발 핸드오프 | “화면정의서 만들어줘” | 자동 |
+| `work-planner` | 요구사항을 저장·재개 가능한 dependency-aware WorkGraph로 변환 | “이 계획을 WorkGraph로 저장해줘” | 자동·저장형 전용 |
 | `acceptance-verifier` | PRD 요구사항과 코드·실행 테스트 증거를 연결해 충족 여부 판정 | “요구사항 반영됐는지 검증해줘” | 자동 |
 | `design-direction` | 기존 디자인 시스템을 먼저 읽고 신규 UI 방향 제안 | “이 UI 디자인 방향 잡아줘” | 자동·제한적 |
-| `verified-delivery` | 구현부터 테스트·타입체크·빌드까지 전체 전달 루프 실행 | `$verified-delivery로 구현해줘` | **명시 호출 전용** |
+| `verified-delivery` | 구현에 비례적인 requirement→code→executed-check 근거 추가 | `$verified-delivery로 구현해줘` | **명시 호출 전용** |
 | `release-readiness` | 변경 범위를 보존하며 검증, 커밋, 푸시, PR 수행 | “커밋해줘”, “PR 올려줘” | 자동·제한적 |
 | `handdrawn-diagram` | Mermaid handDrawn 소스와 검증된 SVG·PNG 생성 | “손그림 아키텍처 만들어줘” | 자동 |
 | `wigtn-presentation` | WIGTN 잉크 네이비와 퍼플 점을 적용한 브랜드 발표자료 생성 | “WIGTN 발표자료 만들어줘” | 자동·제한적 |
-| `knowledge-wiki` | 허용된 Codex 세션의 재사용 가능한 지식을 안전 게이트를 거쳐 개인 위키에 축적 | “세션 지식 위키 설정해줘” | 자동·옵트인 |
 
 ### 자동 호출과 명시 호출
 
@@ -109,9 +117,20 @@ release-readiness ──── 안전한 커밋·푸시·PR
 
 ---
 
+## v0.5.0: GPT‑5.6 Sol 하네스 다이어트
+
+- PRD는 Compact가 기본이며 실제 추가 계약이 필요한 경우만 Full로 승격합니다.
+- Screen Spec은 요청 산출물과 dependency closure만 만들고 전체 요청만 5종 번들을 만듭니다.
+- Work Planner는 저장·resume·drift가 필요한 WorkGraph 요청에만 개입합니다.
+- Verified Delivery는 암시 호출을 차단하고 중복 fast/assurance 절차를 하나의 비례형 evidence 계약으로 줄였습니다.
+- Acceptance 결과는 대화와 JSON에서 같은 canonical 상태를 사용합니다.
+- Knowledge Wiki와 Stop hook은 별도 `wigtn-knowledge-wiki` 플러그인으로 분리했습니다.
+
+---
+
 ## v0.4.0: 옵트인 Knowledge Wiki
 
-v0.4.0은 허용된 저장소의 Codex 세션에서 재사용 가능한 기술 지식만
+v0.4.0에서 도입한 기능은 v0.5.0부터 별도 플러그인으로 제공됩니다. 허용된 저장소의 Codex 세션에서 재사용 가능한 기술 지식만
 일반화해 팀 위키의 `per-user/` 영역에 축적합니다. 설치만으로는 동작하지
 않으며, 별도 설정에서 `enabled: true`와 좁은 `include` 범위를 지정해야 합니다.
 시크릿·개인정보·조직 식별 정보는 결정론 검사와 독립 LLM 감사를 모두
@@ -120,7 +139,7 @@ v0.4.0은 허용된 저장소의 Codex 세션에서 재사용 가능한 기술 �
 
 ---
 
-## v0.3.0: 선택적 제품 개발 계약
+## v0.3.0: PRD·상태·검증·릴리스 규칙
 
 v0.3.0은 `product-spec` → `work-planner` → `verified-delivery` →
 `acceptance-verifier` → `release-readiness` 사이에서 요구사항·코드·실행
@@ -136,7 +155,7 @@ v0.3.0은 `product-spec` → `work-planner` → `verified-delivery` →
 | Artifact interop | Spec Kit·OpenSpec·BMAD 정규화, 변경 없는 evidence resume, spec drift 시 무효화 |
 | Project context | 선택적 `.wigtn/project.json`으로 요구사항 출처·검증 명령·보호 경로·profile 공유 |
 | Evidence status | source hash drift, 사라진 코드 증거, canonical status와 release authority 점검 |
-| Screen contract | 5종 산출물, wireframe anchor, FR handoff drift를 결정론적으로 검증 |
+| Screen contract | 선택 산출물과 dependency closure, wireframe anchor, FR handoff drift를 결정론적으로 검증 |
 | Release state | branch/upstream/충돌/staged/unstaged/untracked를 mutation 없이 JSON 점검 |
 | 평가 분리 | trigger/evidence 정적 계약과 실제 model behavior smoke를 별도 실행 |
 | 비용 회귀 | bare/placebo4/core4/full9를 GPT‑5.5/5.6 Sol에서 분리하고 품질·token·latency를 별도 공개 |
@@ -234,7 +253,6 @@ Claude 전용 도구 이름, 고정 서브에이전트 fan-out, 자동 모델 �
 │   └── MIGRATION.md
 ├── plugins/wigtn-plugins-with-codex/
 │   ├── .codex-plugin/plugin.json
-│   ├── hooks/hooks.json
 │   ├── references/
 │   ├── schemas/
 │   ├── scripts/
@@ -247,8 +265,12 @@ Claude 전용 도구 이름, 고정 서브에이전트 fan-out, 자동 모델 �
 │       ├── verified-delivery/
 │       ├── release-readiness/
 │       ├── handdrawn-diagram/
-│       ├── wigtn-presentation/
-│       └── knowledge-wiki/
+│       └── wigtn-presentation/
+├── plugins/wigtn-knowledge-wiki/
+│   ├── .codex-plugin/plugin.json
+│   ├── hooks/hooks.json
+│   ├── scripts/knowledge_wiki/
+│   └── skills/knowledge-wiki/
 ├── scripts/
 └── tests/
 ```
@@ -373,11 +395,11 @@ v0.3.0의 구조·trigger·Evidence Contract·WorkGraph 검증은 완료됐습�
 
 ## 안전 설계
 
-- 일반 코딩에 제품 워크플로를 강제하지 않습니다.
+- 일반 코딩에 PRD·작업 계획·검증 절차를 강제하지 않습니다.
 - `verified-delivery`는 명시적으로 호출해야 합니다.
 - 사용자 요청 없이 커밋, 푸시, PR, 이슈 생성 또는 배포를 하지 않습니다.
 - 저장소의 기존 변경사항을 사용자 작업으로 취급하고 보존합니다.
-- MCP, 앱, lifecycle hook, 자동 Sol/Terra/Luna 라우팅을 MVP에 번들하지 않습니다.
+- Core에는 MCP, 앱, lifecycle hook, 자동 Sol/Terra/Luna 라우팅을 번들하지 않습니다.
 
 ---
 

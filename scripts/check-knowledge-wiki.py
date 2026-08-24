@@ -13,7 +13,7 @@ import tempfile
 from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULES = ROOT / "plugins" / "wigtn-plugins-with-codex" / "scripts" / "knowledge_wiki"
+MODULES = ROOT / "plugins" / "wigtn-knowledge-wiki" / "scripts" / "knowledge_wiki"
 sys.path.insert(0, str(MODULES))
 
 import common  # noqa: E402
@@ -68,6 +68,40 @@ def main() -> int:
         disabled = dict(conf)
         disabled["enabled"] = False
         check(common.resolve_tenant(disabled, str(repo))[0] is None, "kill switch must win")
+
+        outside = temp / "outside" / "untrusted"
+        outside.mkdir(parents=True)
+        (outside / ".git").mkdir()
+        (outside / ".wigtn-wiki.yml").write_text(
+            "enabled: true\nproject: outside\n", encoding="utf-8"
+        )
+        check(
+            common.resolve_tenant(conf, str(outside))[0] is None,
+            "repository marker must not bypass the global include list",
+        )
+
+        (repo / ".wigtn-wiki.yml").write_text(
+            f"project: product\nwiki:\n  path: {outside}\n", encoding="utf-8"
+        )
+        check(
+            common.resolve_tenant(conf, str(repo))[0] is None,
+            "repository marker must not override the wiki target",
+        )
+        (repo / ".wigtn-wiki.yml").write_text(
+            "project: product\npublish:\n  push: true\n", encoding="utf-8"
+        )
+        check(
+            common.resolve_tenant(conf, str(repo))[0] is None,
+            "repository marker must not override publish authority",
+        )
+        (repo / ".wigtn-wiki.yml").unlink()
+
+        excluded_conf = dict(conf)
+        excluded_conf["exclude"] = [str(repo)]
+        check(
+            common.resolve_tenant(excluded_conf, str(repo))[0] is None,
+            "exclude must win over include",
+        )
         check(common.scan_input("api_key=abcdefghijklmnop") == ["D1 API 키"], "G1 key pattern")
         check(common.scan_output("contact dev@example.com") == ["D2 이메일"], "G4 email pattern")
 

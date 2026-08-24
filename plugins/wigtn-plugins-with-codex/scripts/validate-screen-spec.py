@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate a WIGTN five-artifact screen specification."""
+"""Validate selected WIGTN screen artifacts and their dependency closure."""
 
 from __future__ import annotations
 
@@ -9,13 +9,20 @@ from pathlib import Path
 import re
 
 
-FILES = (
-    "01-IA.md",
-    "02-USER-FLOW.md",
-    "03-SCREEN-SPEC.md",
-    "04-WIREFRAME.html",
-    "05-DEV-HANDOFF.md",
-)
+ARTIFACTS = {
+    "ia": "01-IA.md",
+    "flow": "02-USER-FLOW.md",
+    "screen": "03-SCREEN-SPEC.md",
+    "wireframe": "04-WIREFRAME.html",
+    "handoff": "05-DEV-HANDOFF.md",
+}
+DEPENDENCIES = {
+    "ia": set(),
+    "flow": set(),
+    "screen": {"ia"},
+    "wireframe": {"ia", "screen"},
+    "handoff": {"ia", "flow", "screen", "wireframe"},
+}
 KNOWN_PLACEHOLDER = re.compile(
     r"\{(?:feature-name|YYYY-MM-DD|route-[^}]+|slug-[^}]+|role-[^}]+|"
     r"audience|auth|요약|분기|처리|대상 화면|endpoint|sub-task-list)[^}]*\}"
@@ -26,6 +33,25 @@ HTML_ID = re.compile(r'\bid=["\']([A-Za-z][A-Za-z0-9._:-]*)["\']')
 SCREEN_HEADING = re.compile(r"^## Screen:\s*(.+?)\s*$", re.M)
 
 
+def has_ia_page_map(text: str) -> bool:
+    """Accept an English or Korean structured page map without loose prose hits."""
+    for line in text.splitlines():
+        if not line.lstrip().startswith("|"):
+            continue
+        cells = [cell.strip().casefold() for cell in line.strip().strip("|").split("|")]
+        if any(cell == "page" or "페이지" in cell for cell in cells):
+            return True
+        has_information_unit = any(
+            "정보 단위" in cell or cell == "화면" for cell in cells
+        )
+        has_route = any(
+            cell in {"route", "path", "url"} or "경로" in cell for cell in cells
+        )
+        if has_information_unit and has_route:
+            return True
+    return False
+
+
 def require(text: str, needle: str, path: str, errors: list[str]) -> None:
     if needle not in text:
         errors.append(f"{path}: missing {needle!r}")
@@ -34,11 +60,34 @@ def require(text: str, needle: str, path: str, errors: list[str]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("directory", type=Path)
+    parser.add_argument(
+        "--artifacts",
+        default="all",
+        help="Comma-separated ia,flow,screen,wireframe,handoff or all",
+    )
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
     errors: list[str] = []
+    requested = (
+        set(ARTIFACTS)
+        if args.artifacts == "all"
+        else {item.strip() for item in args.artifacts.split(",") if item.strip()}
+    )
+    unknown = requested - set(ARTIFACTS)
+    if not requested:
+        errors.append("--artifacts must select at least one artifact")
+    if unknown:
+        errors.append("unknown artifacts: " + ", ".join(sorted(unknown)))
+    selected = set(requested - unknown)
+    pending = list(selected)
+    while pending:
+        name = pending.pop()
+        for dependency in DEPENDENCIES[name] - selected:
+            selected.add(dependency)
+            pending.append(dependency)
     texts: dict[str, str] = {}
-    for name in FILES:
+    for artifact in sorted(selected):
+        name = ARTIFACTS[artifact]
         path = args.directory / name
         if not path.is_file():
             errors.append(f"{name}: missing artifact")
@@ -58,35 +107,45 @@ def main() -> int:
     screen = texts.get("03-SCREEN-SPEC.md", "")
     wireframe = texts.get("04-WIREFRAME.html", "")
     handoff = texts.get("05-DEV-HANDOFF.md", "")
-    require(ia, "Page", "01-IA.md", errors)
-    require(flow, "```mermaid", "02-USER-FLOW.md", errors)
-    require(flow, "Flow Coverage", "02-USER-FLOW.md", errors)
-    require(handoff, "FR", "05-DEV-HANDOFF.md", errors)
-    require(handoff, "Suggested Implementation Order", "05-DEV-HANDOFF.md", errors)
+    if ia:
+        if not has_ia_page_map(ia):
+            errors.append(
+                "01-IA.md: missing structured page map "
+                "(Page/페이지 or 정보 단위 + Route/경로 columns)"
+            )
+    if flow:
+        require(flow, "```mermaid", "02-USER-FLOW.md", errors)
+        require(flow, "Flow Coverage", "02-USER-FLOW.md", errors)
+    if handoff:
+        require(handoff, "FR", "05-DEV-HANDOFF.md", errors)
+        require(handoff, "Suggested Implementation Order", "05-DEV-HANDOFF.md", errors)
 
-    screens = SCREEN_HEADING.findall(screen)
-    if not screens:
-        errors.append("03-SCREEN-SPEC.md: no screen headings")
-    elif len(screens) != len(set(screens)):
-        errors.append("03-SCREEN-SPEC.md: duplicate screen heading")
-    anchors = ANCHOR_REF.findall(screen)
-    if len(anchors) != len(set(anchors)):
-        errors.append("03-SCREEN-SPEC.md: duplicate wireframe anchor")
-    html_ids = set(HTML_ID.findall(wireframe))
-    for anchor in sorted(set(anchors) - html_ids):
-        errors.append(f"04-WIREFRAME.html: missing referenced anchor #{anchor}")
-    screen_ids = {value for value in html_ids if value.startswith("screen-")}
-    if not screen_ids:
-        errors.append("04-WIREFRAME.html: no screen-* id")
+    anchors: list[str] = []
+    if screen:
+        screens = SCREEN_HEADING.findall(screen)
+        if not screens:
+            errors.append("03-SCREEN-SPEC.md: no screen headings")
+        elif len(screens) != len(set(screens)):
+            errors.append("03-SCREEN-SPEC.md: duplicate screen heading")
+        anchors = ANCHOR_REF.findall(screen)
+        if len(anchors) != len(set(anchors)):
+            errors.append("03-SCREEN-SPEC.md: duplicate wireframe anchor")
+    if wireframe:
+        html_ids = set(HTML_ID.findall(wireframe))
+        for anchor in sorted(set(anchors) - html_ids):
+            errors.append(f"04-WIREFRAME.html: missing referenced anchor #{anchor}")
+        screen_ids = {value for value in html_ids if value.startswith("screen-")}
+        if not screen_ids:
+            errors.append("04-WIREFRAME.html: no screen-* id")
 
     ia_ids = set(REQ_ID.findall(ia))
     screen_req_ids = set(REQ_ID.findall(screen))
     handoff_ids = set(REQ_ID.findall(handoff))
-    for requirement in sorted(screen_req_ids - ia_ids):
+    for requirement in sorted(screen_req_ids - ia_ids) if ia and screen else []:
         errors.append(
             f"03-SCREEN-SPEC.md: {requirement} is absent from 01-IA.md"
         )
-    for requirement in sorted(screen_req_ids - handoff_ids):
+    for requirement in sorted(screen_req_ids - handoff_ids) if handoff and screen else []:
         errors.append(
             f"05-DEV-HANDOFF.md: missing screen requirement {requirement}"
         )

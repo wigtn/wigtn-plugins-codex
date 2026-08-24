@@ -1,21 +1,21 @@
 {
   "name": "wigtn-plugins-with-codex",
-  "version": "0.4.0",
-  "description": "Selective, evidence-first product lifecycle workflows for Codex: PRD contracts, resumable WorkGraph planning, screen specs, acceptance evidence, explicit verified delivery, safe release actions, and opt-in gated knowledge capture.",
+  "version": "0.5.0",
+  "description": "Selective product contracts for Codex: compact PRDs, saved WorkGraphs, scoped screen artifacts, acceptance evidence, explicit verified delivery, and safe release actions.",
   "author": {
     "name": "WIGTN"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "WIGTN Plugin for Codex",
-    "shortDescription": "Product contracts, evidence, safe delivery, and gated wiki capture.",
-    "longDescription": "Adds focused product contracts, resumable WorkGraph planning, evidence integrity, authority boundaries, and opt-in knowledge-wiki capture while leaving ordinary Codex coding unconstrained. Verified delivery is explicit-only and wiki capture is off until explicitly configured.",
+    "shortDescription": "Product contracts, evidence, and safe delivery.",
+    "longDescription": "Adds compact product contracts, saved WorkGraph planning, scoped screen artifacts, evidence integrity, and release authority boundaries while leaving ordinary Codex coding unconstrained. Verified delivery remains explicit-only.",
     "developerName": "WIGTN",
     "category": "Productivity",
     "capabilities": [],
     "defaultPrompt": [
       "Turn this idea into an implementation-ready PRD.",
-      "Turn these requirements into a dependency-aware implementation plan.",
+      "Save these requirements as a resumable dependency-aware WorkGraph.",
       "Verify this implementation and prepare only the requested Git action."
     ]
   }

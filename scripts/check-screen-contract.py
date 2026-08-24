@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression checks for the five-artifact screen contract."""
+"""Regression checks for selected and bundled screen artifacts."""
 
 from __future__ import annotations
 
@@ -34,10 +34,26 @@ VALID = {
     ),
 }
 
+KOREAN_IA = """# 조직 관리자 팀원 초대 기능 IA
 
-def run(directory: Path) -> subprocess.CompletedProcess[str]:
+## 페이지 및 경로
+
+| ID | 정보 단위 | 권장 경로 | 접근 권한 |
+|---|---|---|---|
+| IA-ORG-01 | 팀원 관리 | `/organizations/:orgId/members` | 관리자 |
+"""
+
+
+def run(directory: Path, artifacts: str = "all") -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        [sys.executable, str(VALIDATOR), str(directory), "--json"],
+        [
+            sys.executable,
+            str(VALIDATOR),
+            str(directory),
+            "--artifacts",
+            artifacts,
+            "--json",
+        ],
         text=True,
         capture_output=True,
     )
@@ -53,6 +69,50 @@ def main() -> int:
         passed = run(valid)
         assert passed.returncode == 0 and '"valid": true' in passed.stdout
 
+        ia_only = root / "ia-only"
+        ia_only.mkdir()
+        (ia_only / "01-IA.md").write_text(VALID["01-IA.md"], encoding="utf-8")
+        passed = run(ia_only, "ia")
+        assert passed.returncode == 0 and '"valid": true' in passed.stdout
+
+        korean_ia = root / "korean-ia"
+        korean_ia.mkdir()
+        (korean_ia / "01-IA.md").write_text(KOREAN_IA, encoding="utf-8")
+        passed = run(korean_ia, "ia")
+        assert passed.returncode == 0 and '"valid": true' in passed.stdout
+
+        prose_only = root / "prose-only-ia"
+        prose_only.mkdir()
+        (prose_only / "01-IA.md").write_text(
+            "# IA\n\n페이지와 경로를 나중에 정합니다.\n", encoding="utf-8"
+        )
+        failed = run(prose_only, "ia")
+        assert failed.returncode == 1
+        assert "missing structured page map" in failed.stdout
+
+        flow_only = root / "flow-only"
+        flow_only.mkdir()
+        (flow_only / "02-USER-FLOW.md").write_text(
+            VALID["02-USER-FLOW.md"], encoding="utf-8"
+        )
+        passed = run(flow_only, "flow")
+        assert passed.returncode == 0 and '"valid": true' in passed.stdout
+
+        wireframe = root / "wireframe"
+        wireframe.mkdir()
+        for name in ("01-IA.md", "03-SCREEN-SPEC.md", "04-WIREFRAME.html"):
+            (wireframe / name).write_text(VALID[name], encoding="utf-8")
+        passed = run(wireframe, "wireframe")
+        assert passed.returncode == 0 and '"valid": true' in passed.stdout
+
+        missing_closure = root / "missing-closure"
+        missing_closure.mkdir()
+        (missing_closure / "04-WIREFRAME.html").write_text(
+            VALID["04-WIREFRAME.html"], encoding="utf-8"
+        )
+        failed = run(missing_closure, "wireframe")
+        assert failed.returncode == 1 and "missing artifact" in failed.stdout
+
         broken = root / "broken"
         broken.mkdir()
         for name, text in VALID.items():
@@ -65,7 +125,10 @@ def main() -> int:
         assert failed.returncode == 1
         assert "unresolved template placeholders" in failed.stdout
         assert "missing referenced anchor #screen-x" in failed.stdout
-    print("Screen contract: PASS (bundle/anchor/requirement)")
+    print(
+        "Screen contract: PASS "
+        "(selected/closure/multilingual-ia/bundle/anchor/requirement)"
+    )
     return 0
 
 

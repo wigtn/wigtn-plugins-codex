@@ -6,8 +6,9 @@ This policy governs automated Codex-session export to a WIGTN wiki.
 
 1. Capture is off unless the Codex-specific config says `enabled: true`.
 2. An empty `include` denies every repository; `exclude` always wins.
-3. A repository marker may opt one repository into the global target, but it
-   cannot override the global kill switch or `exclude`.
+3. A repository marker may only disable capture or provide a generalized
+   project label. It cannot bypass `include`, choose a wiki target, or enable
+   push; unknown marker keys fail closed.
 4. The wiki cannot live inside the repository being observed.
 5. Automated writes are restricted to `per-user/`. `shared/` requires human
    review and a pull request.

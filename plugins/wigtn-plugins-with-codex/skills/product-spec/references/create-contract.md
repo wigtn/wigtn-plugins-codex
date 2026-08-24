@@ -4,8 +4,8 @@ Choose one profile. Never emit both.
 
 ## Compact
 
-Use when the user explicitly asks for a concise, brief, or MVP PRD. Start with
-the exact marker so the validator applies the smaller contract:
+Use by default, including concise, brief, and MVP requests. Start with the
+exact marker so the validator applies the smaller contract:
 
 ```markdown
 <!-- wigtn-prd-profile: compact -->
@@ -28,10 +28,13 @@ to Full. A Compact PRD is smaller, not less testable.
 
 ## Full
 
-Use by default or when the user requests full detail. Preserve the three
-applicability row names and table shapes so the deterministic validator can
-check them. Mark each conditional row `Required` or `N/A` with a concrete
-reason.
+Use only when the user requests full detail or the product actually needs
+multiple route/state contracts, a multi-step lifecycle, evidenced NFRs,
+phased delivery, or migration planning. Authentication or authorization alone
+does not require Full because Compact already includes roles, authorization,
+and data boundaries. Preserve the three applicability row names and table
+shapes so the deterministic validator can check them. Mark each conditional
+row `Required` or `N/A` with a concrete reason.
 
 ```markdown
 <!-- wigtn-prd-profile: full -->

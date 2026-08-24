@@ -1,6 +1,6 @@
 interface:
   display_name: "WIGTN Knowledge Wiki"
   short_description: "Safely capture reusable Codex session knowledge"
-  default_prompt: "Use $wigtn-plugins-with-codex:knowledge-wiki to configure or diagnose opt-in knowledge capture for this Codex project."
+  default_prompt: "Use $wigtn-knowledge-wiki:knowledge-wiki to configure or diagnose opt-in knowledge capture for this Codex project."
 policy:
   allow_implicit_invocation: true

@@ -13,9 +13,10 @@ work a gate for ordinary coding.
 - If `.wigtn/project.json` exists, validate it and read
   [project context](../../references/project-context.md). An explicit user
   profile overrides `prd_profile`; missing context changes nothing.
-- **Create:** read [create contract](references/create-contract.md). Include only
-  applicable sections. Use its Compact profile when the user explicitly asks
-  for a concise, brief, or MVP PRD; otherwise use Full. Mark Full conditional
+- **Create:** read [create contract](references/create-contract.md). Use Compact
+  by default. Use Full only when the user requests it or the product actually
+  needs multiple route/state contracts, a multi-step lifecycle, evidenced
+  NFRs, phased delivery, or migration planning. Mark Full conditional
   contracts `Required` or `N/A` with evidence.
 - **Review:** read [review contract](references/review-contract.md). Emit its
   contract-audit table, then at most five material findings. Do not rewrite

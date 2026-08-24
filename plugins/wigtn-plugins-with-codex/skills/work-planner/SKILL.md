@@ -1,6 +1,6 @@
 ---
 name: work-planner
-description: Turn stable product requirements and artifacts into a dependency-aware WIGTN WorkGraph with implementation tasks, checks, risks, intended paths, stale propagation, and resumable next work. Use for “구현 계획 세워줘”, “task로 쪼개줘”, “작업 순서”, “resume plan”, or an explicit cross-session lifecycle plan. Do not use for ordinary implementation, a simple conversational checklist, PRD authoring, or release execution.
+description: Save stable requirements as a dependency-aware WIGTN WorkGraph with resumable tasks, checks, intended paths, and source-drift invalidation. Use only for an explicitly saved plan, cross-session resume, WorkGraph maintenance, or stale-work analysis. Do not use for an ordinary conversational implementation plan, checklist, implementation, PRD authoring, or release execution.
 ---
 
 # Work Planner

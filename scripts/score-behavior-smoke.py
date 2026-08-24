@@ -10,6 +10,54 @@ import sys
 import csv
 
 
+FORBIDDEN_IA_HEADINGS = re.compile(
+    r"^#{1,6}\s*(?:user flow|사용자 흐름|screen spec|화면 명세|"
+    r"wireframe|와이어프레임|dev(?:eloper)? handoff|개발 핸드오프)\b",
+    re.IGNORECASE | re.MULTILINE,
+)
+
+
+def has_page_map(text: str) -> bool:
+    for line in text.splitlines():
+        if not line.lstrip().startswith("|"):
+            continue
+        cells = [cell.strip().casefold() for cell in line.strip().strip("|").split("|")]
+        has_page = any(
+            cell == "page" or "페이지" in cell or "정보 단위" in cell
+            for cell in cells
+        )
+        has_route = any(
+            cell in {"route", "path", "url"} or "경로" in cell for cell in cells
+        )
+        if has_page and has_route:
+            return True
+    return False
+
+
+def quality_failures(arm: str, case: str, output: str) -> list[str]:
+    if arm != "plugin":
+        return []
+    failures: list[str] = []
+    if case == "acceptance-uncertain" and not re.search(
+        r"\bnot-verifiable\b", output, re.IGNORECASE
+    ):
+        failures.append("must use canonical status not-verifiable")
+    elif case == "ordinary-coding" and re.search(
+        r"\bPRD\b|WorkGraph|verified-delivery|화면정의서", output, re.IGNORECASE
+    ):
+        failures.append("ordinary coding contains WIGTN workflow spillover")
+    elif case == "prd-create":
+        for marker in ("wigtn-prd-profile: compact", "FR-", "AC-"):
+            if marker not in output:
+                failures.append(f"compact PRD missing {marker!r}")
+    elif case == "ia-only":
+        if not has_page_map(output):
+            failures.append("IA-only output lacks a structured page/route map")
+        if FORBIDDEN_IA_HEADINGS.search(output):
+            failures.append("IA-only output expanded into an unrequested artifact")
+    return failures
+
+
 def total_tokens(path: Path) -> int | None:
     text = path.read_text(encoding="utf-8", errors="ignore")
     matches = re.findall(r"tokens used\s*\n([\d,]+)", text, re.IGNORECASE)
@@ -34,6 +82,7 @@ def main(root_arg: str) -> int:
                     errors.append(f"duplicate schedule row: {key}")
                 expected[key] = (item["pair_id"], int(item["order"]))
     observed: set[tuple[str, str, int]] = set()
+    token_by_run: dict[tuple[str, str, int], int | None] = {}
 
     for meta_path in sorted((root / "runs").glob("*/*.meta.json")):
         meta = json.loads(meta_path.read_text(encoding="utf-8"))
@@ -45,6 +94,7 @@ def main(root_arg: str) -> int:
         )
         nonempty = bool(output.strip())
         log_path = meta_path.with_name(meta_path.name.replace(".meta.json", ".log"))
+        tokens = total_tokens(log_path)
         row_key = (meta["arm"], meta["case"], meta["repeat"])
         if row_key in observed:
             errors.append(f"duplicate run metadata: {row_key}")
@@ -67,7 +117,7 @@ def main(root_arg: str) -> int:
                 meta["repeat"],
                 meta["exit_code"],
                 nonempty,
-                total_tokens(log_path),
+                tokens,
                 len(output.encode("utf-8")),
                 meta["duration_seconds"],
             )
@@ -76,6 +126,26 @@ def main(root_arg: str) -> int:
             errors.append(
                 f"{meta['arm']}/{meta['case']}.{meta['repeat']}: "
                 f"exit={meta['exit_code']}, nonempty={nonempty}"
+            )
+        token_by_run[row_key] = tokens
+        for failure in quality_failures(meta["arm"], meta["case"], output):
+            errors.append(
+                f"{meta['arm']}/{meta['case']}.{meta['repeat']}: {failure}"
+            )
+
+    ia_repeats = sorted(
+        repeat for arm, case, repeat in expected if arm == "plugin" and case == "ia-only"
+    )
+    for repeat in ia_repeats:
+        bare = token_by_run.get(("bare", "ia-only", repeat))
+        plugin = token_by_run.get(("plugin", "ia-only", repeat))
+        if bare is None or plugin is None:
+            continue
+        limit = max(bare + 8000, round(bare * 1.75))
+        if plugin > limit:
+            errors.append(
+                f"plugin/ia-only.{repeat}: token budget exceeded "
+                f"({plugin} > {limit}; bare={bare})"
             )
 
     if not rows:
@@ -87,8 +157,9 @@ def main(root_arg: str) -> int:
     report = [
         "# Behavior smoke results",
         "",
-        "This report scores execution health only. It does not score answer quality, "
-        "causal plugin lift, or real-repository generalization.",
+        "This report scores execution health, narrow output contracts, and the IA-only "
+        "token gate. It does not establish causal plugin lift or real-repository "
+        "generalization.",
         "",
         "| Pair | Order | Arm | Case | Repeat | Exit | Output | Total tokens | Output bytes | Duration |",
         "|---|---:|---|---|---:|---:|---|---:|---:|---:|",

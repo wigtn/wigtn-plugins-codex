@@ -156,23 +156,24 @@ def resolve_tenant(conf: dict[str, Any], cwd: str) -> tuple[Tenant | None, str]:
             marker = parse_yaml(marker_path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             return None, "마커 파싱 실패"
+        unknown = set(marker) - {"enabled", "project"}
+        if unknown:
+            return None, "마커에 허용되지 않은 키"
         if marker.get("enabled") is False:
             return None, "repo 마커에서 비활성"
 
     excluded = _paths(conf.get("exclude"))
     if any(repo_root == path or _under(repo_root, path) for path in excluded):
         return None, "exclude 매칭"
-    if marker_path is None:
-        included = _paths(conf.get("include"))
-        if not included:
-            return None, "include 미설정"
-        if not any(repo_root == path or _under(repo_root, path) for path in included):
-            return None, "include 범위 밖"
+    included = _paths(conf.get("include"))
+    if not included:
+        return None, "include 미설정"
+    if not any(repo_root == path or _under(repo_root, path) for path in included):
+        return None, "include 범위 밖"
 
     global_wiki = conf.get("wiki") if isinstance(conf.get("wiki"), dict) else {}
-    marker_wiki = marker.get("wiki") if isinstance(marker.get("wiki"), dict) else {}
-    raw_path = str(marker_wiki.get("path") or global_wiki.get("path") or "").strip()
-    subdir = str(marker_wiki.get("subdir") or global_wiki.get("subdir") or "").strip("/")
+    raw_path = str(global_wiki.get("path") or "").strip()
+    subdir = str(global_wiki.get("subdir") or "").strip("/")
     if not raw_path or not subdir:
         return None, "wiki.path 또는 wiki.subdir 미설정"
     if ".." in Path(subdir).parts or not subdir.startswith("per-user/"):
@@ -189,7 +190,7 @@ def resolve_tenant(conf: dict[str, Any], cwd: str) -> tuple[Tenant | None, str]:
 
     publish = conf.get("publish") if isinstance(conf.get("publish"), dict) else {}
     push = publish.get("push") is True
-    if marker_path is None and push:
+    if push:
         try:
             home = Path.home().resolve()
             if any(path == home or path == Path(path.anchor) for path in _paths(conf.get("include"))):

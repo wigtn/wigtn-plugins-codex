@@ -1,10 +1,13 @@
 # Evidence Matrix Rules
 
-- `Satisfied`: all material behavior is present and evidence directly supports it.
-- `Partially satisfied`: a material subclaim is demonstrated but another
+- `verified`: all material behavior is present and a relevant executed check passes.
+- `implemented-not-executed`: implementation evidence exists, but no relevant
+  executable check ran successfully.
+- `partially-verified`: a material subclaim is demonstrated but another
   material subclaim fails or remains unverified.
-- `Not satisfied`: evidence shows required behavior is absent or contradictory.
-- `Not verifiable`: available artifacts cannot support a reliable conclusion.
+- `not-satisfied`: evidence shows required behavior is absent or contradictory.
+- `not-verifiable`: available artifacts cannot support a reliable conclusion.
+- `not-applicable`: the requirement is outside the evaluated scope.
 
 Prefer evidence in this order: executed behavior or test, implementation at a precise file/line, generated artifact, then documented intent. Documentation alone does not prove runtime behavior.
 
@@ -26,22 +29,20 @@ Before choosing a status, split compound language into observable subclaims
 Record which subclaims passed, failed, or could not be observed. Then collapse
 them to one requirement status:
 
-- use `Partially satisfied` only when at least one material subclaim has direct
+- use `partially-verified` only when at least one material subclaim has direct
   implementation or runtime evidence and another material subclaim fails or
   cannot be observed
-- use `Not satisfied` when the central named behavior is absent or
+- use `not-satisfied` when the central named behavior is absent or
   contradictory; a degenerate input that never exercises that behavior is not
   a material subset
-- use `Not verifiable` when no material subclaim can be concluded from
+- use `not-verifiable` when no material subclaim can be concluded from
   available artifacts or permitted checks
 - if an unreliable test fails intermittently but an independent focused
   runtime assertion covers every material observable subclaim, the assertion
-  may still support `Satisfied`; cite the flaky test separately as a test-suite
+  may still support `verified`; cite the flaky test separately as a test-suite
   gap
 
 An irrelevant pass cannot soften a failure.
 
-When a machine-readable handoff is requested, use the canonical status mapping
-in the parent skill and the plugin-level Evidence Contract. The human label
-`Satisfied` is intentionally split: it becomes `verified` only with a relevant
-passing check and otherwise becomes `implemented-not-executed`.
+Use these same values in the human matrix and in any machine-readable handoff.
+Localized labels may accompany them but must not replace the canonical value.

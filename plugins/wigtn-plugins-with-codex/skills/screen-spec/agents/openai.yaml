@@ -1,6 +1,6 @@
 interface:
   display_name: "WIGTN Screen Spec"
   short_description: "Create IA, flows, screen specs, wireframes, and handoff"
-  default_prompt: "Use $wigtn-plugins-with-codex:screen-spec to turn this PRD into five implementation-ready screen artifacts."
+  default_prompt: "Use $wigtn-plugins-with-codex:screen-spec to create the requested implementation-ready screen artifacts from this PRD."
 policy:
   allow_implicit_invocation: true

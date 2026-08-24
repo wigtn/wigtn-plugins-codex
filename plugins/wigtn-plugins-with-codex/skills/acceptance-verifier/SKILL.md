@@ -20,11 +20,13 @@ Produce an evidence-backed requirement matrix. This is read-only unless the user
 2. Identify the requested implementation scope: working tree, commit, branch comparison, PR, or named files.
 3. Extract stable requirement IDs. If none exist, create temporary `AC-01` IDs and say they are local to the report.
 4. Inspect implementation and tests. Run the smallest meaningful repository-defined checks when authorized and feasible.
-5. Assign exactly one status per requirement:
-   - `Satisfied`
-   - `Partially satisfied`
-   - `Not satisfied`
-   - `Not verifiable`
+5. Assign exactly one canonical status per requirement:
+   - `verified`: implementation evidence plus a relevant passing check
+   - `implemented-not-executed`: implementation exists but no relevant check ran
+   - `partially-verified`: only part of a material requirement is supported
+   - `not-satisfied`: required behavior is absent or contradicted
+   - `not-verifiable`: available evidence cannot support a conclusion
+   - `not-applicable`: the requirement is outside the evaluated scope
 6. Cite code evidence as clickable file and line references. Record commands, exit codes, and relevant test names. Never infer that unexecuted tests passed.
 7. Separate issues outside the requirement set under `Out-of-scope findings`.
 
@@ -32,17 +34,12 @@ Use the matrix and decision rules in [evidence matrix](references/evidence-matri
 
 ## Machine-readable handoff
 
-Do not create state for an ordinary verification answer. When the user requests
+Use the same canonical values in human reports and saved artifacts; add a
+localized display label when useful, but do not maintain a second status
+taxonomy. Do not create state for an ordinary verification answer. When the user requests
 a saved artifact, an existing `.wigtn/evidence.json` must be continued, or a
 cross-session handoff is required, read
-[the shared evidence contract](../../references/evidence-contract.md). Map the
-human result to its canonical status:
-
-- `Satisfied` with a relevant passing check → `verified`
-- `Satisfied` without a relevant passing check → `implemented-not-executed`
-- `Partially satisfied` → `partially-verified`
-- `Not satisfied` → `not-satisfied`
-- `Not verifiable` → `not-verifiable`
+[the shared evidence contract](../../references/evidence-contract.md).
 
 Validate a written artifact with
 `python3 ../../scripts/validate-evidence.py <path>` from this skill directory.
@@ -74,5 +71,10 @@ reference was saved.
 
 | Requirement | Status | Code evidence | Test evidence | Gap |
 |---|---|---|---|---|
+
+Always print the exact canonical status value, including for chat-only answers.
+For insufficient evidence, write `not-verifiable`; a localized label may follow
+in parentheses. Never replace it with `Not Verified`, `Unverified`, or a
+localized-only label.
 
 Follow with executed commands, limitations, and prioritized gaps. A missing test is not automatically a failed requirement; distinguish implementation evidence from verification confidence.
