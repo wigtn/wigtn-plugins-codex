@@ -25,7 +25,9 @@ VALID = {
         "\n### Wireframe Anchor\n\n→ `04-WIREFRAME.html#screen-x`\n"
     ),
     "04-WIREFRAME.html": (
-        "<!doctype html><html><body><section id=\"screen-x\">X</section>"
+        '<!doctype html><html><head><meta name="viewport" '
+        'content="width=device-width"></head><body>'
+        '<section id="screen-x">X</section>'
         "</body></html>\n"
     ),
     "05-DEV-HANDOFF.md": (
@@ -125,6 +127,35 @@ def main() -> int:
         assert failed.returncode == 1
         assert "unresolved template placeholders" in failed.stdout
         assert "missing referenced anchor #screen-x" in failed.stdout
+
+        remote = root / "remote-wireframe"
+        remote.mkdir()
+        for name in ("01-IA.md", "03-SCREEN-SPEC.md"):
+            (remote / name).write_text(VALID[name], encoding="utf-8")
+        (remote / "04-WIREFRAME.html").write_text(
+            '<!doctype html><html><head><meta name="viewport" content="width=device-width">'
+            '<script src="https://cdn.example.test/ui.js"></script></head>'
+            '<body><section id="screen-x">X</section></body></html>\n',
+            encoding="utf-8",
+        )
+        failed = run(remote, "wireframe")
+        assert failed.returncode == 1
+        assert "external network resource" in failed.stdout
+
+        broken_link = root / "broken-link"
+        broken_link.mkdir()
+        for name in ("01-IA.md", "03-SCREEN-SPEC.md"):
+            (broken_link / name).write_text(VALID[name], encoding="utf-8")
+        (broken_link / "04-WIREFRAME.html").write_text(
+            '<!doctype html><html><head><meta name="viewport" '
+            'content="width=device-width"></head><body>'
+            '<a href="#screen-missing">Missing</a>'
+            '<section id="screen-x">X</section></body></html>\n',
+            encoding="utf-8",
+        )
+        failed = run(broken_link, "wireframe")
+        assert failed.returncode == 1
+        assert "broken internal link #screen-missing" in failed.stdout
     print(
         "Screen contract: PASS "
         "(selected/closure/multilingual-ia/bundle/anchor/requirement)"

@@ -21,6 +21,7 @@ design-direction	신규 대시보드 UI 디자인 방향 잡아줘
 design-direction	greenfield 앱의 visual direction 제안해줘
 handdrawn-diagram	한글 손그림 아키텍처 다이어그램 만들어줘
 handdrawn-diagram	Devpost용 sketch diagram 만들어줘
+handdrawn-diagram	Devpost용 hand-drawn 시스템 흐름도 만들어줘
 wigtn-presentation	WIGTN 브랜드 피치덱 만들어줘
 wigtn-presentation	위그튼 회사 소개 발표자료 만들어줘
 release-readiness	변경사항 커밋해줘
@@ -33,6 +34,8 @@ none	README 오타 수정해줘
 none	이 기능 구현해줘
 none	이 기능 작업 완료해줘
 none	일반 회사 발표자료 만들어줘
+none	Devpost 제출용 깔끔한 시스템 다이어그램 만들어줘
+none	WIGTN 로고를 웹사이트 푸터에 넣어줘
 none	코드 리팩터링해줘
 none	테스트 추가해줘
 none	API 응답 속도 개선해줘

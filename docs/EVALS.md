@@ -9,6 +9,10 @@ like proof of model quality.
 `scripts/run-static-contracts.sh` checks:
 
 - all trigger fixtures map to exactly one expected skill or `none`
+- runtime plugin references resolve, bundled skill resources are reachable,
+  and output templates contain no remote dependencies
+- handDrawn source/SVG/PNG structure and self-contained WIGTN HTML presentation
+  routing pass positive and negative fixtures
 - a valid Evidence Contract passes
 - nine invalid Evidence Contract cases fail with the expected diagnostic,
   including false `verified`, unauthorized action, absolute path, duplicate
@@ -24,7 +28,8 @@ like proof of model quality.
 - Evidence status detects source drift and invalid code references
 - optional project context rejects unsafe paths and unknown configuration
 - screen bundles reject missing artifacts, unresolved template values, broken
-  wireframe anchors, and cross-artifact requirement drift
+  wireframe anchors, remote resources, missing viewport metadata, and
+  cross-artifact requirement drift
 - release-state inspection distinguishes staged, unstaged, untracked,
   conflicted, detached, and in-progress Git states without mutation
 - sanitized eval packets redact run roots and secrets, hash membership, exclude

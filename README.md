@@ -4,7 +4,7 @@
 
 **Codex의 자율성은 그대로. PRD·작업 계획·검증·Git 권한은 필요한 순간에만.**
 
-![Version](https://img.shields.io/badge/version-0.5.0-6C5CE7?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.5.1-6C5CE7?style=for-the-badge)
 ![Skills](https://img.shields.io/badge/core_skills-9-00B894?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/platform-Codex-111827?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-Apache--2.0-0984E3?style=for-the-badge)
@@ -102,18 +102,27 @@ release-readiness ──── 안전한 커밋·푸시·PR
 | 스킬 | 하는 일 | 자연어 호출 예시 | 호출 정책 |
 |---|---|---|---|
 | `product-spec` | 구현 가능한 PRD 생성, 리뷰, 딥다이브 | “PRD 뽑아줘” | 자동 |
-| `screen-spec` | 요청한 IA, User Flow, 화면 명세, lo-fi HTML 와이어프레임 또는 개발 핸드오프 | “화면정의서 만들어줘” | 자동 |
+| `screen-spec` | 요청한 IA, User Flow, 화면 명세, self-contained lo-fi HTML 와이어프레임 또는 개발 핸드오프 | “화면정의서 만들어줘” | 자동 |
 | `work-planner` | 요구사항을 저장·재개 가능한 dependency-aware WorkGraph로 변환 | “이 계획을 WorkGraph로 저장해줘” | 자동·저장형 전용 |
 | `acceptance-verifier` | PRD 요구사항과 코드·실행 테스트 증거를 연결해 충족 여부 판정 | “요구사항 반영됐는지 검증해줘” | 자동 |
 | `design-direction` | 기존 디자인 시스템을 먼저 읽고 신규 UI 방향 제안 | “이 UI 디자인 방향 잡아줘” | 자동·제한적 |
 | `verified-delivery` | 구현에 비례적인 requirement→code→executed-check 근거 추가 | `$verified-delivery로 구현해줘` | **명시 호출 전용** |
 | `release-readiness` | 변경 범위를 보존하며 검증, 커밋, 푸시, PR 수행 | “커밋해줘”, “PR 올려줘” | 자동·제한적 |
-| `handdrawn-diagram` | Mermaid handDrawn 소스와 검증된 SVG·PNG 생성 | “손그림 아키텍처 만들어줘” | 자동 |
-| `wigtn-presentation` | WIGTN 잉크 네이비와 퍼플 점을 적용한 브랜드 발표자료 생성 | “WIGTN 발표자료 만들어줘” | 자동·제한적 |
+| `handdrawn-diagram` | Mermaid handDrawn 소스·SVG·PNG를 구조 및 시각 검증 | “손그림 아키텍처 만들어줘” | 자동·스타일 명시형 |
+| `wigtn-presentation` | Codex 발표 생성 위에 WIGTN 잉크 네이비·퍼플 점 브랜드를 적용 | “WIGTN 발표자료 만들어줘” | 자동·WIGTN 명시형 |
 
 ### 자동 호출과 명시 호출
 
 대부분의 스킬은 요청 의도가 설명과 일치할 때 Codex가 자동으로 선택합니다. `verified-delivery`만 예외입니다. 일반적인 코딩 요청이 의도치 않게 전체 전달 파이프라인으로 커지는 것을 막기 위해 `$wigtn-plugins-with-codex:verified-delivery`를 명시해야 합니다.
+
+---
+
+## v0.5.1: 시각 산출물 전달 강화
+
+- HandDrawn은 Mermaid CLI 버전을 기록하고 CJK native SVG label, source·SVG·PNG 구조 검사, 실제 PNG 육안 검사를 적용합니다.
+- WIGTN Presentation은 PPTX·Slides 생성기를 중복하지 않는 브랜드 overlay이며, HTML은 명시 요청에만 self-contained로 만듭니다.
+- Screen Spec wireframe은 CDN 없이 반응형으로 동작하고 외부 의존성·viewport·내부 anchor를 검사합니다.
+- 런타임 문서의 죽은 참조와 연결되지 않은 bundled resource를 정적 계약에서 차단합니다.
 
 ---
 
@@ -291,8 +300,9 @@ Claude 전용 도구 이름, 고정 서브에이전트 fan-out, 자동 모델 �
 ./scripts/run-static-contracts.sh
 ```
 
-이 suite에는 WorkGraph lifecycle·drift·migration·CLI의 67개 결정론적
-케이스와 paired schedule 무결성 검사도 포함됩니다.
+이 suite에는 plugin resource 무결성, 다이어그램·HTML 발표 계약,
+responsive wireframe portability, WorkGraph lifecycle·drift·migration·CLI의
+67개 결정론적 케이스와 paired schedule 무결성 검사도 포함됩니다.
 
 신규 `work-planner`의 모델 기반 capability pilot은 12개 격리 저장소에서
 별도로 실행합니다.

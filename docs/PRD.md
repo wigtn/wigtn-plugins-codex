@@ -473,9 +473,9 @@ docs/product/screens/<feature>/
 
 #### 변경 사항
 
-- `npx -y` 실행은 네트워크 다운로드가 필요할 수 있음을 명시한다.
-- 먼저 로컬 설치된 mermaid-cli를 찾고, 없을 때만 설치 승인을 요청한다.
-- 생성 후 PNG 시각 검증을 필수로 한다.
+- repository 또는 환경에 이미 있는 mermaid-cli를 우선하고 버전을 기록한다.
+- floating `npx -y` 다운로드를 금지하고, renderer가 없을 때만 정확한 버전의 설치 승인을 요청한다.
+- source·SVG·PNG 구조 검사 후 PNG 시각 검증을 필수로 한다.
 - 임의 커밋 지침을 제거하고 파일 생성까지만 담당한다.
 
 ### 7.8 `wigtn-presentation` — 유지, 명시적 브랜드 스킬
@@ -494,7 +494,8 @@ docs/product/screens/<feature>/
 #### 변경 사항
 
 - Claude 전용 경로와 `AskUserQuestion` 표현을 제거한다.
-- 사용 가능한 presentation 도구와 HTML 산출물 중 사용자 요구에 맞는 표면을 선택한다.
+- PPTX·Google Slides는 Codex의 기본 presentation workflow를 사용하고 WIGTN 스킬은 브랜드 overlay만 담당한다.
+- HTML은 명시 요청에만 self-contained 산출물로 만들고 구조 검사와 브라우저 검증을 수행한다.
 - WIGTN 색·로고·퍼플 점이라는 고유 지식은 유지한다.
 - 일반 프레젠테이션 스킬과 충돌하지 않도록 description을 매우 좁게 쓴다.
 

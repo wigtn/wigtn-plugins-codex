@@ -17,7 +17,13 @@ RULES = {
     ),
     "acceptance-verifier": ("요구사항을 만족", "요구사항 반영", "acceptance criteria", "fr별"),
     "design-direction": ("ui 디자인 방향", "visual direction"),
-    "handdrawn-diagram": ("손그림", "sketch diagram", "handdrawn"),
+    "handdrawn-diagram": (
+        "손그림",
+        "스케치 아키텍처",
+        "sketch diagram",
+        "hand-drawn",
+        "handdrawn",
+    ),
     "wigtn-presentation": ("wigtn 브랜드", "위그튼"),
     "release-readiness": ("커밋해줘", "푸시해줘", "pr 올려줘", "커밋 준비해줘"),
 }

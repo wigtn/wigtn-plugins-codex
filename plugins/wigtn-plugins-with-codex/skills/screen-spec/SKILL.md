@@ -45,7 +45,8 @@ For an IA-only or flow-only request:
    validation, offline, and destructive confirmation.
 5. Keep wireframes grayscale with semantic status colors only. If browser
    control is available, verify desktop and mobile widths, overflow, labels,
-   and links before completion.
+   and links before completion. Use the single self-contained responsive
+   `04-WIREFRAME.html` template; do not create a second mobile artifact.
 6. Run the selector-aware validator from this skill directory:
 
    `python3 ../../scripts/validate-screen-spec.py <directory> --artifacts <ia,flow,screen,wireframe,handoff|all>`
@@ -58,6 +59,9 @@ For an IA-only or flow-only request:
 Read [state checklist](references/state-checklist.md) only when screen,
 wireframe, or handoff is selected. Read
 [handoff checklist](references/handoff-checklist.md) only for handoff.
+Read [microcopy patterns](references/microcopy-patterns.md) only when the user
+requests UX copy or the selected screen/handoff contains material forms,
+empty/error states, permission guidance, or destructive confirmation.
 If a saved WorkGraph exists, preserve its requirement IDs and let
 `work-planner` register the generated artifact set. Screen output never
 verifies implementation.

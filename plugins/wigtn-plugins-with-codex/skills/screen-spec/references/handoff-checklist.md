@@ -1,112 +1,61 @@
-# Handoff Checklist
+# Developer Handoff Checklist
 
-`/screen-spec` 산출물이 `/implement`로 넘어가기 전 frontend-developer 에이전트가 자동 검증하는 항목.
+Use this checklist only when `handoff` is selected. It reviews the selected
+screen artifacts; it does not authorize implementation or Git actions.
 
-## 1. Accessibility (a11y)
+## Accessibility
 
-| 항목 | 통과 기준 |
-|------|----------|
-| Landmark | `<header>`, `<nav>`, `<main>`, `<footer>` 사용 |
-| 폼 label | 모든 input에 `<label for>` 또는 `aria-label` |
-| 버튼 라벨 | 아이콘만 있는 버튼은 `aria-label` 필수 |
-| 색 대비 | WCAG AA 기준 (텍스트 4.5:1, 큰 텍스트 3:1) |
-| 키보드 네비 | 모든 인터랙티브 요소가 Tab으로 접근 가능 |
-| 포커스 표시 | `:focus-visible` 스타일 명시 |
-| ARIA 상태 | loading/error 상태에 `aria-busy`, `aria-invalid` |
+- Use appropriate landmarks and heading order.
+- Give every input a visible label or accessible name.
+- Give icon-only controls an accessible label.
+- Define keyboard focus and interaction order.
+- Meet WCAG AA contrast for meaningful text and controls.
+- Describe loading, error, validation, and permission state semantics.
 
-**FAIL 기준**: 폼 필드에 label 없음, 아이콘 버튼에 aria-label 없음.
+## Responsive behavior
 
-## 2. Responsive
+- Define at least desktop and mobile behavior for applicable screens.
+- Keep touch targets at least 44×44 CSS pixels.
+- Avoid mobile horizontal scrolling and unreadably small body text.
+- State how navigation, tables, forms, and dense content collapse.
+- Use one responsive wireframe artifact rather than a disconnected mobile copy.
 
-| 항목 | 통과 기준 |
-|------|----------|
-| Breakpoint 명시 | 모든 페이지에 ≥2 breakpoint 정의 (Desktop ≥1024 / Mobile <768) |
-| 모바일 UX | 터치 타깃 ≥44×44px |
-| 가로 스크롤 | Mobile에서 가로 스크롤 발생 X |
-| 폰트 크기 | Mobile 본문 ≥14px |
-| 이미지 반응형 | `max-width: 100%` 또는 srcset |
+## States and microcopy
 
-**FAIL 기준**: Mobile 분기점이 정의되지 않은 페이지 존재.
-**WARN**: Desktop-only 페이지의 안내 화면 누락.
+- Cover only applicable loading, empty, error, success, unauthorized, offline,
+  validation, and destructive-confirmation states.
+- Give each failure or empty state a useful next action.
+- Use action labels such as “저장하기” rather than ambiguous “확인”.
+- Do not expose raw server errors or fabricate operational promises.
 
-## 3. AI 냄새 / Design Smell
+Read [microcopy patterns](microcopy-patterns.md) only when material forms or
+user-facing recovery states need detailed copy.
 
-| 안티 | 처리 |
-|------|------|
-| 보랏빛 그라데이션 남발 | WARN |
-| "쉽고 빠르게" 같은 클리셰 | WARN |
-| 모든 버튼이 동일 색 (primary 남용) | WARN |
-| 그림자 5겹 이상 | WARN |
-| 이모지로 정보 전달 (텍스트 X) | FAIL |
+## Component contract
 
-**참고**: `plugins/wigtn-plugins/skills/design-system-reference/`의 공통 안티패턴 가이드 참조.
+- Identify input type, required state, validation, and option source.
+- Identify reusable components and repository-native equivalents when known.
+- Describe consequential state transitions, disabled/loading behavior, and
+  destructive effects.
+- Keep visual direction separate unless `design-direction` was explicitly used.
 
-## 4. Microcopy Coverage
+## Coverage
 
-| 항목 | 통과 기준 |
-|------|----------|
-| 빈 상태 메시지 | §5.4.1에서 `empty: ✓`인 모든 화면에 카피 존재 |
-| 에러 메시지 | §5.4.1에서 `error: ✓`인 모든 화면에 카피 존재 |
-| 권한 안내 | `no-permission: ✓`인 화면에 안내 카피 + CTA |
-| placeholder | 모든 input에 예시 또는 형식 안내 |
-| 버튼 라벨 | 명사가 아닌 동사 ("저장하기") |
+- Every in-scope FR maps to at least one screen.
+- Every screen maps back to an in-scope requirement or recorded assumption.
+- Acceptance scenarios map to a user flow when flow is selected.
+- Screen-spec wireframe anchors resolve to real IDs.
+- Page IDs, routes, roles, states, and requirement IDs agree across the
+  selected artifact closure.
 
-**FAIL 기준**: 체크된 상태인데 카피 없음.
+## Completion report
 
-## 5. Component Specification
+Report only material gaps using this shape:
 
-| 항목 | 통과 기준 |
-|------|----------|
-| validation | 모든 required 폼 필드에 validation rule |
-| 타입 명시 | input type, select options, button intent |
-| 의존성 | 페이지가 사용하는 reusable component 목록 |
-| 상태 전이 | 폼 status, modal open/close 등 명시 |
+| Severity | Artifact / screen | Gap | Required correction |
+|---|---|---|---|
 
-**FAIL 기준**: required 필드에 validation 누락.
-
-## 6. Coverage Cross-Check
-
-| 항목 | 통과 기준 |
-|------|----------|
-| FR ↔ Screen | 모든 FR이 1+ 화면에 매핑 |
-| Screen ↔ FR | 모든 화면이 1+ FR과 연결 |
-| Scenario ↔ Flow | 모든 Acceptance Criteria 시나리오가 1+ Flow에 매핑 |
-| Page ↔ State | 모든 페이지에 1+ state 체크 |
-
-**FAIL 기준**: 매핑되지 않은 FR/화면/시나리오가 1+ 존재.
-
-## 7. Document Hygiene
-
-| 항목 | 통과 기준 |
-|------|----------|
-| Open Questions | 화면당 ≤3개 (그 이상이면 명세가 모호) |
-| TODO 마커 | `TBD`, `???`가 5개 이상이면 WARN |
-| Wireframe 링크 | 모든 화면 명세에 wireframe anchor |
-| Style 일관성 | 선택된 design-discovery 스타일과 일치 |
-
-## Output Format
-
-frontend-developer 에이전트 응답:
-
-```yaml
-result: PASS | WARN | FAIL
-warn_count: 0
-fail_items:
-  - section: 3.4 Components
-    screen: /admin
-    issue: filter_dept에 validation 누락
-    suggestion: "min 1 select 추가"
-  - section: 5.4 Microcopy
-    screen: /my
-    issue: empty 상태 카피 누락
-    suggestion: "'첫 {항목}을 만들어보세요' 형식의 안내 추가"
-fix_strategy: regenerate_section  # 전체 재생성 vs 부분 패치
-```
-
-## 통과 기준 요약
-
-- **PASS**: FAIL 0건 + WARN ≤3
-- **WARN**: FAIL 0건 + WARN 4~7
-- **FAIL**: FAIL ≥1 또는 WARN ≥8
-
-PASS면 `/implement`로 진행. FAIL이면 해당 섹션 재생성.
+Run the selector-aware screen validator and report its result separately from
+visual inspection. A passing handoff does not verify implementation. Continue
+into implementation only when the user separately requests it; use
+`verified-delivery` only through its qualified explicit invocation.

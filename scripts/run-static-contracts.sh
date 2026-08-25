@@ -4,6 +4,8 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 env PYTHONDONTWRITEBYTECODE=1 python3 "$repo_root/scripts/check-triggers.py"
+env PYTHONDONTWRITEBYTECODE=1 python3 "$repo_root/scripts/check-plugin-resources.py"
+env PYTHONDONTWRITEBYTECODE=1 python3 "$repo_root/scripts/check-visual-contracts.py"
 env PYTHONDONTWRITEBYTECODE=1 python3 "$repo_root/scripts/check-evidence-contract.py"
 env PYTHONDONTWRITEBYTECODE=1 python3 "$repo_root/scripts/check-evidence-inspector.py"
 env PYTHONDONTWRITEBYTECODE=1 python3 "$repo_root/scripts/check-project-context.py"

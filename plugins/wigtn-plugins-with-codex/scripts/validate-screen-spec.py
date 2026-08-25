@@ -30,6 +30,10 @@ KNOWN_PLACEHOLDER = re.compile(
 REQ_ID = re.compile(r"\b(?:FR|REQ|AC)-[A-Za-z0-9][A-Za-z0-9._-]*\b")
 ANCHOR_REF = re.compile(r"04-WIREFRAME\.html#([A-Za-z][A-Za-z0-9._:-]*)")
 HTML_ID = re.compile(r'\bid=["\']([A-Za-z][A-Za-z0-9._:-]*)["\']')
+HTML_FRAGMENT = re.compile(r'\bhref=["\']#([A-Za-z][A-Za-z0-9._:-]*)["\']')
+REMOTE_RESOURCE = re.compile(
+    r'<(?:script|link|img)\b[^>]+(?:src|href)=["\']https?://', re.I
+)
 SCREEN_HEADING = re.compile(r"^## Screen:\s*(.+?)\s*$", re.M)
 
 
@@ -131,7 +135,15 @@ def main() -> int:
         if len(anchors) != len(set(anchors)):
             errors.append("03-SCREEN-SPEC.md: duplicate wireframe anchor")
     if wireframe:
+        if REMOTE_RESOURCE.search(wireframe):
+            errors.append(
+                "04-WIREFRAME.html: external network resource breaks portability"
+            )
+        if 'name="viewport"' not in wireframe and "name='viewport'" not in wireframe:
+            errors.append("04-WIREFRAME.html: missing viewport meta")
         html_ids = set(HTML_ID.findall(wireframe))
+        for fragment in sorted(set(HTML_FRAGMENT.findall(wireframe)) - html_ids):
+            errors.append(f"04-WIREFRAME.html: broken internal link #{fragment}")
         for anchor in sorted(set(anchors) - html_ids):
             errors.append(f"04-WIREFRAME.html: missing referenced anchor #{anchor}")
         screen_ids = {value for value in html_ids if value.startswith("screen-")}
