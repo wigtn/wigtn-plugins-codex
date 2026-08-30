@@ -20,6 +20,10 @@ publish:
   # First verify local commits. Enable only with explicit remote-sharing intent.
   push: false
 
+retention:
+  # Queued transcript excerpts fail closed and expire after one day.
+  queue_ttl_seconds: 86400
+
 codex:
   # Optional. Empty uses the current Codex default model.
   model: ""

@@ -56,7 +56,17 @@ full contract.
 
 ## Diagnosis
 
-Inspect only metadata under `${PLUGIN_DATA}/knowledge-wiki/events/`:
+Run the bundled read-only doctor first. Resolve the script relative to this
+skill directory and never print queued job files:
+
+```bash
+python3 ../../scripts/knowledge_wiki/doctor.py --json
+```
+
+The doctor reports config scope counts, destination namespace, push state,
+queue age/count, Codex availability, and body-free outcome counts. If the
+plugin data directory is not inherited, pass its `knowledge-wiki` child with
+`--state`. Inspect only metadata under `${PLUGIN_DATA}/knowledge-wiki/events/`:
 
 - `G1`: the original turn contained a deterministic secret or irreversible
   identifier and was never sent to the compiler.

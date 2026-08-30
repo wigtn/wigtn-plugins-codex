@@ -90,8 +90,9 @@ isolation when the agent filesystem can still read those references.
 It creates isolated `CODEX_HOME` directories, disables remote plugins and apps,
 installs WIGTN only in the treatment arm, verifies prompt-input isolation,
 hashes the evaluated plugin and prompts, and stores raw outputs, logs, metadata,
-and a results file outside the repository by default. Its three prompts cover
-PRD creation, uncertain acceptance evidence, and an ordinary coding request.
+and a results file outside the repository by default. Its four prompts cover
+PRD creation, uncertain acceptance evidence, IA-only scope, and an ordinary
+coding request. This is deliberately not full skill-router coverage.
 
 The smoke scorer checks execution health only. It deliberately does not turn
 output keywords into a quality score. Publication claims require frozen

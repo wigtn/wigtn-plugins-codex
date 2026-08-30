@@ -13,6 +13,7 @@ from typing import Any
 CONFIG_NAME = "knowledge-wiki-codex.yml"
 MARKER_NAME = ".wigtn-wiki.yml"
 MAX_CONVERSATION_CHARS = 15_000
+DEFAULT_QUEUE_TTL_SECONDS = 86_400
 
 
 def parse_yaml(text: str) -> dict[str, Any]:
@@ -183,8 +184,12 @@ def resolve_tenant(conf: dict[str, Any], cwd: str) -> tuple[Tenant | None, str]:
     try:
         wiki_resolved = wiki_path.resolve()
         root_resolved = repo_root.resolve()
-        if wiki_resolved == root_resolved or _under(wiki_resolved, root_resolved):
-            return None, "위키가 작업 repo 안에 있음"
+        if (
+            wiki_resolved == root_resolved
+            or _under(wiki_resolved, root_resolved)
+            or _under(root_resolved, wiki_resolved)
+        ):
+            return None, "위키와 작업 repo의 경로가 겹침"
     except (OSError, RuntimeError):
         return None, "위키 경로 해석 실패"
 
@@ -199,6 +204,44 @@ def resolve_tenant(conf: dict[str, Any], cwd: str) -> tuple[Tenant | None, str]:
             push = False
     project = str(marker.get("project") or conf.get("project") or repo_root.name)
     return Tenant(repo_root, wiki_path, subdir, project, push), ""
+
+
+def bounded_int(
+    value: Any,
+    *,
+    default: int,
+    minimum: int,
+    maximum: int,
+    label: str,
+) -> int:
+    if value in (None, ""):
+        return default
+    if isinstance(value, bool):
+        raise ValueError(f"{label} must be an integer")
+    if isinstance(value, int):
+        parsed = value
+    elif isinstance(value, str) and re.fullmatch(r"[+-]?\d+", value.strip()):
+        parsed = int(value)
+    else:
+        raise ValueError(f"{label} must be an integer")
+    if not minimum <= parsed <= maximum:
+        raise ValueError(f"{label} must be between {minimum} and {maximum}")
+    return parsed
+
+
+def queue_ttl_seconds(conf: dict[str, Any]) -> int:
+    retention = (
+        conf.get("retention")
+        if isinstance(conf.get("retention"), dict)
+        else {}
+    )
+    return bounded_int(
+        retention.get("queue_ttl_seconds"),
+        default=DEFAULT_QUEUE_TTL_SECONDS,
+        minimum=300,
+        maximum=604_800,
+        label="retention.queue_ttl_seconds",
+    )
 
 
 _INPUT_PATTERNS = [

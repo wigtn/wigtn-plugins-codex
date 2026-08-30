@@ -10,6 +10,18 @@ from pathlib import Path
 import re
 
 
+REMOTE_HTML_RESOURCE = re.compile(
+    r'<(?:script|link|img|source|video|audio|iframe|embed|object)\b[^>]*'
+    r'(?:src|href|poster|data|srcset)\s*=\s*["\']?[^"\'>]*'
+    r'(?:(?:https?:)?//)',
+    re.I,
+)
+REMOTE_CSS_RESOURCE = re.compile(
+    r'(?:@import\s+(?:url\(\s*)?|url\(\s*)["\']?\s*(?:(?:https?:)?//)',
+    re.I,
+)
+
+
 class DeckParser(HTMLParser):
     VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 
@@ -63,7 +75,7 @@ def inspect(path: Path) -> dict[str, object]:
         errors.append("HTML: missing WIGTN signature on slides " + ", ".join(missing))
     if not parser.has_viewport:
         errors.append("HTML: missing viewport meta")
-    if re.search(r"<(?:script|link|img)\b[^>]+(?:src|href)=[\"']https?://", text, re.I):
+    if REMOTE_HTML_RESOURCE.search(text) or REMOTE_CSS_RESOURCE.search(text):
         errors.append("HTML: external network resource is not self-contained")
     upper = text.upper()
     if "#1E1E28" not in upper and "#15151E" not in upper:

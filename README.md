@@ -4,7 +4,7 @@
 
 **Codex의 자율성은 그대로. PRD·작업 계획·검증·Git 권한은 필요한 순간에만.**
 
-![Version](https://img.shields.io/badge/version-0.5.1-6C5CE7?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.5.2-6C5CE7?style=for-the-badge)
 ![Skills](https://img.shields.io/badge/core_skills-9-00B894?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/platform-Codex-111827?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-Apache--2.0-0984E3?style=for-the-badge)
@@ -49,6 +49,9 @@ codex plugin add wigtn-plugins-with-codex@wigtn
 ```bash
 codex plugin add wigtn-knowledge-wiki@wigtn
 ```
+
+두 플러그인은 릴리스 버전을 함께 올립니다. Core만 설치해도 되고,
+Knowledge Wiki가 필요할 때 같은 버전의 별도 플러그인을 추가하면 됩니다.
 
 Codex 앱에서는 Plugins를 열어 WIGTN 마켓플레이스를 선택한 뒤 플러그인을 설치하고 새 작업을 시작하면 됩니다. 설치 후에는 별도 명령을 외울 필요 없이 자연어로 요청하세요.
 
@@ -114,6 +117,30 @@ release-readiness ──── 안전한 커밋·푸시·PR
 ### 자동 호출과 명시 호출
 
 대부분의 스킬은 요청 의도가 설명과 일치할 때 Codex가 자동으로 선택합니다. `verified-delivery`만 예외입니다. 일반적인 코딩 요청이 의도치 않게 전체 전달 파이프라인으로 커지는 것을 막기 위해 `$wigtn-plugins-with-codex:verified-delivery`를 명시해야 합니다.
+
+---
+
+## v0.5.2: 권한·검증 하드닝
+
+- Knowledge Wiki의 큐 작업은 캡처 당시의 push 권한을 넘어서지 못하며,
+  처리 전에 목적지가 바뀌거나 24시간 TTL이 지난 작업은 폐기합니다.
+- 잘못된 timeout이나 손상된 작업 하나가 뒤의 큐를 막지 않으며, 처리 후에는
+  transcript 본문 대신 상태 메타데이터만 남깁니다.
+- 읽기 전용 doctor가 설정 범위, 목적지 namespace, 큐 상태, Codex 실행 가능
+  여부를 transcript 노출 없이 점검합니다.
+- HandDrawn PNG는 청크·CRC·IDAT·IEND까지 검증하고, 발표와 wireframe은
+  CSS `@import`, 원격 `url()`, media resource를 포함한 외부 의존성을 차단합니다.
+- Core와 Knowledge Wiki 매니페스트를 0.5.2 lockstep으로 검증하며 어느 한쪽의
+  버전·정책·경로 오류도 CI와 릴리스를 통과하지 못합니다.
+- Design Direction의 9개 스타일 레퍼런스를 98,899 bytes에서 18,479 bytes로
+  줄이고 결정 규칙·접근성·금지 패턴·완료 조건만 남겼습니다.
+
+Knowledge Wiki 상태만 진단할 때는 설치된 플러그인의 번들 스크립트를
+`--json`으로 실행합니다. 설정이나 큐를 수정하지 않습니다.
+
+```bash
+python3 plugins/wigtn-knowledge-wiki/scripts/knowledge_wiki/doctor.py --json
+```
 
 ---
 
@@ -212,7 +239,7 @@ GPT‑5.5·GPT‑5.6 Sol 평가에서 일반 구현 성공률의 positive lift�
 | `release-readiness` | review·prepare·commit·push·PR 권한을 사용자 문장 그대로 분리 |
 | 자동 호출 | 일반 구현·버그 수정·리팩터링은 기본 Codex에 맡기고 heavy workflow 오호출 방지 |
 | 설치 UX | 모든 starter prompt를 설치된 플러그인의 qualified skill name으로 고정 |
-| 검증 | 공식 manifest/skill validator, 저장소 계약, 자연어 trigger 30건을 함께 실행 |
+| 검증 | 공식 manifest/skill validator, 저장소 계약, lexical trigger 49건을 함께 실행 |
 
 ### 검증된 주장과 아직 검증되지 않은 주장
 
@@ -360,7 +387,10 @@ Package ablation의 PRD를 익명 비교하려면
 판정 시점에 후보 매핑 파일을 만들지 않으며 model judge 결과를 human
 sign-off로 취급하지 않습니다.
 
-트리거 fixture와 Evidence Contract fixture는 결정론적인 계약 검사입니다.
+트리거 fixture 49건은 skill 설명의 lexical 경계를 점검할 뿐 실제 모델
+router를 검증하지 않습니다. 현재 paired behavior smoke는 PRD, acceptance,
+IA, 일반 코딩 4개 계약만 다룹니다. Evidence Contract fixture도 결정론적인
+계약 검사입니다.
 behavior smoke의 성공은 실행 건전성만 뜻하며 품질 향상을 입증하지 않습니다.
 자세한 주장 경계와 재현 절차는 [평가 가이드](docs/EVALS.md)를 참고하세요.
 내부 oracle을 주효과에서 제외하고 SWE-Skills-Bench, FeatureBench,
@@ -392,9 +422,9 @@ FeatureBench 네 저장소에서 실행한 feature-level paired 파일럿, 첫
 정리했습니다. 재현 가능하고 무결한 positive lift는 아직 0/4입니다.
 
 Pull Request와 `main` 푸시에서는 저장소 계약, 사용 가능한 공식 Codex
-validator, trigger fixture 30건, Evidence Contract fixture를 검사합니다.
-`main`에서 플러그인 매니페스트 버전을 올리면 동일 버전의 GitHub tag와
-Release가 생성됩니다.
+validator, lexical trigger fixture 49건, Evidence Contract fixture를 검사합니다.
+`main`에서 어느 플러그인 매니페스트든 버전을 올리면 두 버전의 일치 여부를
+검사하고 동일 버전의 GitHub tag와 Release를 생성합니다.
 
 v0.3.0의 구조·trigger·Evidence Contract·WorkGraph 검증은 완료됐습니다.
 실제 저장소 confirmatory study와

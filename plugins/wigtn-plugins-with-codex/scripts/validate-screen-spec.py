@@ -32,7 +32,11 @@ ANCHOR_REF = re.compile(r"04-WIREFRAME\.html#([A-Za-z][A-Za-z0-9._:-]*)")
 HTML_ID = re.compile(r'\bid=["\']([A-Za-z][A-Za-z0-9._:-]*)["\']')
 HTML_FRAGMENT = re.compile(r'\bhref=["\']#([A-Za-z][A-Za-z0-9._:-]*)["\']')
 REMOTE_RESOURCE = re.compile(
-    r'<(?:script|link|img)\b[^>]+(?:src|href)=["\']https?://', re.I
+    r'<(?:script|link|img|source|video|audio|iframe|embed|object)\b[^>]*'
+    r'(?:src|href|poster|data|srcset)\s*=\s*["\']?[^"\'>]*'
+    r'(?:(?:https?:)?//)'
+    r'|(?:@import\s+(?:url\(\s*)?|url\(\s*)["\']?\s*(?:(?:https?:)?//)',
+    re.I,
 )
 SCREEN_HEADING = re.compile(r"^## Screen:\s*(.+?)\s*$", re.M)
 

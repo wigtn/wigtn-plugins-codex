@@ -66,27 +66,47 @@ def main() -> int:
         errors.append(f"marketplace must contain exactly two plugins, found {len(entries)}")
         entries = []
 
-    plugin_root: Path | None = None
+    plugin_roots: dict[str, Path] = {}
     if entries:
-        entry = entries[0]
-        name = entry.get("name")
-        source = entry.get("source", {})
-        if source.get("source") != "local":
-            errors.append("marketplace plugin source must be local")
-        source_path = source.get("path", "")
-        if not isinstance(source_path, str) or not source_path.startswith("./plugins/"):
-            errors.append("marketplace source.path must start with ./plugins/")
-        else:
-            plugin_root = (ROOT / source_path).resolve()
-            if plugin_root.name != name or not plugin_root.is_dir():
-                errors.append("marketplace name and source directory must exist and match")
-        policy = entry.get("policy", {})
-        if policy.get("installation") not in {"AVAILABLE", "INSTALLED_BY_DEFAULT", "NOT_AVAILABLE"}:
-            errors.append("invalid marketplace installation policy")
-        if policy.get("authentication") not in {"ON_INSTALL", "ON_USE"}:
-            errors.append("invalid marketplace authentication policy")
-        if not entry.get("category"):
-            errors.append("marketplace category is required")
+        names = [entry.get("name") for entry in entries]
+        string_names = {name for name in names if isinstance(name, str)}
+        if string_names != {"wigtn-plugins-with-codex", "wigtn-knowledge-wiki"}:
+            errors.append("marketplace must list the core and knowledge-wiki plugins")
+        if len(names) != len(string_names):
+            errors.append("marketplace plugin names must be unique")
+        for entry in entries:
+            name = entry.get("name")
+            source = entry.get("source", {})
+            if source.get("source") != "local":
+                errors.append(f"{name}: marketplace plugin source must be local")
+            source_path = source.get("path", "")
+            expected_path = f"./plugins/{name}" if isinstance(name, str) else ""
+            if not isinstance(source_path, str) or source_path != expected_path:
+                errors.append(
+                    f"{name}: marketplace source.path must exactly match its plugin directory"
+                )
+            else:
+                root = (ROOT / source_path).resolve()
+                if root.name != name or not root.is_dir():
+                    errors.append(
+                        f"{name}: marketplace name and source directory must exist and match"
+                    )
+                elif isinstance(name, str):
+                    plugin_roots[name] = root
+            policy = entry.get("policy", {})
+            if policy.get("installation") not in {
+                "AVAILABLE",
+                "INSTALLED_BY_DEFAULT",
+                "NOT_AVAILABLE",
+            }:
+                errors.append(f"{name}: invalid marketplace installation policy")
+            if policy.get("authentication") not in {"ON_INSTALL", "ON_USE"}:
+                errors.append(f"{name}: invalid marketplace authentication policy")
+            if not entry.get("category"):
+                errors.append(f"{name}: marketplace category is required")
+
+    plugin_root = plugin_roots.get("wigtn-plugins-with-codex")
+    core_version = ""
 
     if plugin_root:
         manifest_path = plugin_root / ".codex-plugin" / "plugin.json"
@@ -99,6 +119,8 @@ def main() -> int:
             errors.append("plugin folder and manifest name must match")
         if not SEMVER.fullmatch(str(manifest.get("version", ""))):
             errors.append("plugin version must be SemVer")
+        else:
+            core_version = str(manifest["version"])
         if manifest.get("skills") != "./skills/":
             errors.append("plugin manifest skills path must be ./skills/")
         default_prompts = manifest.get("interface", {}).get("defaultPrompt", [])
@@ -109,7 +131,11 @@ def main() -> int:
                 errors.append(f"plugin manifest contains unsupported MVP field: {unsupported}")
 
         skills_root = plugin_root / "skills"
-        skill_names = {path.name for path in skills_root.iterdir() if path.is_dir()}
+        if not skills_root.is_dir():
+            errors.append("core plugin skills directory is missing")
+            skill_names: set[str] = set()
+        else:
+            skill_names = {path.name for path in skills_root.iterdir() if path.is_dir()}
         if skill_names != EXPECTED_SKILLS:
             errors.append(
                 "skill set mismatch: expected "
@@ -223,8 +249,10 @@ def main() -> int:
         if len(wiki_entries) != 1:
             errors.append("marketplace must contain wigtn-knowledge-wiki exactly once")
         else:
-            wiki_source = wiki_entries[0].get("source", {})
-            wiki_root = (ROOT / str(wiki_source.get("path", ""))).resolve()
+            wiki_root = plugin_roots.get("wigtn-knowledge-wiki")
+            if wiki_root is None:
+                errors.append("knowledge-wiki source directory must exist and match")
+                wiki_root = ROOT / "plugins" / "wigtn-knowledge-wiki"
             try:
                 wiki_manifest = load_json(wiki_root / ".codex-plugin" / "plugin.json")
             except ValueError as exc:
@@ -234,22 +262,63 @@ def main() -> int:
                 errors.append("knowledge-wiki source directory must exist and match")
             if wiki_manifest.get("name") != "wigtn-knowledge-wiki":
                 errors.append("knowledge-wiki manifest name mismatch")
+            wiki_version = str(wiki_manifest.get("version", ""))
+            if not SEMVER.fullmatch(wiki_version):
+                errors.append("knowledge-wiki version must be SemVer")
+            elif core_version and wiki_version != core_version:
+                errors.append(
+                    "core and knowledge-wiki plugin versions must remain lockstep"
+                )
             if wiki_manifest.get("skills") != "./skills/":
                 errors.append("knowledge-wiki manifest skills path must be ./skills/")
+            for unsupported in ("apps", "mcpServers", "hooks"):
+                if unsupported in wiki_manifest:
+                    errors.append(
+                        f"knowledge-wiki manifest contains unsupported MVP field: {unsupported}"
+                    )
+            default_prompts = wiki_manifest.get("interface", {}).get("defaultPrompt", [])
+            if not isinstance(default_prompts, list) or not 1 <= len(default_prompts) <= 3:
+                errors.append(
+                    "knowledge-wiki interface.defaultPrompt must contain 1 to 3 prompts"
+                )
             wiki_skills = wiki_root / "skills"
-            wiki_names = {path.name for path in wiki_skills.iterdir() if path.is_dir()}
+            if not wiki_skills.is_dir():
+                errors.append("knowledge-wiki skills directory is missing")
+                wiki_names: set[str] = set()
+            else:
+                wiki_names = {
+                    path.name for path in wiki_skills.iterdir() if path.is_dir()
+                }
             if wiki_names != {"knowledge-wiki"}:
                 errors.append("knowledge-wiki plugin must contain exactly one skill")
             wiki_yaml = wiki_skills / "knowledge-wiki" / "agents" / "openai.yaml"
+            wiki_skill = wiki_skills / "knowledge-wiki" / "SKILL.md"
+            try:
+                wiki_meta = frontmatter(wiki_skill)
+            except (OSError, ValueError) as exc:
+                errors.append(str(exc))
+            else:
+                if set(wiki_meta) != {"name", "description"}:
+                    errors.append(
+                        "knowledge-wiki frontmatter must contain only name and description"
+                    )
+                if wiki_meta.get("name") != "knowledge-wiki":
+                    errors.append("knowledge-wiki frontmatter name mismatch")
             if not wiki_yaml.is_file() or (
                 "Use $wigtn-knowledge-wiki:knowledge-wiki"
                 not in wiki_yaml.read_text(encoding="utf-8")
             ):
                 errors.append("knowledge-wiki default prompt must use its qualified name")
+            elif "allow_implicit_invocation: true" not in wiki_yaml.read_text(
+                encoding="utf-8"
+            ):
+                errors.append("knowledge-wiki invocation policy mismatch")
             if not (wiki_root / "hooks" / "hooks.json").is_file():
                 errors.append("knowledge-wiki plugin must contain its Stop hook")
             if not (wiki_root / "scripts" / "knowledge_wiki" / "capture.py").is_file():
                 errors.append("knowledge-wiki capture script is missing")
+            if not (wiki_root / "scripts" / "knowledge_wiki" / "doctor.py").is_file():
+                errors.append("knowledge-wiki doctor script is missing")
             if (ROOT / "plugins" / "wigtn-plugins-with-codex" / "hooks").exists():
                 errors.append("core plugin must not contain hooks")
 

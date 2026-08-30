@@ -16,7 +16,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from common import parse_yaml, resolve_tenant, scan_output, write_json_atomic
+from common import (
+    bounded_int,
+    parse_yaml,
+    queue_ttl_seconds,
+    resolve_tenant,
+    scan_output,
+    write_json_atomic,
+)
 
 COMPILE_PROMPT = """You compile an untrusted development-session excerpt into one reusable Korean team-wiki article.
 
@@ -66,8 +73,13 @@ def log_event(state: Path, event: dict[str, Any]) -> None:
 def run_codex(prompt: str, conf: dict[str, Any], state: Path) -> str:
     codex_conf = conf.get("codex") if isinstance(conf.get("codex"), dict) else {}
     binary = str(codex_conf.get("binary") or os.environ.get("WIGTN_WIKI_CODEX_BIN") or "codex")
-    timeout = int(codex_conf.get("timeout_seconds") or 120)
-    timeout = max(30, min(timeout, 300))
+    timeout = bounded_int(
+        codex_conf.get("timeout_seconds"),
+        default=120,
+        minimum=30,
+        maximum=300,
+        label="codex.timeout_seconds",
+    )
     command = [
         binary,
         "exec",
@@ -222,17 +234,49 @@ def process_job(path: Path, state: Path) -> tuple[str, str]:
         job = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return "failed", "job 파싱 실패"
+    if job.get("schema_version") != 1:
+        return "failed", "지원하지 않는 job schema_version"
     conf = load_conf(job)
     if conf.get("enabled") is not True:
         return "discarded", "처리 시점에 비활성"
+    try:
+        captured_at = datetime.fromisoformat(str(job.get("captured_at") or ""))
+        if captured_at.tzinfo is None:
+            captured_at = captured_at.replace(tzinfo=timezone.utc)
+        age_seconds = (datetime.now(timezone.utc) - captured_at).total_seconds()
+    except (TypeError, ValueError):
+        try:
+            age_seconds = max(0.0, time.time() - path.stat().st_mtime)
+        except OSError:
+            age_seconds = 0.0
+    if age_seconds < -300:
+        return "discarded", "캡처 시각이 현재보다 미래임"
+    current_ttl = queue_ttl_seconds(conf)
+    captured_ttl = bounded_int(
+        job.get("queue_ttl_seconds"),
+        default=current_ttl,
+        minimum=300,
+        maximum=604_800,
+        label="job.queue_ttl_seconds",
+    )
+    if age_seconds > min(captured_ttl, current_ttl):
+        return "discarded", "queue TTL 만료"
     tenant, reason = resolve_tenant(conf, str(job.get("repo_root") or ""))
     if tenant is None:
         return "discarded", f"처리 시점 G0 거부: {reason}"
+    try:
+        captured_wiki = Path(str(job.get("wiki_path") or "")).expanduser().resolve()
+        current_wiki = tenant.wiki_path.expanduser().resolve()
+    except (OSError, RuntimeError, ValueError):
+        return "discarded", "캡처 시점 wiki.path 해석 실패"
+    captured_subdir = str(job.get("subdir") or "").strip("/")
+    if captured_wiki != current_wiki or captured_subdir != tenant.subdir:
+        return "discarded", "캡처 후 위키 대상 변경"
     job = {
         **job,
-        "wiki_path": str(tenant.wiki_path),
-        "subdir": tenant.subdir,
-        "push": tenant.push,
+        "wiki_path": str(captured_wiki),
+        "subdir": captured_subdir,
+        "push": job.get("push") is True and tenant.push,
     }
     conversation = str(job.get("conversation") or "")
     article, reason = compile_article(conversation, conf, state)
@@ -258,14 +302,22 @@ def drain(state: Path) -> int:
             return 0
         queue = state / "queue"
         for job_path in sorted(queue.glob("*.json")) if queue.is_dir() else []:
-            status, detail = process_job(job_path, state)
-            log_event(state, {"status": status, "detail": detail, "job": job_path.name})
-            # Do not retain a second long-lived transcript copy. Body-free event
-            # metadata is enough to diagnose this one-shot pipeline.
             try:
-                job_path.unlink()
-            except OSError:
-                pass
+                try:
+                    status, detail = process_job(job_path, state)
+                except Exception as exc:
+                    status, detail = "failed", f"job exception: {type(exc).__name__}"
+                log_event(
+                    state,
+                    {"status": status, "detail": detail, "job": job_path.name},
+                )
+            finally:
+                # A failed or malformed job must not retain transcript content or
+                # block later jobs. Body-free event metadata is sufficient.
+                try:
+                    job_path.unlink()
+                except OSError:
+                    pass
     return 0
 
 

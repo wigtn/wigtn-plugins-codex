@@ -12,7 +12,11 @@ ROOT = Path(__file__).resolve().parents[1]
 PLUGINS = ROOT / "plugins"
 LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 REMOTE_HTML = re.compile(
-    r'<(?:script|link|img)\b[^>]+(?:src|href)=["\']https?://', re.I
+    r'<(?:script|link|img|source|video|audio|iframe|embed|object)\b[^>]*'
+    r'(?:src|href|poster|data|srcset)\s*=\s*["\']?[^"\'>]*'
+    r'(?:(?:https?:)?//)'
+    r'|(?:@import\s+(?:url\(\s*)?|url\(\s*)["\']?\s*(?:(?:https?:)?//)',
+    re.I,
 )
 BANNED_RUNTIME_TEXT = (
     "plugins/wigtn-plugins/skills/design-system-reference/",

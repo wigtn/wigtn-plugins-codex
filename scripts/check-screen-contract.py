@@ -142,6 +142,16 @@ def main() -> int:
         assert failed.returncode == 1
         assert "external network resource" in failed.stdout
 
+        (remote / "04-WIREFRAME.html").write_text(
+            '<!doctype html><html><head><meta name="viewport" content="width=device-width">'
+            '<style>.hero{background:url(https://cdn.example.test/hero.png)}</style>'
+            '</head><body><section id="screen-x">X</section></body></html>\n',
+            encoding="utf-8",
+        )
+        failed = run(remote, "wireframe")
+        assert failed.returncode == 1
+        assert "external network resource" in failed.stdout
+
         broken_link = root / "broken-link"
         broken_link.mkdir()
         for name in ("01-IA.md", "03-SCREEN-SPEC.md"):

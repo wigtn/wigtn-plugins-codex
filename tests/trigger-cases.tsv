@@ -28,6 +28,11 @@ release-readiness	변경사항 커밋해줘
 release-readiness	현재 브랜치 푸시해줘
 release-readiness	이 변경으로 PR 올려줘
 release-readiness	검증하고 커밋 준비해줘
+verified-delivery	$wigtn-plugins-with-codex:verified-delivery 이 기능을 구현하고 검증해줘
+verified-delivery	$verified-delivery로 요구사항부터 실행 테스트까지 끝내줘
+knowledge-wiki	knowledge wiki 설정을 진단해줘
+knowledge-wiki	이 저장소 지식을 위키에 지식 쌓아줘
+knowledge-wiki	knowledge-wiki 진단 결과만 보여줘
 none	버튼 색을 파란색으로 바꿔줘
 none	이 에러 고쳐줘
 none	README 오타 수정해줘
@@ -41,3 +46,5 @@ none	테스트 추가해줘
 none	API 응답 속도 개선해줘
 none	오늘 할 일 체크리스트를 간단히 만들어줘
 none	이 기능 구현 계획을 대화로만 정리해줘
+none	이 기능을 구현하고 검증까지 해줘
+none	세션 내용을 짧게 요약해줘

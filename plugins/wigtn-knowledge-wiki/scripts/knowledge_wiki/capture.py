@@ -8,11 +8,13 @@ import os
 import subprocess
 import sys
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 from common import (
     cursor_path,
     load_config,
+    queue_ttl_seconds,
     read_cursor,
     resolve_tenant,
     scan_input,
@@ -62,6 +64,8 @@ def main() -> int:
         state / "queue" / f"{job_id}.json",
         {
             "schema_version": 1,
+            "captured_at": datetime.now(timezone.utc).isoformat(),
+            "queue_ttl_seconds": queue_ttl_seconds(conf),
             "config_path": str(config_path),
             "conversation": conversation,
             "repo_root": str(tenant.repo_root),

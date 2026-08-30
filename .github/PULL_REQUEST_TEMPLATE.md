@@ -16,4 +16,4 @@
 - [ ] Minor
 - [ ] Major
 
-If a release is required, update the version in `plugins/wigtn-plugins-with-codex/.codex-plugin/plugin.json` before merging.
+If a release is required, update both plugin manifests to the same version before merging.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic smoke test for narrow natural-language trigger contracts."""
+"""Lexical fixture for narrow trigger descriptions; not a model-router test."""
 
 from pathlib import Path
 import sys
@@ -26,6 +26,15 @@ RULES = {
     ),
     "wigtn-presentation": ("wigtn 브랜드", "위그튼"),
     "release-readiness": ("커밋해줘", "푸시해줘", "pr 올려줘", "커밋 준비해줘"),
+    "verified-delivery": (
+        "$wigtn-plugins-with-codex:verified-delivery",
+        "$verified-delivery",
+    ),
+    "knowledge-wiki": (
+        "knowledge wiki 설정",
+        "위키에 지식 쌓아줘",
+        "knowledge-wiki 진단",
+    ),
 }
 
 
@@ -64,7 +73,7 @@ def main() -> int:
         print("Trigger contract: FAIL")
         print("\n".join(failures))
         return 1
-    print(f"Trigger contract: PASS ({count} cases)")
+    print(f"Lexical trigger fixture: PASS ({count} cases; model routing not tested)")
     return 0
 
 
