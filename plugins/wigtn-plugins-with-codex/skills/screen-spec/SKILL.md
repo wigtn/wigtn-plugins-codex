@@ -1,70 +1,56 @@
 ---
 name: screen-spec
-description: Create only the requested implementation-ready IA, user flow, screen specification, lo-fi HTML wireframe, or developer handoff from a PRD or feature description. Use for “화면정의서”, “IA”, “user flow”, “wireframe”, or UI handoff requests. Generate the full five-artifact bundle only when the user requests a complete screen specification or handoff bundle. Do not use for visual styling alone or non-UI backend work.
+description: Create only the requested IA, user flow, screen spec, lo-fi HTML wireframe, or developer handoff from requirements. Use for “화면정의서”, IA, user flow, wireframe, or UI handoff requests. Build all five only for an explicit complete bundle. Do not use for styling alone or backend work.
 ---
 
 # Screen Spec
 
-Select the artifacts requested by the user:
+Select the requested artifact and its dependency closure:
 
 - `ia` → `01-IA.md`
 - `flow` → `02-USER-FLOW.md`
 - `screen` → `03-SCREEN-SPEC.md` plus IA
-- `wireframe` → `04-WIREFRAME.html` plus IA and screen spec
-- `handoff` → `05-DEV-HANDOFF.md` and its full dependency closure
-- complete “화면정의서”, bundle, or full handoff request → all five
+- `wireframe` → `04-WIREFRAME.html` plus IA and screen
+- `handoff` → `05-DEV-HANDOFF.md` plus all dependencies
+- explicit complete bundle → all five
 
-Do not create unrelated artifacts merely because the skill was selected.
+Do not produce or propose the other artifacts merely because the skill loaded.
 
-## Compact single-artifact path
+## IA-only or flow-only
 
-For an IA-only or flow-only request:
-
-- Treat a sufficient user-provided feature description as the source. Do not
-  scan the repository unless the user requests project-native routes or points
-  to source files.
-- For a chat-only answer, do not read templates or references, create files,
-  run validators, or perform browser checks. Return only the selected artifact.
-- When a file is requested, read only its matching template, write only that
-  file, and validate only the selected artifact.
-- Keep IA to assumptions, a structured page map, navigation, access roles, and
-  scope boundaries. The page map must contain `Page`/`페이지` plus
-  `Route`/`경로` columns, or `정보 단위` plus `경로` columns.
-- Stop after the selected artifact. Do not propose or summarize the other four.
+- Use a sufficient user brief directly. Inspect repository routes only when
+  project-native behavior is requested or source files are named.
+- For chat-only output, do not read templates, create files, run validators,
+  or perform browser checks.
+- For a file, read only its matching template and validate only that artifact.
+- IA needs assumptions, a page/route map, navigation, roles, and boundaries.
+  Stop after the requested artifact.
 
 ## Multi-artifact workflow
 
-1. Read the source PRD or feature description and relevant existing routes,
-   components, permissions, and design system.
-2. Preserve requirement IDs. Record safe inferences under `Assumptions`; ask
-   only when a missing decision materially changes navigation or behavior.
-3. Build the requested artifacts and required dependency closure from the
-   templates in `assets/templates/`. Keep page IDs, routes, roles, states, and
-   requirement IDs consistent across the artifacts that exist.
-4. Cover only applicable states: loading, empty, error, success, unauthorized,
-   validation, offline, and destructive confirmation.
-5. Keep wireframes grayscale with semantic status colors only. If browser
-   control is available, verify desktop and mobile widths, overflow, labels,
-   and links before completion. Use the single self-contained responsive
-   `04-WIREFRAME.html` template; do not create a second mobile artifact.
-6. Run the selector-aware validator from this skill directory:
+1. Read the requirements and only the existing routes, components,
+   permissions, and tokens needed for the selected artifacts.
+2. Preserve requirement IDs. Mark unsupported routes, policies, breakpoints,
+   APIs, and copy as assumptions or open decisions rather than defaults.
+3. Read only the selected templates in `assets/templates/` and their dependency
+   templates. Treat placeholders as shape, never as product facts.
+4. Keep page IDs, roles, routes, states, requirements, and wireframe anchors
+   consistent across the artifacts that exist.
+5. For screen, wireframe, or handoff, read the compact
+   [state contract](references/state-contract.md). For handoff, also read the
+   [handoff contract](references/handoff-contract.md).
+6. Keep wireframes grayscale with semantic status colors and one self-contained
+   responsive HTML file. If browser control is available, inspect wide and
+   narrow layouts, overflow, labels, and links.
+7. Run from this skill directory:
 
-   `python3 ../../scripts/validate-screen-spec.py <directory> --artifacts <ia,flow,screen,wireframe,handoff|all>`
+   `python3 ../../scripts/validate-screen-spec.py <directory> --artifacts <selection|all>`
 
-   Fix missing selected artifacts, unresolved template tokens, broken anchors,
-   and requirement drift between artifacts that exist.
-7. Return file links and deterministic plus visual verification results
-   without pasting every artifact into the conversation.
+8. Return file links and deterministic plus visual results without pasting the
+   full bundle into chat.
 
-Read [state checklist](references/state-checklist.md) only when screen,
-wireframe, or handoff is selected. Read
-[handoff checklist](references/handoff-checklist.md) only for handoff.
-Read [microcopy patterns](references/microcopy-patterns.md) only when the user
-requests UX copy or the selected screen/handoff contains material forms,
-empty/error states, permission guidance, or destructive confirmation.
-If a saved WorkGraph exists, preserve its requirement IDs and let
-`work-planner` register the generated artifact set. Screen output never
-verifies implementation.
-
-Do not invent a visual brand. Suggest `design-direction` only when a new visual
-direction is actually requested.
+Use project-native language for microcopy. Prefer explicit action labels and a
+useful recovery action; do not invent timing, policy, ownership, or operational
+promises. Screen artifacts describe intended behavior and never verify its
+implementation. Suggest `design-direction` only for an actual visual-direction
+request.

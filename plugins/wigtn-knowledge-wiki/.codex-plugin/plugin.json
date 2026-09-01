@@ -1,6 +1,6 @@
 {
   "name": "wigtn-knowledge-wiki",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Opt-in, gated Codex session knowledge capture for an explicitly authorized personal wiki namespace.",
   "author": {
     "name": "WIGTN"

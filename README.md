@@ -4,7 +4,7 @@
 
 **Codex의 자율성은 그대로. PRD·작업 계획·검증·Git 권한은 필요한 순간에만.**
 
-![Version](https://img.shields.io/badge/version-0.5.2-6C5CE7?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.5.3-6C5CE7?style=for-the-badge)
 ![Skills](https://img.shields.io/badge/core_skills-9-00B894?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/platform-Codex-111827?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-Apache--2.0-0984E3?style=for-the-badge)
@@ -117,6 +117,23 @@ release-readiness ──── 안전한 커밋·푸시·PR
 ### 자동 호출과 명시 호출
 
 대부분의 스킬은 요청 의도가 설명과 일치할 때 Codex가 자동으로 선택합니다. `verified-delivery`만 예외입니다. 일반적인 코딩 요청이 의도치 않게 전체 전달 파이프라인으로 커지는 것을 막기 위해 `$wigtn-plugins-with-codex:verified-delivery`를 명시해야 합니다.
+
+---
+
+## v0.5.3: 하네스 경량화·스택 중립화
+
+- 항상 노출되는 Core 스킬 설명 합계를 2,980자에서 2,162자로 줄여
+  선택 신호는 유지하면서 기본 컨텍스트 부담을 약 27% 낮췄습니다.
+- Screen Spec의 본문·템플릿·참조 자료를 30,960 bytes에서 13,558 bytes로
+  줄이고, 요청한 산출물과 그 의존 자료만 읽도록 정리했습니다.
+- 화면 템플릿에서 임의의 라우트·HTTP 상태 코드·breakpoint·CSS token과
+  Next.js, Supabase, Auth.js, Zod, TanStack 같은 스택 가정을 제거했습니다.
+- Verified Delivery의 상세 증거 계약과 Acceptance Verifier의 저장형 JSON
+  handoff는 필요한 요청에서만 읽도록 분리했습니다.
+- Presentation의 중복 브랜드·디자인 지침을 하나의 계약으로 합쳐 4,825
+  bytes에서 3,082 bytes로 줄였습니다.
+- 새 Screen Spec 플레이스홀더와 외부 리소스·anchor·요구사항 연결 검증은
+  그대로 유지하고 회귀 검사를 보강했습니다.
 
 ---
 

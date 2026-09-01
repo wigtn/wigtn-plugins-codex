@@ -122,11 +122,11 @@ def main() -> int:
 
     presentation = CORE / "wigtn-presentation"
     brand = (presentation / "references" / "brand.md").read_text(encoding="utf-8")
-    guide = (presentation / "references" / "design-guide.md").read_text(encoding="utf-8")
     skill = (presentation / "SKILL.md").read_text(encoding="utf-8")
     assert "section-inverse" in brand
     assert "brand overlay" in skill and "PPTX" in skill and "HTML" in skill
-    assert "design-system-reference" not in guide
+    assert "one audience-facing message" in brand
+    assert "design-system-reference" not in brand
     assert "Google Fonts/CDN" not in brand
     print("Visual contracts: PASS (diagram/html/presentation-routing)")
     return 0

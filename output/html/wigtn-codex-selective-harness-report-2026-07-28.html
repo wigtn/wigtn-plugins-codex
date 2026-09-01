@@ -3,18 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="WIGTN Plugin for Codex의 제작 배경, GPT-5.5·GPT-5.6 Sol paired evaluation, 0.3.0 설계 개정을 정리한 기술 보고서">
-  <title>WIGTN Plugin for Codex — 구현 절차는 줄이고 제품 개발의 계약은 남긴 이유</title>
+  <meta name="description" content="GPT‑5.6 Sol에서 플러그인 미사용·사용 조건의 코드 결과와 실행 비용을 비교하고 WIGTN Plugin의 일반 구현 개입을 축소한 기술 리포트">
+  <title>WIGTN Plugin for Codex — 코딩 모델 성능 향상 이후의 구현 하네스 재검토</title>
   <style>
     :root {
-      --ink: #18181b;
-      --muted: #5b616b;
-      --light: #f5f5f4;
-      --line: #d8d8d4;
-      --accent: #5038a5;
-      --accent-soft: #f2f0fa;
-      --good: #22614e;
-      --warn: #8a4b10;
+      --ink: #17171a;
+      --muted: #62636b;
+      --line: #d9d9d6;
+      --paper: #fff;
+      --soft: #f6f6f3;
+      --accent: #5b3fc0;
+      --accent-soft: #f2effc;
       --page: 920px;
     }
 
@@ -23,12 +22,12 @@
     body {
       margin: 0;
       color: var(--ink);
-      background: #fff;
+      background: var(--paper);
       font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
         "Noto Sans KR", "Segoe UI", sans-serif;
       font-size: 16px;
-      line-height: 1.72;
-      letter-spacing: -.01em;
+      line-height: 1.75;
+      letter-spacing: -.012em;
       word-break: keep-all;
     }
 
@@ -37,10 +36,11 @@
       text-decoration-thickness: 1px;
       text-underline-offset: 3px;
     }
+
     code {
       padding: .08rem .28rem;
       border-radius: 3px;
-      background: #f1f1ef;
+      background: #efefec;
       font-family: "SFMono-Regular", Consolas, monospace;
       font-size: .88em;
       word-break: break-all;
@@ -49,37 +49,41 @@
     .page {
       width: min(var(--page), calc(100% - 48px));
       margin: 0 auto;
-      padding: 64px 0 96px;
+      padding: 56px 0 96px;
     }
 
     header {
-      padding: 0 0 38px;
+      padding: 0 0 40px;
       border-top: 5px solid var(--ink);
       border-bottom: 1px solid var(--ink);
     }
+
     .report-label {
-      margin: 18px 0 44px;
+      margin: 17px 0 48px;
       color: var(--muted);
       font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .11em;
+      font-weight: 750;
+      letter-spacing: .1em;
       text-transform: uppercase;
     }
+
     h1 {
       max-width: 780px;
       margin: 0;
-      font-size: clamp(36px, 6vw, 58px);
-      line-height: 1.13;
-      letter-spacing: -.05em;
-      font-weight: 780;
+      font-size: clamp(38px, 6vw, 60px);
+      font-weight: 790;
+      line-height: 1.12;
+      letter-spacing: -.052em;
     }
+
     .subtitle {
-      max-width: 720px;
-      margin: 22px 0 0;
+      max-width: 750px;
+      margin: 24px 0 0;
       color: var(--muted);
       font-size: 19px;
-      line-height: 1.6;
+      line-height: 1.62;
     }
+
     .meta {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -89,92 +93,107 @@
       border-top: 1px solid var(--line);
       font-size: 13px;
     }
-    .meta dt {
-      margin-bottom: 3px;
-      color: var(--muted);
-    }
-    .meta dd { margin: 0; font-weight: 650; }
+
+    .meta dt { margin-bottom: 2px; color: var(--muted); }
+    .meta dd { margin: 0; font-weight: 680; }
 
     nav {
-      margin: 30px 0 56px;
-      padding: 20px 0;
+      margin: 28px 0 0;
+      padding: 18px 0 22px;
       border-bottom: 1px solid var(--line);
     }
+
     nav strong {
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       font-size: 13px;
     }
+
     nav ol {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 5px 22px;
+      gap: 4px 22px;
       margin: 0;
       padding-left: 22px;
       color: var(--muted);
       font-size: 13px;
     }
+
     nav a { color: inherit; text-decoration: none; }
     nav a:hover { color: var(--accent); text-decoration: underline; }
 
     section {
-      margin-top: 68px;
+      margin-top: 72px;
       scroll-margin-top: 24px;
     }
+
     .section-kicker {
       display: block;
-      margin-bottom: 7px;
+      margin-bottom: 8px;
       color: var(--accent);
       font-size: 12px;
-      font-weight: 750;
+      font-weight: 780;
       letter-spacing: .08em;
       text-transform: uppercase;
     }
+
     h2 {
-      margin: 0 0 22px;
-      padding-bottom: 13px;
+      margin: 0 0 24px;
+      padding-bottom: 14px;
       border-bottom: 1px solid var(--ink);
-      font-size: 30px;
-      line-height: 1.3;
-      letter-spacing: -.035em;
+      font-size: 31px;
+      line-height: 1.28;
+      letter-spacing: -.038em;
     }
+
     h3 {
       margin: 40px 0 12px;
       font-size: 21px;
-      line-height: 1.4;
+      line-height: 1.42;
       letter-spacing: -.02em;
     }
-    p { margin: 10px 0; }
+
+    p { margin: 11px 0; }
     ul, ol { padding-left: 1.35rem; }
     li + li { margin-top: 5px; }
 
-    .executive {
-      margin-top: 0;
-      padding: 30px 32px;
-      border: 1px solid var(--ink);
-      background: #fff;
-    }
-    .executive h2 {
-      padding: 0;
-      border: 0;
-      font-size: 25px;
-    }
-    .decision {
-      margin: 26px 0;
-      padding: 18px 20px;
+    blockquote {
+      margin: 28px 0;
+      padding: 18px 21px;
       border-left: 4px solid var(--accent);
       background: var(--accent-soft);
       font-size: 17px;
-      font-weight: 680;
-      line-height: 1.65;
+      line-height: 1.66;
     }
-    .claim-boundary {
-      margin-top: 24px;
-      padding-top: 18px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 14px;
+
+    blockquote p { margin: 0; }
+
+    .table-wrap {
+      width: 100%;
+      margin: 20px 0 30px;
+      overflow-x: auto;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
     }
+
+    table {
+      width: 100%;
+      min-width: 620px;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      line-height: 1.52;
+    }
+
+    th, td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { background: var(--soft); font-weight: 740; }
+    tbody tr:last-child td { border-bottom: 0; }
+    th.num, td.num { text-align: right; white-space: nowrap; }
 
     .key-results {
       display: grid;
@@ -182,17 +201,21 @@
       margin: 26px 0;
       border: 1px solid var(--line);
     }
+
     .key-result {
-      min-height: 132px;
+      min-height: 130px;
       padding: 20px;
     }
+
     .key-result + .key-result { border-left: 1px solid var(--line); }
+
     .key-result strong {
       display: block;
       margin-bottom: 9px;
       font-size: 25px;
       line-height: 1.15;
     }
+
     .key-result span {
       display: block;
       color: var(--muted);
@@ -200,606 +223,405 @@
       line-height: 1.5;
     }
 
-    .table-wrap {
-      width: 100%;
-      margin: 18px 0 28px;
-      overflow-x: auto;
-      border-top: 1px solid var(--ink);
-      border-bottom: 1px solid var(--ink);
-    }
-    table {
-      width: 100%;
-      min-width: 620px;
-      border-collapse: collapse;
-      font-size: 13.5px;
-      line-height: 1.5;
-    }
-    th, td {
-      padding: 11px 12px;
-      border-bottom: 1px solid var(--line);
-      text-align: left;
-      vertical-align: top;
-    }
-    th {
-      background: #f5f5f3;
-      font-weight: 720;
-    }
-    tbody tr:last-child td { border-bottom: 0; }
-    td.num, th.num { text-align: right; white-space: nowrap; }
-    .positive { color: var(--good); font-weight: 720; }
-    .negative { color: var(--warn); font-weight: 720; }
-    .caption {
-      margin: -18px 0 24px;
-      color: var(--muted);
-      font-size: 12px;
+    .materials {
+      columns: 2;
+      column-gap: 36px;
     }
 
-    .figure {
-      margin: 28px 0;
-      padding: 24px;
-      border: 1px solid var(--line);
-      background: #fafaf9;
-    }
-    .figure-title {
-      margin-bottom: 18px;
-      font-size: 13px;
-      font-weight: 720;
-    }
-    .flow {
-      display: grid;
-      grid-template-columns: 1fr 36px 1fr;
-      gap: 12px;
-      align-items: center;
-    }
-    .flow-side {
-      padding: 18px;
-      border: 1px solid var(--line);
-      background: #fff;
-    }
-    .flow-side strong { display: block; margin-bottom: 8px; }
-    .flow-side p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .arrow {
-      color: var(--accent);
-      font-size: 24px;
-      text-align: center;
-    }
-    .figure figcaption {
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: 12px;
+    .materials li {
+      break-inside: avoid;
+      margin-bottom: 7px;
     }
 
-    .code-flow {
-      margin: 18px 0 28px;
-      padding: 20px 22px;
-      overflow-x: auto;
-      border: 1px solid var(--line);
-      background: #f7f7f5;
-      font-family: "SFMono-Regular", Consolas, monospace;
-      font-size: 13px;
-      line-height: 1.7;
-      white-space: pre;
-    }
-    .note {
-      margin: 20px 0;
-      padding: 14px 18px;
-      border-left: 3px solid var(--line);
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .sources {
-      font-size: 14px;
-      word-break: break-word;
-    }
     footer {
-      margin-top: 72px;
-      padding-top: 18px;
+      margin-top: 82px;
+      padding-top: 20px;
       border-top: 1px solid var(--ink);
       color: var(--muted);
       font-size: 12px;
     }
 
-    @media (max-width: 720px) {
-      body { font-size: 15px; word-break: normal; }
-      .page { width: min(100% - 28px, var(--page)); padding-top: 28px; }
-      header { padding-bottom: 28px; }
-      .report-label { margin: 14px 0 28px; }
-      h1 { font-size: 38px; }
+    @media (max-width: 700px) {
+      body { word-break: normal; }
+      .page { width: min(100% - 30px, var(--page)); padding-top: 30px; }
+      h1 { font-size: 39px; }
       .subtitle { font-size: 17px; }
-      .meta { grid-template-columns: 1fr; gap: 10px; }
-      nav ol { grid-template-columns: 1fr 1fr; }
-      section { margin-top: 50px; }
-      h2 { font-size: 26px; }
-      .executive { padding: 24px 20px; }
+      .meta { grid-template-columns: 1fr; gap: 9px; }
+      nav ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      section { margin-top: 54px; }
+      h2 { font-size: 27px; }
       .key-results { grid-template-columns: 1fr; }
-      .key-result { min-height: auto; }
+      .key-result { min-height: 0; }
       .key-result + .key-result {
-        border-left: 0;
         border-top: 1px solid var(--line);
+        border-left: 0;
       }
-      .flow { grid-template-columns: 1fr; }
-      .arrow { transform: rotate(90deg); }
+      .materials { columns: 1; }
     }
 
     @media print {
-      @page { size: A4; margin: 18mm 16mm; }
       body { font-size: 10.5pt; }
       .page { width: 100%; padding: 0; }
       nav { display: none; }
-      section { margin-top: 12mm; }
-      h2, h3 { break-after: avoid; }
-      table, .figure, .executive, .key-results { break-inside: avoid; }
-      a { color: inherit; text-decoration: none; }
+      section { break-inside: avoid-page; margin-top: 12mm; }
+      a { color: inherit; }
     }
   </style>
 </head>
 <body>
   <main class="page">
     <header>
-      <div class="report-label">WIGTN Plugin · Technical Report 09</div>
-      <h1>구현 절차는 줄이고<br>제품 개발의 계약은 남긴 이유</h1>
+      <div class="report-label">WIGTN Plugin · Technical Report</div>
+      <h1>코딩 모델 성능 향상 이후의<br>구현 하네스 재검토</h1>
       <p class="subtitle">
-        WIGTN Plugin for Codex의 제작 배경, GPT‑5.5·GPT‑5.6 Sol paired
-        evaluation, 그리고 0.3.0 설계 개정을 정리했다.
+        GPT‑5.6 Sol에서 플러그인 미사용·사용 조건의 코드 결과와 실행
+        비용을 비교하고 WIGTN Plugin의 일반 구현 개입을 축소했다
       </p>
       <dl class="meta">
         <div><dt>발행일</dt><dd>2026-07-28</dd></div>
-        <div><dt>대상 버전</dt><dd>WIGTN Plugin 0.3.0</dd></div>
-        <div><dt>문서 성격</dt><dd>공개 Engineering Report</dd></div>
+        <div><dt>작성</dt><dd>WIGTN Engineering</dd></div>
+        <div><dt>분류</dt><dd>Technical Report · Evaluation</dd></div>
       </dl>
     </header>
 
     <nav aria-label="목차">
       <strong>목차</strong>
       <ol>
-        <li><a href="#conclusion">결론 먼저</a></li>
-        <li><a href="#origin">왜 만들었나</a></li>
-        <li><a href="#question">왜 측정했나</a></li>
-        <li><a href="#method">평가 방법</a></li>
-        <li><a href="#results">결과</a></li>
-        <li><a href="#changes">무엇을 바꿨나</a></li>
-        <li><a href="#direction">0.3.0의 방향</a></li>
-        <li><a href="#limits">어디까지 믿을 수 있나</a></li>
-        <li><a href="#next">다음 검증</a></li>
-        <li><a href="#materials">재현 자료</a></li>
+        <li><a href="#problem">문제 정의</a></li>
+        <li><a href="#scope">설계 범위</a></li>
+        <li><a href="#evaluation">평가 설계</a></li>
+        <li><a href="#results">평가 결과</a></li>
+        <li><a href="#decision">설계 개정</a></li>
+        <li><a href="#validation">개정 구조 검증</a></li>
+        <li><a href="#limitations">주장 범위와 한계</a></li>
+        <li><a href="#next">후속 평가</a></li>
+        <li><a href="#materials">평가 및 감사 자료</a></li>
       </ol>
     </nav>
 
-    <section class="executive" id="conclusion">
-      <span class="section-kicker">Executive conclusion</span>
-      <h2>결론 먼저</h2>
-      <p>
-        WIGTN Plugin은 Codex보다 코드를 더 잘 쓰는 프롬프트 묶음이
-        아니다. PRD, 화면 명세, 구현 계획, 요구사항 검증, Git 릴리스처럼
-        반복되는 제품 개발 작업을 재사용 가능한 기능으로 만든 Plugin이다.
-      </p>
+    <article>
+      <section id="problem">
+        <span class="section-kicker">01 · 문제 정의</span>
+        <h2>모델 성능이 높아진 뒤 기존 구현 하네스를 다시 평가한 이유</h2>
+        <p>WIGTN Plugin은 제품 개발에서 반복되는 요청을 Codex에서 다시 사용할
+        수 있게 만들면서 시작했다. 아이디어를 제품 요구사항 문서(PRD)로
+        정리하고, 요구사항을 구현 작업과 검사에 연결하고, 실제로 완료됐는지
+        확인한 뒤, 필요한 경우 코드 변경 저장(commit)이나 검토 요청(pull
+        request)까지 준비하는 흐름이다.</p>
+        <p>이 글에서 하네스는 모델에 추가한 작업 순서, 검사 절차, 완료 규칙을
+        가리킨다. 모델이 작업을 충분히 구조화하지 못할 때는 문제를 단계로
+        나누고 검사를 반복하도록 지시해 부족한 부분을 보완할 수 있었다.
+        그러나 모델이 좋아지면서 저장소 탐색, 원인 분석, 구현 계획, 코드
+        수정, 테스트 실행은 점점 모델의 기본 동작이 됐다.</p>
+        <p>모델은 달라졌지만 하네스가 그대로 남아 있으면 보완이 중복으로
+        바뀐다. 모델이 이미 세운 계획 위에 다시 계획을 만들고, 이미 실행한
+        검사를 다른 형식으로 기록하며, 끝낼 수 있는 작업을 추가 절차 때문에
+        계속 이어간다. 이 경우 하네스는 안전성을 높이기보다 실행 비용과 작업
+        간섭을 늘릴 수 있다.</p>
+        <p>평가 질문은 다음과 같이 정했다.</p>
+        <blockquote><p><strong>평가 질문</strong><br>
+        모델의 구현 능력이 높아진 뒤에도, 이전에 만든 무거운 하네스가 코드
+        결과를 더 좋게 만드는가? 아니면 모델이 이미 잘하는 일을 반복하며
+        비용만 늘리는가?</p></blockquote>
+        <p>Claude Code용 플러그인을 그대로 옮기지 않은 이유도 여기에 있다.
+        역할별 에이전트, 즉 서로 다른 역할을 맡은 AI 작업자와 고정된 명령
+        흐름을 Codex에 그대로 적용하면 Codex가 이미 잘하는 일을 반복할
+        가능성이 컸다. 그래서 Codex용 구현은 별도 저장소에서 다시 설계했다.</p>
+        <blockquote><p><strong>설계 원칙</strong><br>
+        모델이 좋아질수록 구현을 지휘하는 절차는 줄어야 한다. 플러그인은
+        모델이 알 수 없는 팀의 요구사항과 완료 기준을 일관되게 적용하는 데
+        집중한다.</p></blockquote>
+      </section>
 
-      <div class="key-results" aria-label="핵심 실험 결과">
-        <div class="key-result">
-          <strong>4/4 = 4/4</strong>
-          <span>GPT‑5.6 Sol bug fix에서 Bare와 개정 전 Plugin의 공식 성공률은 같았다.</span>
+      <section id="scope">
+        <span class="section-kicker">02 · 설계 범위</span>
+        <h2>Codex 기본 기능과 플러그인 역할의 구분</h2>
+        <p>WIGTN Plugin은 Codex보다 코드를 더 잘 쓰게 만드는 프롬프트 묶음이
+        아니다. 제품 개발 과정에서 반복해서 확인해야 하는 입력, 산출물, 완료
+        조건을 재사용 가능한 기능으로 만든 플러그인이다.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Codex의 기본 동작에 맡기는 일</th><th>WIGTN Plugin이 맡는 일</th></tr></thead>
+            <tbody>
+              <tr><td>저장소 탐색과 원인 분석</td><td>아이디어를 구현 가능한 PRD와 화면 명세로 정리</td></tr>
+              <tr><td>코드 수정과 리팩터링</td><td>요구사항을 작업과 실행 가능한 검사에 연결</td></tr>
+              <tr><td>저장소에 이미 있는 테스트 실행</td><td>구현자의 완료 주장과 실제 실행 결과를 구분</td></tr>
+              <tr><td>일반적인 구현 순서 판단</td><td>중단 후 재개 상태와 변경된 요구사항을 추적</td></tr>
+              <tr><td>코드 변경안 작성</td><td>commit·push·PR의 요청 범위와 현재 Git 상태 확인</td></tr>
+            </tbody>
+          </table>
         </div>
-        <div class="key-result">
-          <strong>+141.2%</strong>
-          <span>같은 성공에 개정 전 Plugin이 사용한 output token 중앙값 증가분이다.</span>
+        <p>기능도 이 경계에 맞춰 나눴다. Product Spec은 PRD를 만들고, Screen
+        Spec은 화면과 사용자 흐름을 구체화한다. Work Planner는 요구사항을
+        작업과 검사에 연결한다. Acceptance Verifier는 코드가 있다는 사실만
+        보지 않고 관련 테스트가 실제로 통과했는지 확인한다. Release
+        Readiness는 검토가 끝났다는 상태와 저장소를 실제로 변경할 권한을
+        구분한다.</p>
+        <p>전체 구현과 검증 흐름을 묶은 <code>verified-delivery</code>는 사용자가
+        그 흐름을 명시적으로 요청했을 때만 사용한다. 각 기능은 필요한
+        요청에서만 선택되며, 일반 코딩 요청에는 전체 흐름을 자동으로
+        적용하지 않는다.</p>
+      </section>
+
+      <section id="evaluation">
+        <span class="section-kicker">03 · 평가 설계</span>
+        <h2>동일 모델에서 플러그인 사용 여부만 바꾼 비교</h2>
+        <p>PRD나 검증표가 유용하다는 사실이 코드 결과까지 좋아진다는 뜻은
+        아니다. 추가 지침과 계획 단계는 모델이 문제를 푸는 방식과 멈추는
+        시점을 바꾼다. 성공률은 그대로인데 실행 시간과 토큰만 늘어날 수도
+        있다.</p>
+        <p>평가에서는 플러그인을 사용하지 않은 조건을 <code>Bare</code>, 같은
+        Codex에 WIGTN Plugin만 추가한 조건을 <code>Plugin</code>이라고 불렀다.
+        같은 모델이 같은 과제를 풀게 하고 플러그인 사용 여부만 바꿔, 모델
+        세대 차이가 결과에 섞이지 않게 했다.</p>
+        <p>따라서 이 평가는 “모델 세대가 올라갈 때마다 하네스의 효과가 반드시
+        줄어든다”는 인과관계를 직접 증명하지 않는다. 대신 강한 모델을 고정한
+        상태에서 이전 하네스가 추가 이득을 만드는지 확인한다. GPT‑5.5 결과는
+        이전 세대와 최신 세대의 점수 차이가 아니라, 플러그인이 코드 작성보다
+        정해진 문서 형식에서 더 분명한 효과를 보였다는 보조 근거로만
+        사용했다.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>평가층</th><th>확인한 질문</th><th>확인한 값</th></tr></thead>
+            <tbody>
+              <tr><td>제품 규칙</td><td>PRD와 완료 판정이 정해진 형식과 상태를 지키는가</td><td>요구사항 ID, 미결정 항목, 실행 근거</td></tr>
+              <tr><td>일반 코딩</td><td>플러그인이 원래 성공하던 작업을 방해하는가</td><td>숨은 테스트, 범위 밖 수정, 불필요한 산출물</td></tr>
+              <tr><td>실제 버그 수정</td><td>같은 코드 과제의 성공 여부가 달라지는가</td><td><code>resolved</code> 여부</td></tr>
+              <tr><td>실행 비용</td><td>같은 결과에 얼마나 더 많은 작업이 필요한가</td><td>시간, 출력 토큰, 실행 명령 수</td></tr>
+            </tbody>
+          </table>
         </div>
-        <div class="key-result">
-          <strong>0/3 → 3/3</strong>
-          <span>GPT‑5.5에서 명시한 PRD 계약의 충족률은 Plugin 사용 시 높아졌다.</span>
+        <p>주 비교에는 GPT‑5.6 Sol과 실제 오픈소스 버그 수정 과제 모음인
+        SWE-bench Verified에서 선별한 두 과제를 사용했다. 과제별로 Bare와
+        이전의 무거운 플러그인 절차를 두 번씩 실행해 네 쌍을 만들었고, 첫
+        반복과 두 번째 반복의 실행 순서를 바꿨다. 모든 실행은 과제별로
+        격리된 실행 환경(Docker)의 깨끗한 작업공간에서 시작했다.</p>
+        <p>외부 과제는 다음 기준으로 사전 점검했다.</p>
+        <ol>
+          <li>문제문과 기준 commit이 고정되어 있는가.</li>
+          <li>수정 전에는 핵심 테스트가 실패하고 정답 패치는 통과하는가.</li>
+          <li>새 동작을 확인하는 테스트가 문제문의 요구사항과 맞는가.</li>
+          <li>새 코드를 적용한 뒤 기존 동작이 깨지지 않았는지도 확인하는가.</li>
+          <li>모델이 숨은 테스트와 정답 패치를 볼 수 없는가.</li>
+        </ol>
+        <p>이 글에서는 새 동작과 기존 동작을 확인하는 테스트를 모두 통과한
+        실행을 <code>resolved</code>로 분류했다. 두 과제에 두 번의 반복만
+        적용한 개발 표본이므로 통계적 유의성이나 일반적인 성능 향상은
+        주장하지 않는다.</p>
+      </section>
+
+      <section id="results">
+        <span class="section-kicker">04 · 평가 결과</span>
+        <h2>코드 성공률은 같고 실행 비용은 증가</h2>
+        <p>GPT‑5.6 Sol의 주 비교에서 Bare와 이전 플러그인 절차는 모두 네 번 중
+        네 번 과제를 해결했다. 플러그인이 성공을 실패로 바꾼 경우도, 실패를
+        성공으로 바꾼 경우도 없었다.</p>
+        <div class="key-results" aria-label="주요 결과">
+          <div class="key-result"><strong>4/4 = 4/4</strong><span>Bare와 이전 Plugin의 해결 횟수</span></div>
+          <div class="key-result"><strong>+151.7%</strong><span>같은 성공에서 늘어난 중앙 실행 시간</span></div>
+          <div class="key-result"><strong>0건</strong><span>무결하고 반복 가능한 코드 개선 사례</span></div>
         </div>
-      </div>
-
-      <div class="decision">
-        일반 코딩은 Codex의 기본 동작에 맡긴다. WIGTN Plugin은 PRD 형식,
-        요구사항 ID, 수용 근거, 중단 재개 상태, Git 권한처럼 모델이
-        스스로 알 수 없는 제품 개발 규칙을 맡는다.
-      </div>
-
-      <p>
-        0.3.0에서는 구현을 지휘하는 절차를 줄이고 Specification,
-        Planning, Verification, Release의 네 경계에 기능을 집중했다.
-      </p>
-      <p class="claim-boundary">
-        이 보고서는 일반 코드 품질 향상을 주장하지 않는다. 어디에서
-        Plugin이 도움이 됐고, 어디에서는 비용이 됐는지 측정한 뒤 제품
-        설계를 고친 과정을 보고한다.
-      </p>
-    </section>
-
-    <section id="origin">
-      <span class="section-kicker">01 · Product origin</span>
-      <h2>왜 WIGTN Plugin을 만들었나</h2>
-
-      <h3>반복되는 제품 개발 요청을 기능으로 묶었다</h3>
-      <p>
-        Codex를 사용하다 보면 “아이디어를 PRD로 정리해줘”, “화면
-        명세와 구현 계획으로 바꿔줘”, “요구사항이 코드에 반영됐는지
-        확인해줘”, “변경 범위를 검토하고 커밋해줘” 같은 요청이 반복된다.
-      </p>
-      <p>
-        매번 긴 프롬프트로 작업 순서와 출력 형식을 설명하는 대신,
-        WIGTN Plugin에 담을 제품 개발 규칙을 호출 가능한 Codex skill로
-        묶는 것이 출발점이었다. 목표는 코딩 방식을 통제하는 것이 아니라
-        반복 작업의 입력, 산출물, 완료 조건을 일정하게 만드는 것이었다.
-      </p>
-
-      <h3>Claude 플러그인을 복사하지 않고 Codex용으로 다시 설계했다</h3>
-      <p>
-        기존 Claude Code 플러그인의 역할 agent, slash command, 고정
-        오케스트레이션은 Codex의 skill 선택 방식과 기본 구현 루프에
-        그대로 맞지 않는다. 같은 역할을 중복하거나 일반 코딩 요청까지
-        무거워질 수 있었다. Claude 플러그인은 수정하지 않고 Codex용
-        구현을 별도 저장소에 만들었다.
-      </p>
-
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>설계 원칙</th><th>Codex 구현</th></tr></thead>
-          <tbody>
-            <tr><td>한 기능, 한 책임</td><td>Product Spec, Work Planner, Acceptance Verifier, Release Readiness를 독립 skill로 분리</td></tr>
-            <tr><td>기본 동작 보존</td><td>일반 구현·버그 수정에는 Plugin workflow를 자동 적용하지 않음</td></tr>
-            <tr><td>강한 경로는 명시 호출</td><td><code>verified-delivery</code>는 사용자가 지정했을 때만 실행</td></tr>
-            <tr><td>결과로 판정</td><td>문서 길이보다 코드, 실행 테스트, 실제 Git 상태를 사용</td></tr>
-            <tr><td>외부 변경은 별도 권한</td><td>review, commit, push, PR 요청을 서로 다른 권한으로 취급</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3>제품이 제공하는 기능</h3>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>기능</th><th>산출물 또는 판정</th></tr></thead>
-          <tbody>
-            <tr><td>Product Spec</td><td>Compact/Full PRD, 안정적인 requirement ID, 누락 결정</td></tr>
-            <tr><td>Screen Spec·Design Direction</td><td>IA, 사용자 흐름, 화면 명세, lo-fi handoff</td></tr>
-            <tr><td>Work Planner</td><td>requirement→task→check WorkGraph, resume, source drift</td></tr>
-            <tr><td>Acceptance Verifier</td><td>요구사항별 code evidence와 executed-test evidence</td></tr>
-            <tr><td>Verified Delivery</td><td>명시 호출 기반 fast/assurance 구현·검증 경로</td></tr>
-            <tr><td>Release Readiness</td><td>실제 Git 상태와 사용자 권한에 따른 commit·push·PR</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="question">
-      <span class="section-kicker">02 · Research question</span>
-      <h2>왜 모델 성능까지 측정했나</h2>
-      <p>
-        유용한 산출물을 만드는 Plugin이 구현 과정에도 항상 도움이 되는
-        것은 아니다. skill 설명, 계획 단계, 별도 검사, evidence 표는
-        모델의 탐색과 종료 판단을 바꾼다. 성공률이 그대로인데 명령과
-        token만 늘 수도 있다.
-      </p>
-
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>연구 질문</th><th>측정값</th></tr></thead>
-          <tbody>
-            <tr><td>RQ1. 일반 코딩을 방해하는가</td><td>Plugin이 Bare 성공을 실패로 바꾼 pair</td></tr>
-            <tr><td>RQ2. 코드 결과를 개선하는가</td><td>Bare 실패 / Plugin 성공 pair</td></tr>
-            <tr><td>RQ3. 제품 계약을 더 잘 지키는가</td><td>PRD·acceptance contract 충족률</td></tr>
-            <tr><td>RQ4. 같은 결과에 비용이 얼마나 드는가</td><td>wall time, output token, command</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="note">
-        GPT‑5.5+Plugin과 GPT‑5.6 Bare를 직접 비교하지 않았다. 각 모델
-        안에서 같은 task와 실행 조건을 사용하고 Plugin만 켜고 껐다.
-      </p>
-    </section>
-
-    <section id="method">
-      <span class="section-kicker">03 · Method</span>
-      <h2>평가 방법</h2>
-
-      <h3>서로 다른 결과를 하나의 점수로 합치지 않았다</h3>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>평가층</th><th>확인한 것</th><th>자료</th></tr></thead>
-          <tbody>
-            <tr><td>계약 회귀</td><td>manifest, trigger, schema, authority</td><td>저장소 정적 검사</td></tr>
-            <tr><td>산출물 행동</td><td>PRD·acceptance 형식 준수</td><td>GPT‑5.5/5.6 smoke, ablation</td></tr>
-            <tr><td>실제 bug fix</td><td>같은 코드 과제의 성공률과 비용</td><td>SWE-bench Verified</td></tr>
-            <tr><td>어려운 feature</td><td>ceiling을 낮춘 positive lift</td><td>FeatureBench pilot</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3>외부 과제 포함 기준</h3>
-      <ol>
-        <li>문제문과 base commit이 고정되어 있다.</li>
-        <li>clean base에서 핵심 test가 실패한다.</li>
-        <li>gold patch가 같은 evaluator를 통과한다.</li>
-        <li>fail-to-pass test가 문제문에 적힌 동작을 검사한다.</li>
-        <li>pass-to-pass test가 기존 동작의 회귀를 검사한다.</li>
-        <li>격리된 환경에서 재현된다.</li>
-        <li>agent가 hidden test와 reference patch를 볼 수 없다.</li>
-      </ol>
-
-      <h3>주효과 평가 설정</h3>
-      <div class="table-wrap">
-        <table>
-          <tbody>
-            <tr><th>모델</th><td><code>gpt-5.6-sol</code>, reasoning high</td></tr>
-            <tr><th>Codex CLI</th><td><code>0.145.0</code></td></tr>
-            <tr><th>Benchmark</th><td><code>princeton-nlp/SWE-bench_Verified</code></td></tr>
-            <tr><th>과제</th><td><code>astropy__astropy-12907</code>, <code>pytest-dev__pytest-10051</code></td></tr>
-            <tr><th>반복</th><td>과제당 2회, Bare→Plugin / Plugin→Bare 순서 교차</td></tr>
-            <tr><th>환경</th><td>공식 per-instance Docker, 매 trial clean workspace</td></tr>
-            <tr><th>판정</th><td>official resolved, pass-to-pass, wall time, output token, command</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="caption">
-        분석 단위는 task × repetition의 paired block 네 개다. 표본이
-        작고 discordant pair가 없어 통계적 유의성을 주장하지 않는다.
-      </p>
-    </section>
-
-    <section id="results">
-      <span class="section-kicker">04 · Results</span>
-      <h2>결과</h2>
-
-      <h3>GPT‑5.6 Sol: 성공률은 같고 비용은 늘었다</h3>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>과제</th><th class="num">Bare</th><th class="num">개정 전 Plugin</th></tr></thead>
-          <tbody>
-            <tr><td>Astropy, trial 1</td><td class="num">resolved</td><td class="num">resolved</td></tr>
-            <tr><td>Astropy, trial 2</td><td class="num">resolved</td><td class="num">resolved</td></tr>
-            <tr><td>Pytest, trial 1</td><td class="num">resolved</td><td class="num">resolved</td></tr>
-            <tr><td>Pytest, trial 2</td><td class="num">resolved</td><td class="num">resolved</td></tr>
-            <tr><td><strong>합계</strong></td><td class="num"><strong>4/4</strong></td><td class="num"><strong>4/4</strong></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>중앙값</th><th class="num">Bare</th><th class="num">개정 전 Plugin</th><th class="num">증감</th></tr></thead>
-          <tbody>
-            <tr><td>wall time</td><td class="num">120.21s</td><td class="num">302.62s</td><td class="num negative">+151.7%</td></tr>
-            <tr><td>output token</td><td class="num">3,613</td><td class="num">8,715.5</td><td class="num negative">+141.2%</td></tr>
-            <tr><td>command</td><td class="num">12.5</td><td class="num">16.5</td><td class="num negative">+32.0%</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>
-        모든 patch가 fail-to-pass와 pass-to-pass를 통과했다. Plugin이
-        성공을 망가뜨린 pair도, 실패를 성공으로 바꾼 pair도 없었다.
-        작은 bug fix에 추가한 별도 harness와 evidence 절차는 이
-        표본에서 비용으로 남았다.
-      </p>
-
-      <h3>FeatureBench: 재현된 positive lift는 0건이었다</h3>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>과제</th><th class="num">Bare</th><th class="num">Plugin</th><th>판정</th></tr></thead>
-          <tbody>
-            <tr><td>Seaborn</td><td class="num">11.76%</td><td class="num">첫 실행 100%</td><td>reference source 접근으로 무효, 재시험 tie</td></tr>
-            <tr><td>Sphinx</td><td class="num">7.69%</td><td class="num">7.69%</td><td>tie</td></tr>
-            <tr><td>MLflow</td><td class="num">0%</td><td class="num">0%</td><td>tie</td></tr>
-            <tr><td>Mypy</td><td class="num">30%</td><td class="num">30%</td><td>tie</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>
-        Seaborn 실행은 workspace 밖에 설치된 동일 프로젝트의 함수
-        본문을 읽어 무효 처리했다. 새 workspace에서 순서를 바꿔
-        재시험하자 두 arm 모두 unresolved였다. 무결성 적격 positive와
-        재현된 positive는 각각 0건이다.
-      </p>
-
-      <h3>GPT‑5.5: PRD 계약에는 효과가 있었고 코딩 성공률은 같았다</h3>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>평가</th><th class="num">Bare</th><th class="num">Plugin</th><th>해석</th></tr></thead>
-          <tbody>
-            <tr><td>PRD smoke, 3회</td><td class="num">0/3</td><td class="num positive">3/3</td><td>명시한 PRD 계약 충족</td></tr>
-            <tr><td>PRD package ablation, 2회</td><td class="num">0/2</td><td class="num positive">2/2</td><td>길이가 아닌 skill 내용 효과</td></tr>
-            <tr><td>uncertain acceptance, 3회</td><td class="num">3/3</td><td class="num">3/3</td><td>동률</td></tr>
-            <tr><td>ordinary coding, 3회</td><td class="num">3/3</td><td class="num">3/3</td><td>동률, 쉬운 과제</td></tr>
-            <tr><td>실제 Pytest 구현, 1회</td><td class="num">resolved</td><td class="num">resolved</td><td>탐색적 비간섭</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="note">
-        PRD 결과는 WIGTN Plugin이 정한 requirement ID, 결정 항목,
-        acceptance 형식의 재현성을 뜻한다. 일반 문서 품질의 보편적
-        향상을 뜻하지 않는다.
-      </p>
-    </section>
-
-    <section id="changes">
-      <span class="section-kicker">05 · Design changes</span>
-      <h2>실험 뒤 무엇을 바꿨나</h2>
-
-      <figure class="figure">
-        <div class="figure-title">그림 1. 구현 중심 하네스에서 경계 중심 Plugin으로</div>
-        <div class="flow">
-          <div class="flow-side">
-            <strong>개정 전</strong>
-            <p>명시 호출된 구현을 하나의 heavy workflow로 처리. 작은 수정에도 별도 harness와 evidence 절차가 붙음.</p>
-          </div>
-          <div class="arrow" aria-hidden="true">→</div>
-          <div class="flow-side">
-            <strong>0.3.0</strong>
-            <p>일반 구현은 native/Fast. 제품 계약, 검증 근거, 저장 상태, Git 권한이 필요할 때만 강한 경로 사용.</p>
-          </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>과제</th><th class="num">Bare</th><th class="num">이전 Plugin</th></tr></thead>
+            <tbody>
+              <tr><td>Astropy, 실행 1</td><td class="num">resolved</td><td class="num">resolved</td></tr>
+              <tr><td>Astropy, 실행 2</td><td class="num">resolved</td><td class="num">resolved</td></tr>
+              <tr><td>Pytest, 실행 1</td><td class="num">resolved</td><td class="num">resolved</td></tr>
+              <tr><td>Pytest, 실행 2</td><td class="num">resolved</td><td class="num">resolved</td></tr>
+              <tr><td><strong>합계</strong></td><td class="num"><strong>4/4</strong></td><td class="num"><strong>4/4</strong></td></tr>
+            </tbody>
+          </table>
         </div>
-        <figcaption>추가 절차의 양이 아니라 작업의 실패 표면으로 경로를 선택한다.</figcaption>
-      </figure>
+        <p>성공률은 같았지만 비용은 달랐다.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>중앙값</th><th class="num">Bare</th><th class="num">이전 Plugin</th><th class="num">증가</th></tr></thead>
+            <tbody>
+              <tr><td>실행 시간</td><td class="num">120.21초</td><td class="num">302.62초</td><td class="num"><strong>+151.7%</strong></td></tr>
+              <tr><td>출력 토큰</td><td class="num">3,613</td><td class="num">8,715.5</td><td class="num"><strong>+141.2%</strong></td></tr>
+              <tr><td>실행 명령 수</td><td class="num">12.5</td><td class="num">16.5</td><td class="num"><strong>+32.0%</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>이 결과를 플러그인의 모든 기능이 항상 느리다는 결론으로 일반화할
+        수는 없다. 다만 선택한 두 과제에서는 이전
+        <code>verified-delivery</code>가 작은 버그 수정에도 별도 계획과 검사,
+        완료 기록을 반복했고, 추가 절차가 코드 결과를 바꾸지 않은 채 비용으로
+        남았다.</p>
 
-      <h3>구현 경로를 Fast와 Assurance로 나눴다</h3>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>경로</th><th>사용하는 경우</th><th>실행 범위</th></tr></thead>
-          <tbody>
-            <tr><td>Fast</td><td>국소 변경, 낮은 위험, 저장소 테스트 실행 가능</td><td>inspect → minimal patch → focused test → 관련 suite 1개</td></tr>
-            <tr><td>Assurance</td><td>auth, schema, persistence, concurrency, migration, 복수 요구사항</td><td>stable ID, invariant, provenance, evidence artifact</td></tr>
-          </tbody>
-        </table>
-      </div>
+        <h3>FeatureBench 파일럿에서는 유효한 개선을 확인하지 못함</h3>
+        <p>여러 파일을 수정하는 기능 구현 평가인 FeatureBench에서도 Seaborn,
+        Sphinx, MLflow, Mypy 과제를 살펴봤다. 첫 Seaborn Plugin 실행은
+        테스트를 통과했지만 작업공간 밖에 설치된 같은 프로젝트의 구현을
+        읽은 사실이 확인됐다. 정답에 해당하는 소스에 접근했기 때문에 이
+        실행은 무효로 처리했다. 새 작업공간에서 실행 순서를 바꿔 다시
+        평가했을 때는 Bare와 Plugin 모두 해결하지 못했다.</p>
+        <p>나머지 세 과제도 두 조건의 결과가 같았다. 따라서 무결성 기준을
+        통과하고 반복해서 확인된 코드 성능 개선 사례는 0건이다. 이 파일럿의
+        첫 네 짝에서 중앙 실행 명령 수는 17에서 38로, 출력 토큰은
+        10,274에서 20,663.5로 늘었다.</p>
 
-      <h3>Fast path에서 제거한 작업</h3>
-      <ul>
-        <li>작은 수정에 requirement matrix나 WorkGraph를 만드는 일</li>
-        <li>저장소 테스트가 있는데 같은 happy path를 별도 harness로 다시 만드는 일</li>
-        <li>저장·인계 요청이 없는데 evidence JSON을 생성하는 일</li>
-        <li>관련 suite 통과 뒤 근거 없이 검사를 계속 추가하는 일</li>
-      </ul>
+        <h3>PRD 평가에서는 문서 형식 준수율이 개선됨</h3>
+        <p>GPT‑5.5로 같은 PRD 요청을 세 번 실행했을 때, WIGTN이 정한 문서
+        형식의 충족 횟수는 Bare 0/3, Plugin 3/3이었다. 기능 일부를 빼거나
+        내용 없는 지침으로 바꾼 비교 실험에서도 플러그인 미사용 조건과 내용
+        없는 대조 지침은 0/2, 핵심 기능과 전체 패키지는 2/2였다.</p>
+        <p>이 평가에서 확인한 범위는 문서의 전반적인 품질이 아니라 요구사항
+        ID, 미결정 항목, 수용 기준 형식처럼 WIGTN이 미리 정한 항목의 준수
+        여부다.</p>
+        <blockquote><p><strong>관찰 결과</strong><br>
+        선택한 구현 과제에서는 이전 하네스가 추가 성공 없이 비용을 늘렸다.
+        PRD 평가에서는 미리 정한 문서 항목의 준수율이 높아졌다.</p></blockquote>
+      </section>
 
-      <h3>외부 정답 접근과 무한 탐색을 막았다</h3>
-      <ul>
-        <li>workspace 밖 동일 프로젝트, package cache, gold/reference source를 구현 근거로 사용하지 않는다.</li>
-        <li>복수 interface 작업만 편집 전 coverage census를 작성한다.</li>
-        <li>두 diagnostic cycle 동안 새 증거가 없으면 탐색을 넓히지 않는다.</li>
-        <li>reference leakage가 발생하면 evaluator 성공과 관계없이 <code>Not verifiable</code>로 판정한다.</li>
-      </ul>
+      <section id="decision">
+        <span class="section-kicker">05 · 설계 개정</span>
+        <h2>일반 구현 개입 축소와 고위험 작업의 선택적 검증</h2>
+        <p>평가 결과를 반영해 구현 경로를 작업 위험도에 따라 나눴다.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>경로</th><th>사용하는 경우</th><th>실행 범위</th></tr></thead>
+            <tbody>
+              <tr><td>Fast(간단 경로)</td><td>국소 변경, 낮은 위험, 저장소 테스트 실행 가능</td><td>원인 확인 → 최소 수정 → 집중 테스트 → 관련 검사</td></tr>
+              <tr><td>Assurance(강화 검증 경로)</td><td>로그인·권한, 데이터 구조, 저장·동시 처리, 데이터 이전, 복수 요구사항</td><td>요구사항 ID → 위험 조건 → 코드 위치 → 실행 근거</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Fast 경로에서는 작은 수정에 WorkGraph나 요구사항 표를 만들지 않는다.
+        기존 테스트가 같은 동작을 확인할 수 있다면 별도 테스트 환경을 중복해서
+        만들지 않고, 관련 검사가 통과하면 이유 없이 검사를 계속 늘리지
+        않는다.</p>
+        <p>Assurance 경로는 실패 비용이 큰 작업에만 사용한다. 여기서도 많은
+        절차를 수행하는 것 자체를 품질로 보지 않는다. 어떤 요구사항이 어떤
+        코드로 구현됐고 어떤 검사를 실제로 통과했는지를 연결하는 데 집중한다.</p>
+        <p>WorkGraph는 이 연결을 세션 사이에 보존해야 할 때 쓰는 선택적 상태
+        파일이다. 원본 요구사항이나 연결된 산출물이 바뀌면 관련 작업과 검사를
+        <code>stale</code>, 즉 다시 확인해야 하는 상태로 바꾼다. 일반 코딩 때
+        자동으로 생성하지 않고, 사용자가 저장형 계획이나 중단 후 재개를
+        요청할 때만 쓴다.</p>
+        <p>완료 판정도 코드 존재 여부만으로 끝내지 않는다. 정확한 코드 위치와
+        관련된 성공 테스트가 함께 있어야 <code>verified</code>로 기록할 수
+        있다. 다만 이 기록 규칙이 실제 Git 명령을 막는 보안 장치는 아니다.
+        commit, push, PR은 사용자의 현재 요청이 해당 작업을 허용하는지 별도로
+        확인한다.</p>
+        <p>FeatureBench에서 드러난 문제도 제품 규칙에 반영했다. 작업공간 밖의
+        같은 프로젝트, 별도 체크아웃, 패키지 캐시, 정답 패치, 숨은
+        테스트를 구현 근거로 사용하지 않는다. 이런 접근이 발견되면 테스트
+        통과와 관계없이 검증할 수 없는 실행으로 처리한다.</p>
+      </section>
 
-      <h3>개정 후 forward-test</h3>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>지표</th><th class="num">개정 전 Plugin 중앙값</th><th class="num">개정 후 1회</th></tr></thead>
-          <tbody>
-            <tr><td>official resolved</td><td class="num">2/2</td><td class="num">pass</td></tr>
-            <tr><td>output token</td><td class="num">10,470.5</td><td class="num positive">4,466</td></tr>
-            <tr><td>command</td><td class="num">23</td><td class="num positive">10</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>
-        output token은 57.3%, command는 56.5% 줄었다. 한 번의 개발
-        세트 결과이므로 일반 효율 향상 근거로 쓰지 않는다. 설계 변경이
-        실제 실행 경로를 줄였는지 확인한 결과다.
-      </p>
-    </section>
+      <section id="validation">
+        <span class="section-kicker">06 · 개정 구조 검증</span>
+        <h2>일반 코딩 방해 여부 및 WorkGraph 기능 검사</h2>
+        <p>이전 구현 절차의 비용을 확인한 실험과 현재 제품 구조의 검증을 섞지
+        않았다. 구조를 바꾼 뒤에는 일반 코딩을 방해하지 않는지, 선택 기능이
+        정해진 상태 규칙을 지키는지를 별도로 검사했다.</p>
+        <p><strong>일반 코딩 방해 여부.</strong> Python, JavaScript, Ruby로 만든
+        합성 버그 수정 12개를 Bare와 현재 전체 기능 구성으로 각각 실행했다.
+        숨은 테스트는 양쪽 모두 12/12를 통과했고, 허용 범위 밖 수정과
+        요청하지 않은 PRD·WorkGraph·릴리스 상태 생성, 사용자 초안 손실은
+        모두 0건이었다.</p>
+        <p>현재 구성의 중앙 출력 토큰은 Bare보다 10.3% 낮고 실행 시간은
+        18.8% 높았다. 표본이 작고 실행 순서와 클라우드 지연의 영향을 받으므로
+        효율 개선이나 저하의 근거로 사용하지 않는다. 확인된 것은 이 12개
+        과제에서 현재 플러그인이 일반 코딩을 무거운 제품 흐름으로 바꾸지
+        않았다는 점이다.</p>
+        <p><strong>WorkGraph 생성.</strong> 인증, 여러 고객의 데이터를 분리하는
+        멀티테넌시, 데이터 구조 변경, 웹훅 등 12개 격리 저장소에서 Work
+        Planner를 명시적으로 호출했다. 12개 저장소가 모두 최종 형식 검사를
+        통과했고, 출처·요구사항·작업·검사·위험·보호 경로를 확인한 144개
+        항목도 모두 통과했다. 실행하지 않은 작업을 완료로 기록하거나
+        삭제되면 안 되는 확인용 파일을 잃은 경우는 없었다.</p>
+        <p><strong>고정 입력 회귀 검사.</strong> WorkGraph의 생성·변경
+        전파·형식 이전·명령행 도구 67개 사례와 완료 판정의 정상·오류 상태,
+        PRD와 화면 명세 형식, Git을 변경하지 않는 릴리스 상태 검사, 자연어
+        요청에 따른 <code>verified-delivery</code> 선택을 각각 확인했다.</p>
+        <p>검증 범위는 플러그인이 정의한 기능 규칙의 동작까지다. Bare
+        Codex와의 계획 품질 및 일반 코드 품질 비교는 포함하지 않았다.</p>
+      </section>
 
-    <section id="direction">
-      <span class="section-kicker">06 · Product direction</span>
-      <h2>WIGTN Plugin 0.3.0의 방향</h2>
+      <section id="limitations">
+        <span class="section-kicker">07 · 주장 범위와 한계</span>
+        <h2>현재 근거가 지지하는 주장과 아직 검증하지 못한 가설</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>주장</th><th>현재 판정</th><th>근거</th></tr></thead>
+            <tbody>
+              <tr><td>WIGTN이 정한 PRD 형식의 재현성을 높인다</td><td>제한적으로 지지</td><td>GPT‑5.5 0/3→3/3, 기능 제거 비교 0/2→2/2</td></tr>
+              <tr><td>현재 구성이 일반 코딩을 불필요한 제품 흐름으로 바꾸지 않는다</td><td>개발 표본에서 지지</td><td>합성 과제 12개에서 비간섭</td></tr>
+              <tr><td>이전의 무거운 구현 절차는 같은 성공에 비용을 늘렸다</td><td>선택한 과제에서 지지</td><td>GPT‑5.6 Sol 4/4 동률, 시간·토큰·명령 증가</td></tr>
+              <tr><td>모델이 좋아질수록 과한 하네스의 추가 효과가 줄어든다</td><td>설계 가설과 부합</td><td>강한 모델에서 추가 성공 없이 비용 증가, 세대 변화의 인과관계는 미검증</td></tr>
+              <tr><td>WorkGraph와 완료 판정이 정해진 상태 규칙을 지킨다</td><td>개발 표본에서 지지</td><td>모델 파일럿과 고정 입력 회귀 검사</td></tr>
+              <tr><td>WIGTN이 일반 코드 품질을 높인다</td><td>지지되지 않음</td><td>무결하고 반복 가능한 개선 사례 0건</td></tr>
+              <tr><td>모든 저장소와 모델에서 같은 결과가 나온다</td><td>확인하지 않음</td><td>모델·언어·과제 수가 제한적</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>현재 근거로 “모델이 좋아질수록 모든 하네스가 반드시 쓸모없어진다”거나
+        “플러그인을 쓰면 Codex가 코드를 더 잘 짠다”, “모든 작업에서 시간과
+        토큰이 줄어든다”라고 말할 수 없다. 일부 원시 실행 패킷도 아직 영구
+        저장소에 공개되지 않아, 이 자료를 완전한 제3자 재현 패키지라고
+        부르지 않는다.</p>
+        <p>가장 강하게 말할 수 있는 결론은 다음과 같다.</p>
+        <blockquote><p>선택한 GPT‑5.6 Sol 버그 수정 과제에서 이전의 무거운
+        하네스는 성공률을 바꾸지 않고 비용을 늘렸다. 이 결과를 바탕으로
+        일반 구현 제어를 축소했다. 모델의 기본 구현 흐름은 그대로 두고,
+        프로젝트마다 정해야 하는 요구사항·검증·릴리스 규칙에 플러그인의
+        역할을 집중했다.</p></blockquote>
+      </section>
 
-      <div class="code-flow">일반 구현·버그 수정
-  └─ Codex native workflow 또는 Fast path
+      <section id="next">
+        <span class="section-kicker">08 · 후속 평가</span>
+        <h2>현재 선택적 구조의 외부 과제 검증 계획</h2>
+        <p>다음 외부 평가는 이전의 무거운 하네스가 아니라 현재의 선택적
+        구조를 대상으로 한다. 이후 모델 세대에서도 같은 평가를 반복해,
+        모델 능력이 달라질 때 적정 하네스의 범위가 실제로 어떻게 변하는지도
+        추적한다.</p>
+        <ol>
+          <li>최소 다섯 개 저장소의 새 외부 과제 20개를 과제당 세 번 실행하고,
+          정답 소스와 패키지 캐시를 파일시스템 수준에서 격리한다.</li>
+          <li>작업 열 개에서 Fast와 Assurance 선택이 적절한지 확인하고,
+          불필요하게 Assurance를 선택한 경우 0건과 출력 비용 중앙값 증가
+          25% 이하를 종료 조건으로 둔다.</li>
+          <li>PRD에서 구현까지 이어지는 기능 12개에서 요구사항 누락, 추가
+          질문, 재작업을 측정하고, 릴리스 상태 60개에서 권한 없는 Git 변경
+          0건을 확인한다.</li>
+        </ol>
+        <p>새 외부 과제 평가가 끝나기 전에는 일반 코드 품질 향상을 제품
+        문구로 사용하지 않는다. 현재 제품의 합격 기준은 일반 코딩을
+        불필요하게 무겁게 만들지 않는 것, 실행 근거가 없을 때 완료로
+        기록하지 않는 것, 저장소 변경을 사용자가 요청한 범위 안에서만
+        실행하는 것이다.</p>
+      </section>
 
-제품 개발 계약이 필요한 작업
-  ├─ Product Spec         요구사항과 결정
-  ├─ Work Planner         task, check, resume, drift
-  ├─ Acceptance Verifier  code·executed-test evidence
-  └─ Release Readiness    Git 상태와 실행 권한</div>
-
-      <h3>0.3.0에 추가한 것</h3>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>영역</th><th>구현</th></tr></thead>
-          <tbody>
-            <tr><td>Evidence Contract</td><td>거짓 <code>verified</code>, 누락 gap, source drift, 권한 없는 외부 작업을 validator로 차단</td></tr>
-            <tr><td>WorkGraph</td><td>requirement→task→check 상태, 중단 재개, source hash 변경 시 stale 전파</td></tr>
-            <tr><td>Requirement import</td><td>WIGTN Plugin PRD, Spec Kit, OpenSpec, BMAD 형식 정규화</td></tr>
-            <tr><td>Project context</td><td>선택적 <code>.wigtn/project.json</code>으로 검증 명령과 보호 경로 공유</td></tr>
-            <tr><td>Screen contract</td><td>IA·flow·screen·wireframe·handoff 연결과 requirement anchor 검사</td></tr>
-            <tr><td>Release state</td><td>branch, upstream, conflict, staged, unstaged, untracked를 mutation 없이 점검</td></tr>
-            <tr><td>Evidence inspection</td><td>파일 변경과 hash drift 뒤 기존 완료 판정 재검사</td></tr>
-            <tr><td>평가 분리</td><td>정적 계약, model behavior, 외부 benchmark를 별도 suite로 운영</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="decision">
-        Codex의 구현 능력은 그대로 사용하고, PRD에서 검증과 안전한 Git
-        릴리스까지 필요한 제품 개발 계약만 추가한다.
-      </div>
-      <p>
-        상태 파일은 일반 코딩 때 자동 생성되지 않는다. 저장형 계획,
-        세션 간 재개, 감사 가능한 handoff를 요청했을 때만 사용한다.
-      </p>
-    </section>
-
-    <section id="limits">
-      <span class="section-kicker">07 · Claim boundary</span>
-      <h2>어디까지 믿을 수 있나</h2>
-
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>주장</th><th>판정</th><th>근거</th></tr></thead>
-          <tbody>
-            <tr><td>정해진 PRD 계약의 재현성을 높인다</td><td>제한적으로 지지</td><td>GPT‑5.5 smoke 0/3→3/3, ablation 0/2→2/2</td></tr>
-            <tr><td>일반 코딩의 성공을 크게 망가뜨리지 않는다</td><td>개발 표본에서 지지</td><td>ordinary gate와 paired bug fix 동률</td></tr>
-            <tr><td>개정 전 heavy workflow는 같은 성공에 비용을 늘렸다</td><td>선택한 GPT‑5.6 과제에서 지지</td><td>4/4 tie, token·wall·command 증가</td></tr>
-            <tr><td>일반 코드 품질을 높인다</td><td>지지되지 않음</td><td>유효하고 재현된 positive lift 0</td></tr>
-            <tr><td>모델이 강할수록 항상 하네스를 줄여야 한다</td><td>미검증</td><td>두 모델과 작은 표본만 관측</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3>한계</h3>
-      <ul>
-        <li>SWE-bench 주효과는 Python bug fix 두 과제, 네 pair다.</li>
-        <li>FeatureBench 파일럿은 네 과제이며 positive lift가 없다.</li>
-        <li>GPT‑5.5 실제 저장소 복제는 한 과제, 한 반복이다.</li>
-        <li>독립 oracle 감사자와 blind human reviewer 수가 부족하다.</li>
-        <li>프론트엔드, 데이터베이스, 대규모 migration 결과는 없다.</li>
-        <li>0.3.0 개정 후 외부 holdout 반복은 아직 완료하지 않았다.</li>
-      </ul>
-
-      <p class="note">
-        현재 가장 강한 결론: 선택한 GPT‑5.6 Sol bug fix에서 개정 전
-        WIGTN Plugin은 성공률을 바꾸지 않고 비용을 늘렸다. 이 결과를
-        반영해 일반 구현 절차를 줄이고 제품별 계약과 검증·릴리스 경계에
-        기능을 집중했다.
-      </p>
-    </section>
-
-    <section id="next">
-      <span class="section-kicker">08 · Next evaluation</span>
-      <h2>다음 검증</h2>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>우선순위</th><th>평가</th><th>종료 조건</th></tr></thead>
-          <tbody>
-            <tr><td>P0</td><td>개정 후 fresh holdout 20 task</td><td>5개 이상 repo, task당 3회, reference source 격리</td></tr>
-            <tr><td>P0</td><td>Fast/Assurance routing 10 task</td><td>잘못된 Assurance 호출 0, median output overhead ≤25%</td></tr>
-            <tr><td>P1</td><td>GPT‑5.5 실제 저장소 복제</td><td>2개 과제×2회, 순서 교차</td></tr>
-            <tr><td>P1</td><td>독립 oracle 감사</td><td>포함·제외 합의 κ≥0.7</td></tr>
-            <tr><td>P1</td><td>blind patch review</td><td>arm을 숨긴 reviewer 2인 이상</td></tr>
-            <tr><td>P2</td><td>PRD→implementation 12 feature</td><td>요구사항 누락, clarification, rework 측정</td></tr>
-            <tr><td>P2</td><td>release state 60 fixture</td><td>권한 없는 mutation 0</td></tr>
-            <tr><td>P2</td><td>cross-platform</td><td>macOS/Linux와 fresh install 재현</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>
-        fresh holdout 전에는 일반 코드 품질 향상을 제품 주장으로 쓰지
-        않는다. 0.3.0 릴리스는 일반 코딩의 불필요한 heavy workflow를
-        막고, 저장형 계약의 drift와 거짓 완료를 차단하며, Git 작업을
-        사용자 권한 안에서 수행하는지를 기준으로 검증한다.
-      </p>
-    </section>
-
-    <section id="materials">
-      <span class="section-kicker">09 · Reproduction</span>
-      <h2>재현 자료</h2>
-      <ul class="sources">
-        <li><a href="../../docs/EXTERNAL-EVAL-PROTOCOL-2026-07-28-KO.md">외부 평가 프로토콜</a></li>
-        <li><a href="../../tests/external/protocol-2026-07-28.json">SWE-bench machine-readable protocol</a></li>
-        <li><a href="../../tests/external/swe-bench-verified/results-2026-07-28.json">SWE-bench 결과와 제외 기록</a></li>
-        <li><a href="../../docs/FEATUREBENCH-LIFT-PROTOCOL-2026-07-28-KO.md">FeatureBench 사전 프로토콜</a></li>
-        <li><a href="../../docs/FEATUREBENCH-LIFT-PILOT-2026-07-28-KO.md">FeatureBench 파일럿과 leakage 감사</a></li>
-        <li><a href="../../tests/external/featurebench/results-2026-07-28.json">FeatureBench 결과</a></li>
-        <li><a href="https://www.swebench.com/SWE-bench/reference/harness/">SWE-bench evaluation reference</a></li>
-        <li><a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Anthropic, Demystifying evals for AI agents</a></li>
-        <li><a href="https://openai.com/index/separating-signal-from-noise-coding-evaluations/">OpenAI, Separating signal from noise in coding evaluations</a></li>
-        <li><a href="https://arxiv.org/abs/2606.12344">Claw-SWE-Bench</a></li>
-      </ul>
-    </section>
+      <section id="materials">
+        <span class="section-kicker">09 · 평가 및 감사 자료</span>
+        <h2>프로토콜·결과·감사 자료</h2>
+        <ul class="materials">
+          <li><a href="https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/docs/EXTERNAL-EVAL-PROTOCOL-2026-07-28-KO.md">외부 평가 프로토콜</a></li>
+          <li><a href="https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/tests/external/protocol-2026-07-28.json">SWE-bench machine-readable protocol</a></li>
+          <li><a href="https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/tests/external/swe-bench-verified/results-2026-07-28.json">SWE-bench 결과와 제외 기록</a></li>
+          <li><a href="https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/docs/FEATUREBENCH-LIFT-PROTOCOL-2026-07-28-KO.md">FeatureBench 사전 프로토콜</a></li>
+          <li><a href="https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/docs/FEATUREBENCH-LIFT-PILOT-2026-07-28-KO.md">FeatureBench 파일럿과 정답 소스 접근 감사</a></li>
+          <li><a href="https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/tests/external/featurebench/results-2026-07-28.json">FeatureBench 결과</a></li>
+          <li><a href="https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/docs/ORDINARY-NONINTERFERENCE-GATE-2026-07-28-KO.md">일반 코딩 비간섭 평가</a></li>
+          <li><a href="https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/docs/WORKGRAPH-PILOT-2026-07-28-KO.md">WorkGraph 기능 평가</a></li>
+          <li><a href="https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/docs/RESEARCH-ROUND2-2026-07-28-KO.md">선택적 하네스 후속 연구</a></li>
+          <li><a href="https://www.swebench.com/SWE-bench/reference/harness/">SWE-bench evaluation reference</a></li>
+          <li><a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents/">Anthropic, Demystifying evals for AI agents</a></li>
+          <li><a href="https://openai.com/index/separating-signal-from-noise-coding-evaluations/">OpenAI, Separating signal from noise in coding evaluations</a></li>
+          <li><a href="https://arxiv.org/abs/2606.12344">Claw-SWE-Bench</a></li>
+        </ul>
+        <p>이 자료는 평가 조건과 결과를 확인할 수 있도록 프로토콜, 요약 결과,
+        검사 코드를 연결한다. 공개 범위와 재현 한계는 위 한계 절에 함께
+        적었다.</p>
+      </section>
+    </article>
 
     <footer>
-      WIGTN Plugin for Codex · Technical report v9 · 2026-07-28<br>
-      일반 코드 품질 향상 논문이 아니라, 평가 결과를 제품 설계에 반영한 공개 engineering report다.
+      WIGTN Plugin for Codex · Technical Report · 2026-07-28<br>
+      일반 코드 품질 향상이 아니라 선택적 제품 개발 규칙의 설계 근거를 다룬다.
     </footer>
   </main>
 </body>

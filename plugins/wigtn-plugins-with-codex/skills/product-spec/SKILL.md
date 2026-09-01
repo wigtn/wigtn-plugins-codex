@@ -1,6 +1,6 @@
 ---
 name: product-spec
-description: Create, review, or deeply analyze an actual implementation-ready PRD or product-spec artifact. Use for “PRD 뽑아줘”, “PRD 검토해줘”, “PRD 디깅해줘”, drafting requirements or acceptance criteria, and feasibility, security, edge-case, or contradiction review of a provided spec. Do not use for conceptual explanations of product terms, brainstorming without a requested requirements artifact, ordinary implementation, minor fixes, or general code review.
+description: Create, review, or deep-dive an implementation-ready PRD or product spec. Use for “PRD 뽑아줘”, “PRD 검토해줘”, “PRD 디깅해줘”, requirements, acceptance criteria, and spec feasibility or contradiction review. Do not use for brainstorming without an artifact, implementation, minor fixes, or general code review.
 ---
 
 # Product Spec

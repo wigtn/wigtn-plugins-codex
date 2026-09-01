@@ -1,6 +1,6 @@
 ---
 name: verified-delivery
-description: Add proportional implementation evidence when explicitly invoked as $wigtn-plugins-with-codex:verified-delivery. Use only for an intentional delivery request; never auto-invoke for ordinary coding, PRD writing, review, commit, push, or PR requests.
+description: Implement and verify with proportional evidence only when explicitly invoked as $wigtn-plugins-with-codex:verified-delivery; never auto-invoke for ordinary coding, specs, review, or Git requests.
 ---
 
 # Verified Delivery
@@ -28,10 +28,10 @@ installation, or unrelated external mutations.
    failure and post-change pass were both observed.
 5. Review the final diff, changed interfaces, unexpected paths, debug
    artifacts, and whether checks exercise the requested failure mode.
-6. Apply [delivery evidence](references/delivery-evidence.md). Use a short
-   verification boundary for a small request; use requirement rows only for
-   multiple material requirements or an explicitly requested evidence
-   artifact.
+6. For a small request, report changed behavior, exact checks, and the
+   verification boundary. Read [delivery evidence](references/delivery-evidence.md)
+   only for multiple material requirements, authored-test provenance,
+   benchmark/evaluator work, or a requested saved evidence artifact.
 
 ## Evidence and state
 

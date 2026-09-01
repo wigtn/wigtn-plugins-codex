@@ -1,6 +1,6 @@
 ---
 name: wigtn-presentation
-description: Create WIGTN-branded presentations, pitch decks, company introductions, or internal slides using WIGTN’s ink navy, signature purple dot, and logo rules. Use only when WIGTN branding is explicit. Do not use for general presentations, another brand, or a generic PPT request.
+description: Apply WIGTN branding to presentations, pitch decks, company introductions, or internal slides. Use only when WIGTN identity is explicit. Do not use for generic presentations or another brand.
 ---
 
 # WIGTN Presentation
@@ -16,7 +16,7 @@ not replace its narrative, source, rendering, overflow, or output-format rules.
    - For Google Slides, follow the host's native Slides routing.
    - Create HTML only when the user explicitly requests HTML; then read the
      [HTML delivery contract](references/html-delivery.md).
-2. Read [brand](references/brand.md) and [design guide](references/design-guide.md).
+2. Read the single [brand contract](references/brand.md).
 3. Build one audience-facing message per slide. Apply one base theme and the
    documented `section-inverse` exception only when it strengthens section rhythm.
 4. Use an approved user-provided logo when available. Otherwise use the

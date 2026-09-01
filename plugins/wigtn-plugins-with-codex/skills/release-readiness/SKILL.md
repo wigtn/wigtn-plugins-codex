@@ -1,6 +1,6 @@
 ---
 name: release-readiness
-description: Safely review, verify, commit, push, or open a pull request when the user asks in natural language such as “커밋해줘”, “푸시해줘”, “PR 올려줘”, or “커밋 준비해줘”. Preserve unrelated changes and execute only the requested Git scope. Do not use for ordinary implementation or vague “완료해줘”.
+description: Safely review, prepare, commit, push, or open a PR for explicit Git requests such as “커밋해줘”, “푸시해줘”, or “PR 올려줘”. Preserve unrelated changes and perform only the requested scope. Do not use for implementation or vague completion requests.
 ---
 
 # Release Readiness

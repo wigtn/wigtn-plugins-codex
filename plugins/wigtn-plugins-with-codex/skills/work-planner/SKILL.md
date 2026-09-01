@@ -1,6 +1,6 @@
 ---
 name: work-planner
-description: Save stable requirements as a dependency-aware WIGTN WorkGraph with resumable tasks, checks, intended paths, and source-drift invalidation. Use only for an explicitly saved plan, cross-session resume, WorkGraph maintenance, or stale-work analysis. Do not use for an ordinary conversational implementation plan, checklist, implementation, PRD authoring, or release execution.
+description: Save requirements as a resumable dependency-aware WIGTN WorkGraph with tasks, checks, paths, and drift invalidation. Use only for saved plans, cross-session resume, WorkGraph maintenance, or stale-work analysis. Do not use for conversational plans, implementation, PRDs, or releases.
 ---
 
 # Work Planner

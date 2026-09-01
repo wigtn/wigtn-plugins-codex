@@ -1,127 +1,70 @@
-<!DOCTYPE html>
-<html lang="ko">
+<!doctype html>
+<html lang="{language-code}">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>화면정의서 — {feature-name}</title>
+  <title>{feature-name} lo-fi wireframe</title>
   <style>
     :root {
       color-scheme: light;
-      --wf-bg: #fafafa;
-      --wf-surface: #ffffff;
-      --wf-border: #d4d4d8;
-      --wf-fg: #18181b;
-      --wf-muted: #71717a;
-      --wf-dark: #27272a;
-      --wf-error: #fef2f2;
-      --wf-success: #f0fdf4;
-      --wf-warning: #fffbeb;
+      --bg: #fafafa; --surface: #fff; --fg: #18181b;
+      --muted: #71717a; --border: #d4d4d8;
+      --error: #fef2f2; --success: #f0fdf4; --warning: #fffbeb;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { margin: 0; background: var(--wf-bg); color: var(--wf-fg); font: 16px/1.5 system-ui, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; }
     a { color: inherit; }
-    .topbar { position: sticky; top: 0; z-index: 2; border-bottom: 1px solid var(--wf-border); background: var(--wf-surface); }
-    .nav, main, footer { width: min(72rem, calc(100% - 2rem)); margin-inline: auto; }
-    .nav { display: flex; align-items: center; gap: 1rem; min-height: 3.5rem; }
-    .nav-links { display: flex; flex-wrap: wrap; gap: 1rem; }
-    .nav-meta { margin-left: auto; color: var(--wf-muted); font-size: .75rem; }
-    main { display: grid; gap: 4rem; padding-block: 2rem 4rem; }
-    .screen { border: 1px solid var(--wf-border); border-radius: .75rem; padding: 1.5rem; background: var(--wf-surface); }
-    .screen-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: .75rem; margin-bottom: 1rem; }
+    .nav, main { width: min(72rem, calc(100% - 2rem)); margin-inline: auto; }
+    .nav { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; min-height: 3.5rem; }
+    .nav a { text-decoration: underline; }
+    main { display: grid; gap: 3rem; padding-block: 2rem 4rem; }
+    .screen { border: 1px solid var(--border); border-radius: .5rem; padding: clamp(1rem, 2vw, 1.25rem); background: var(--surface); }
+    .screen-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; }
     h2 { margin: 0; font-size: 1.25rem; }
-    .wf-label { color: var(--wf-muted); font-size: .75rem; letter-spacing: .04em; text-transform: uppercase; }
-    .layouts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .65fr); gap: 1.5rem; }
-    .wf-box { border: 2px dashed var(--wf-border); border-radius: .5rem; padding: 1rem; background: var(--wf-surface); }
-    .stack { display: grid; gap: .75rem; min-height: 25rem; }
-    .slot { background: #f4f4f5; }
-    .cta { background: var(--wf-dark); color: #fff; text-align: center; }
-    .mobile { width: min(100%, 24rem); }
-    .states { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .75rem; margin-top: .75rem; font-size: .75rem; }
-    .state-error { background: var(--wf-error); }
-    .state-success { background: var(--wf-success); }
-    .state-warning { background: var(--wf-warning); }
-    details { margin-top: 1.5rem; }
-    summary { cursor: pointer; text-decoration: underline; }
-    footer { border-top: 1px solid var(--wf-border); padding-block: 2rem; color: var(--wf-muted); font-size: .75rem; }
-    @media (max-width: 767px) {
-      .nav { align-items: flex-start; flex-direction: column; padding-block: .75rem; }
-      .nav-meta { margin-left: 0; }
-      .layouts, .states { grid-template-columns: 1fr; }
-      .screen { padding: 1rem; }
-    }
+    .meta { color: var(--muted); font-size: .8rem; }
+    .layouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr)); gap: 1rem; margin-top: 1rem; }
+    .stack { display: grid; gap: .75rem; }
+    .box { min-height: 3rem; border: 2px dashed var(--border); border-radius: .35rem; padding: .75rem; }
+    .primary { background: #27272a; color: #fff; text-align: center; }
+    .states { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .5rem; margin-top: 1rem; }
+    [data-state="error"] { background: var(--error); }
+    [data-state="success"] { background: var(--success); }
+    [data-state="warning"] { background: var(--warning); }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <nav class="nav" aria-label="화면 목록">
-      <strong>{feature-name} — 화면정의서</strong>
-      <div class="nav-links">
-        <a href="#screen-{slug-1}">{route-1}</a>
-        <a href="#screen-{slug-2}">{route-2}</a>
-        <a href="#screen-{slug-3}">{route-3}</a>
-      </div>
-      <span class="nav-meta">Lo-fi responsive wireframe</span>
+  <header>
+    <nav class="nav" aria-label="{screen-list-label}">
+      <strong>{feature-name}</strong>
+      <a href="#screen-{slug-1}">{screen-name}</a>
     </nav>
   </header>
-
   <main>
-    <!-- Duplicate this section for every in-scope screen. -->
+    <!-- Duplicate only for an in-scope screen; keep IDs aligned with 03-SCREEN-SPEC.md. -->
     <section id="screen-{slug-1}" class="screen" aria-labelledby="screen-{slug-1}-title">
       <header class="screen-head">
-        <h2 id="screen-{slug-1}-title">{route-1}</h2>
-        <span class="wf-label">Audience: {audience} · Auth: {auth}</span>
+        <h2 id="screen-{slug-1}-title">{screen-name}</h2>
+        <span class="meta">Audience: {audience} · Auth: {auth}</span>
       </header>
       <div class="layouts">
-        <div>
-          <p class="wf-label">Desktop ≥1024px</p>
-          <div class="wf-box stack">
-            <div class="wf-box slot">[Header / 제목 슬롯]</div>
-            <div class="wf-box slot">[Body / 주요 콘텐츠 슬롯]</div>
-            <div class="wf-box slot">[Form field 슬롯]</div>
-            <div class="wf-box cta">[Primary CTA]</div>
-          </div>
+        <div class="stack" aria-label="Primary layout">
+          <div class="box">[Primary content]</div>
+          <div class="box">[Input or data region]</div>
+          <div class="box primary">[Primary action]</div>
         </div>
-        <div>
-          <p class="wf-label">Mobile &lt;768px</p>
-          <div class="wf-box stack mobile">
-            <div class="wf-box slot">[Header]</div>
-            <div class="wf-box slot">[Body]</div>
-            <div class="wf-box slot">[Form]</div>
-            <div class="wf-box cta">[CTA]</div>
-          </div>
-        </div>
+        <aside class="stack" aria-label="Supporting layout">
+          <div class="box">[Context or secondary action]</div>
+        </aside>
       </div>
-      <details>
-        <summary>Applicable states</summary>
-        <div class="states">
-          <div class="wf-box">[loading] 진행 표시</div>
-          <div class="wf-box slot">[empty] 다음 행동</div>
-          <div class="wf-box state-error">[error] 복구 행동</div>
-          <div class="wf-box state-success">[success] 결과 피드백</div>
-          <div class="wf-box state-warning">[unauthorized] 안내</div>
-        </div>
-      </details>
-    </section>
-
-    <section id="screen-{slug-2}" class="screen" aria-labelledby="screen-{slug-2}-title">
-      <header class="screen-head">
-        <h2 id="screen-{slug-2}-title">{route-2}</h2>
-        <span class="wf-label">Audience: {audience} · Auth: {auth}</span>
-      </header>
-      <p>위 구조를 복제하고 페이지별 슬롯과 상태를 채운다.</p>
-    </section>
-
-    <section id="screen-{slug-3}" class="screen" aria-labelledby="screen-{slug-3}-title">
-      <header class="screen-head">
-        <h2 id="screen-{slug-3}-title">{route-3}</h2>
-        <span class="wf-label">Audience: {audience} · Auth: {auth}</span>
-      </header>
-      <p>위 구조를 복제하고 페이지별 슬롯과 상태를 채운다.</p>
+      <div class="states" aria-label="Applicable states">
+        <div class="box">[{applicable state}]</div>
+        <div class="box" data-state="error">[error + recovery]</div>
+        <div class="box" data-state="success">[success feedback]</div>
+        <div class="box" data-state="warning">[authorization or warning]</div>
+      </div>
     </section>
   </main>
-
-  <footer>Generated with WIGTN Screen Spec · {YYYY-MM-DD} · grayscale + semantic state colors</footer>
 </body>
 </html>

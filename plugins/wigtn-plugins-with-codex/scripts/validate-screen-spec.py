@@ -23,10 +23,10 @@ DEPENDENCIES = {
     "wireframe": {"ia", "screen"},
     "handoff": {"ia", "flow", "screen", "wireframe"},
 }
-KNOWN_PLACEHOLDER = re.compile(
-    r"\{(?:feature-name|YYYY-MM-DD|route-[^}]+|slug-[^}]+|role-[^}]+|"
-    r"audience|auth|요약|분기|처리|대상 화면|endpoint|sub-task-list)[^}]*\}"
-)
+# Template tokens start immediately after ``{`` and do not contain CSS-style
+# declarations. This catches new project-native placeholders without mistaking
+# ordinary formatted CSS blocks (``{ color: ...; }``) for unresolved tokens.
+KNOWN_PLACEHOLDER = re.compile(r"\{(?=[A-Za-z0-9가-힣])[^{}\n;:]+\}")
 REQ_ID = re.compile(r"\b(?:FR|REQ|AC)-[A-Za-z0-9][A-Za-z0-9._-]*\b")
 ANCHOR_REF = re.compile(r"04-WIREFRAME\.html#([A-Za-z][A-Za-z0-9._:-]*)")
 HTML_ID = re.compile(r'\bid=["\']([A-Za-z][A-Za-z0-9._:-]*)["\']')
@@ -125,7 +125,8 @@ def main() -> int:
         require(flow, "```mermaid", "02-USER-FLOW.md", errors)
         require(flow, "Flow Coverage", "02-USER-FLOW.md", errors)
     if handoff:
-        require(handoff, "FR", "05-DEV-HANDOFF.md", errors)
+        if not REQ_ID.search(handoff):
+            errors.append("05-DEV-HANDOFF.md: missing requirement ID")
         require(handoff, "Suggested Implementation Order", "05-DEV-HANDOFF.md", errors)
 
     anchors: list[str] = []

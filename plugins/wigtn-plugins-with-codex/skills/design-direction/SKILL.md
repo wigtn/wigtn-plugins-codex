@@ -1,6 +1,6 @@
 ---
 name: design-direction
-description: Derive a project-native visual direction for a new UI or redesign by inspecting the existing design system first. Use for UI design direction, style exploration, greenfield interface styling, or redesign requests. Do not use for a tiny CSS fix, established-component implementation, or non-UI work.
+description: Derive a project-native UI direction from the existing design system. Use for visual direction, greenfield styling, or redesign requests. Do not use for small CSS fixes, established-component work, or non-UI tasks.
 ---
 
 # Design Direction
