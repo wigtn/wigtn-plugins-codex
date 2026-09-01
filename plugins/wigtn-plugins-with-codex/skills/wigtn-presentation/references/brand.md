@@ -1,68 +1,69 @@
-# WIGTN Presentation Brand
+# WIGTN presentation brand contract
 
-Use this identity only for an explicit WIGTN presentation. Preserve the exact
-tokens; do not approximate them with generic AI purple.
+Apply this overlay only to an explicit WIGTN presentation. The host
+presentation workflow owns narrative, citations, generation, rendering, and
+format-specific limits.
 
 ## Identity
 
-- Wordmark: lowercase `wigtn.` in a heavy geometric sans-serif.
-- Signature: only the period is purple.
+- Wordmark: lowercase `wigtn.` in a heavy geometric sans-serif; only the period
+  is purple.
 - Tone: minimal, confident, technical; ink navy with one restrained purple cue.
+- Use Light or Dark as the deck-wide base. A named `section-inverse` may invert
+  a real section divider, then return to the base theme.
 
-| Token | HEX | Use |
+| Token | HEX | Role |
 |---|---|---|
-| Ink | `#1E1E28` | Light-theme text, dark surfaces |
-| Ink Deep | `#15151E` | Dark-theme background |
-| Purple | `#9B51E0` | Light-theme signature and accent |
-| Purple Bright | `#A85FEA` | Dark-theme signature and accent |
-| Purple Deep | `#6B2EAA` | restrained depth or single-hue gradient end |
-| White | `#FFFFFF` | Light background, dark-theme text |
-| Off White | `#FAFAFA` | Light secondary surface |
+| Ink | `#1E1E28` | light-theme text, dark surfaces |
+| Ink Deep | `#15151E` | dark-theme background |
+| Purple | `#9B51E0` | light-theme signature and accent |
+| Purple Bright | `#A85FEA` | dark-theme signature and accent |
+| Purple Deep | `#6B2EAA` | restrained single-hue depth |
+| White | `#FFFFFF` | light canvas, dark-theme text |
+| Off White | `#FAFAFA` | light secondary surface |
 
-Use either Light or Dark as the base theme for the complete deck. One named
-`section-inverse` treatment may invert a section-divider slide, then the deck
-must return to its base theme. This is the only theme-mixing exception.
+## Signature and assets
 
-## Signature dot
+Choose one repeatable signature location: page number, section number,
+title-ending period, or fixed corner. Use exactly one signature treatment per
+slide. Do not add another dot beside a logo that already includes it.
 
-Choose one repeatable placement for the deck: page number, section number,
-title-ending dot, or fixed corner marker. Use exactly one signature treatment
-per slide. Do not scatter purple decoration or add a second dot beside a logo
-that already contains the purple period.
+Use an approved user-provided or repository logo and preserve its ratio and
+clear space. Do not search assumed paths or synthesize an image logo. Without
+an approved asset, use editable text runs: `wigtn` in Ink/White and the period
+in Purple/Purple Bright.
 
-## Wordmark and assets
+## Composition
 
-Use an approved logo supplied by the user or present in the target repository.
-Preserve its ratio and clear space. Do not assume untracked `assets/logo/` or
-`docs/images/` files exist and do not synthesize an unofficial image logo.
+- Give each slide one audience-facing message and no more than three visible
+  hierarchy levels.
+- Prefer asymmetric alignment, deliberate whitespace, and one strong
+  composition over repeated cards, badges, or dashboard panels.
+- Vary adjacent silhouettes. Use a cover, numbered agenda, section divider,
+  comparison, image/text, timeline, quote, KPI, or concise closing only when
+  the content supports that role.
+- Keep the purple signature subordinate to the message.
+- Use native shapes or the host diagram route for PPTX/Slides. Use CSS or
+  inline SVG only for an explicitly requested HTML deck. Invoke
+  `handdrawn-diagram` only for an explicit sketch aesthetic.
 
-When no approved logo is available, the canonical fallback is live text:
+## Type and motion
 
-```text
-wigtn + purple period
-```
+Prefer fonts already available in the output environment. Use a present Korean
+sans-serif for Korean and one geometric display face when available. Do not
+download fonts or add a CDN without explicit authorization. Split content
+before shrinking below the host workflow's readable minimum.
 
-Style `wigtn` in Ink/White and the period in Purple/Purple Bright. For HTML,
-use separate spans. For PPTX or Slides, use adjacent text runs so the mark stays
-editable and portable.
+Use restrained 0.2–0.4 second fades or short vertical movement, at most one or
+two entrance patterns per slide. Respect reduced motion and avoid parallax,
+perpetual motion, or heavy glow.
 
-## Typography
+## Final review
 
-Prefer a font already available in the output environment. Use Pretendard or
-Noto Sans KR for Korean when present, and a geometric sans such as Space
-Grotesk or Sora for display text when present. Otherwise use a platform Korean
-sans-serif fallback consistently. Do not download fonts or add a CDN dependency
-without explicit authorization. Verify substitution in the final render.
+Inspect every rendered slide at full size for overflow, clipping, overlap,
+title wrapping, contrast, signature placement, logo distortion, source notes,
+and font substitution. Use a contact sheet for deck rhythm only.
 
-Keep no more than three visible hierarchy levels per slide. Shorten content or
-split the slide before reducing body text below the host presentation workflow's
-minimum size.
-
-## Avoid
-
-- purple/pink or rainbow gradients
-- generic indigo such as `#6366F1`
-- mixed Light/Dark body slides outside `section-inverse`
-- centered text on every slide
-- repeated dashboard-card layouts
-- distorted logos, excessive glow, or decorative dot clouds
+Avoid generic indigo, rainbow gradients, mixed Light/Dark body slides outside
+`section-inverse`, centered text everywhere, repeated card grids, distorted
+logos, glow, and decorative dot clouds.

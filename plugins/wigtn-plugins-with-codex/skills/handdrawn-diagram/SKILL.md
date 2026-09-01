@@ -1,6 +1,6 @@
 ---
 name: handdrawn-diagram
-description: Create committable sketch-style architecture or flow diagrams as Mermaid handDrawn source plus verified SVG and PNG. Use when the user explicitly requests a 손그림, sketch, hand-drawn, or handDrawn aesthetic, including Devpost assets with that stated style. Do not use for an ordinary diagram, chart, presentation diagram, or bitmap illustration without a sketch-style request.
+description: Create Mermaid handDrawn architecture or flow diagrams with verified SVG and PNG. Use for explicit 손그림, sketch, hand-drawn, or handDrawn requests. Do not use for ordinary diagrams, charts, presentation diagrams, or bitmap illustrations.
 ---
 
 # Hand-drawn Diagram

@@ -11,6 +11,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 VALIDATOR = ROOT / "plugins/wigtn-plugins-with-codex/scripts/validate-screen-spec.py"
+TEMPLATES = ROOT / "plugins/wigtn-plugins-with-codex/skills/screen-spec/assets/templates"
 
 
 VALID = {
@@ -62,6 +63,12 @@ def run(directory: Path, artifacts: str = "all") -> subprocess.CompletedProcess[
 
 
 def main() -> int:
+    flow_template = (TEMPLATES / "02-USER-FLOW.md").read_text(encoding="utf-8")
+    wireframe_template = (TEMPLATES / "04-WIREFRAME.html").read_text(encoding="utf-8")
+    assert "## Flow Coverage" in flow_template
+    assert '@media (max-width' not in wireframe_template
+    assert 'lang="{language-code}"' in wireframe_template
+
     with tempfile.TemporaryDirectory() as temp:
         root = Path(temp)
         valid = root / "valid"
@@ -69,6 +76,15 @@ def main() -> int:
         for name, text in VALID.items():
             (valid / name).write_text(text, encoding="utf-8")
         passed = run(valid)
+        assert passed.returncode == 0 and '"valid": true' in passed.stdout
+
+        ac_handoff = root / "ac-handoff"
+        ac_handoff.mkdir()
+        for name, text in VALID.items():
+            (ac_handoff / name).write_text(
+                text.replace("FR-001", "AC-001"), encoding="utf-8"
+            )
+        passed = run(ac_handoff, "handoff")
         assert passed.returncode == 0 and '"valid": true' in passed.stdout
 
         ia_only = root / "ia-only"
@@ -127,6 +143,19 @@ def main() -> int:
         assert failed.returncode == 1
         assert "unresolved template placeholders" in failed.stdout
         assert "missing referenced anchor #screen-x" in failed.stdout
+
+        generic_placeholder = root / "generic-placeholder"
+        generic_placeholder.mkdir()
+        (generic_placeholder / "03-SCREEN-SPEC.md").write_text(
+            VALID["03-SCREEN-SPEC.md"].replace("/x", "{screen-name}"),
+            encoding="utf-8",
+        )
+        (generic_placeholder / "01-IA.md").write_text(
+            VALID["01-IA.md"], encoding="utf-8"
+        )
+        failed = run(generic_placeholder, "screen")
+        assert failed.returncode == 1
+        assert "unresolved template placeholders" in failed.stdout
 
         remote = root / "remote-wireframe"
         remote.mkdir()
