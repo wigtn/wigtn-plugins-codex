@@ -1,386 +1,325 @@
 # WIGTN Plugin for Codex
 
-## 구현 절차는 줄이고 제품 개발의 계약은 남긴 이유
+## 코딩 모델 성능 향상 이후의 구현 하네스 재검토
 
-GPT‑5.5·GPT‑5.6 Sol paired evaluation과 WIGTN Plugin 0.3.0 설계 개정
-Technical report v9 · 2026-07-28
-상태: 공개 engineering report · 일반 코드 품질 향상 논문 아님
+GPT‑5.6 Sol에서 플러그인 미사용·사용 조건의 코드 결과와 실행 비용을
+비교하고 WIGTN Plugin의 일반 구현 개입을 축소했다
 
----
-
-## 결론 먼저
-
-WIGTN Plugin은 Codex보다 코드를 더 잘 쓰는 프롬프트 묶음으로 만들지
-않았다. 반복해서 요청하는 제품 개발 작업을 재사용 가능한 기능으로
-만들었다.
-
-- 아이디어를 구현 가능한 PRD와 화면 명세로 정리한다.
-- 요구사항을 작업과 실행 가능한 검사로 연결한다.
-- 구현자의 완료 주장과 실제 검증 결과를 구분한다.
-- commit, push, PR처럼 저장소를 바꾸는 작업의 권한과 범위를 확인한다.
-
-처음에는 이 기능들을 구현 과정에 더 촘촘히 연결하면 코드 결과도
-좋아질 수 있다고 봤다. 실험 결과는 달랐다.
-
-- GPT‑5.6 Sol의 SWE-bench Verified 4개 paired block에서 Bare와 Plugin은
-  모두 4/4 성공했다.
-- 같은 성공을 얻는 동안 개정 전 Plugin의 중앙값은 wall time 151.7%,
-  output token 141.2%, command 32.0%가 더 들었다.
-- 더 어려운 FeatureBench 네 과제에서도 무결하고 재현된 positive lift는
-  0건이었다.
-- GPT‑5.5에서는 PRD 계약 충족이 Bare 0/3에서 Plugin 3/3으로 바뀌었다.
-  일반 코딩과 실제 저장소 구현의 성공률은 달라지지 않았다.
-
-이 결과로 제품 방향을 정했다.
-
-> 일반 코딩은 Codex의 기본 동작에 맡긴다. WIGTN Plugin은 PRD 형식,
-> 요구사항 ID, 수용 근거, 중단 재개 상태, Git 권한처럼 모델이 스스로
-> 알 수 없는 제품 개발 규칙을 맡는다.
-
-0.3.0에서는 구현을 지휘하는 절차를 줄이고 다음 네 경계에 기능을
-집중했다.
-
-1. **Specification** — 무엇을 만들지 결정하고 안정적인 요구사항 ID를 남긴다.
-2. **Planning** — 요구사항을 task와 executable check로 연결하고 재개 상태를 보존한다.
-3. **Verification** — 코드와 실행된 테스트 근거로 요구사항 충족을 판정한다.
-4. **Release** — 검증 완료와 Git 실행 권한을 분리한다.
-
-이 보고서가 주장하는 것은 “WIGTN Plugin이 일반 코드 품질을 높였다”가
-아니다. **어디에 플러그인을 붙이면 도움이 되고, 어디에서는 오히려
-비용이 되는지 측정해 제품을 고쳤다**는 것이다.
+> Technical report · Evaluation & product design
+> WIGTN Engineering · 2026-07-28
 
 ---
 
-## 1. 왜 WIGTN Plugin을 만들었나
+## 01 · 문제 정의
 
-### 1.1 출발점
+### 모델 성능이 높아진 뒤 기존 구현 하네스를 다시 평가한 이유
 
-Codex를 사용하다 보면 같은 종류의 요청이 반복된다.
+WIGTN Plugin은 제품 개발에서 반복되는 요청을 Codex에서 다시 사용할 수
+있게 만들면서 시작했다. 아이디어를 제품 요구사항 문서(PRD)로 정리하고,
+요구사항을 구현 작업과 검사에 연결하고, 실제로 완료됐는지 확인한 뒤,
+필요한 경우 코드 변경 저장(commit)이나 검토 요청(pull request)까지
+준비하는 흐름이다.
 
-- “이 아이디어를 PRD로 정리해줘.”
-- “PRD를 화면 명세와 구현 계획으로 바꿔줘.”
-- “요구사항이 실제 코드에 반영됐는지 확인해줘.”
-- “변경 범위를 검토하고 커밋하거나 PR을 올려줘.”
+이 글에서 하네스는 모델에 추가한 작업 순서, 검사 절차, 완료 규칙을
+가리킨다. 모델이 작업을 충분히 구조화하지 못할 때는 문제를 단계로 나누고
+검사를 반복하도록 지시해 부족한 부분을 보완할 수 있었다. 그러나 모델이
+좋아지면서 저장소 탐색, 원인 분석, 구현 계획, 코드 수정, 테스트 실행은
+점점 모델의 기본 동작이 됐다.
 
-매번 긴 프롬프트로 작업 순서와 출력 형식을 다시 설명하는 대신,
-WIGTN Plugin에 담을 제품 개발 규칙을 호출 가능한 Codex skill로 묶는 것이
-출발점이었다. 목표는 모델의 코딩 방식을 통제하는 것이 아니라 반복되는
-작업의 입력, 산출물, 완료 조건을 일정하게 만드는 것이었다.
+모델은 달라졌지만 하네스가 그대로 남아 있으면 보완이 중복으로 바뀐다.
+모델이 이미 세운 계획 위에 다시 계획을 만들고, 이미 실행한 검사를 다른
+형식으로 기록하며, 끝낼 수 있는 작업을 추가 절차 때문에 계속 이어간다.
+이 경우 하네스는 안전성을 높이기보다 실행 비용과 작업 간섭을 늘릴 수 있다.
 
-### 1.2 왜 Codex 전용으로 다시 만들었나
+평가 질문은 다음과 같이 정했다.
 
-기존 Claude Code 플러그인에는 역할 agent, slash command, 고정된
-오케스트레이션을 전제로 한 부분이 있다. Codex는 skill 선택 방식과 기본
-탐색·구현 루프가 다르다. 그대로 옮기면 같은 역할을 중복하거나 일반
-코딩 요청까지 무거운 workflow로 바꿀 수 있었다.
+> **평가 질문**
+> 모델의 구현 능력이 높아진 뒤에도, 이전에 만든 무거운 하네스가 코드 결과를
+> 더 좋게 만드는가? 아니면 모델이 이미 잘하는 일을 반복하며 비용만 늘리는가?
 
-Claude 플러그인은 건드리지 않았다. Codex용 구현을 별도 저장소에서
-다음 원칙으로 다시 만들었다.
+Claude Code용 플러그인을 그대로 옮기지 않은 이유도 여기에 있다. 역할별
+에이전트, 즉 서로 다른 역할을 맡은 AI 작업자와 고정된 명령 흐름을 Codex에
+그대로 적용하면 Codex가 이미 잘하는 일을 반복할 가능성이 컸다. 그래서
+Codex용 구현은 별도 저장소에서 다시 설계했다.
 
-| 원칙 | Codex 구현 |
+> **설계 원칙**
+> 모델이 좋아질수록 구현을 지휘하는 절차는 줄어야 한다. 플러그인은 모델이
+> 알 수 없는 팀의 요구사항과 완료 기준을 일관되게 적용하는 데 집중한다.
+
+---
+
+## 02 · 설계 범위
+
+### Codex 기본 기능과 플러그인 역할의 구분
+
+WIGTN Plugin은 Codex보다 코드를 더 잘 쓰게 만드는 프롬프트 묶음이 아니다.
+제품 개발 과정에서 반복해서 확인해야 하는 입력, 산출물, 완료 조건을
+재사용 가능한 기능으로 만든 플러그인이다.
+
+| Codex의 기본 동작에 맡기는 일 | WIGTN Plugin이 맡는 일 |
 |---|---|
-| 한 기능, 한 책임 | Product Spec, Work Planner, Acceptance Verifier, Release Readiness 등을 독립 skill로 분리 |
-| 기본 동작 보존 | 일반 구현·버그 수정에는 Plugin workflow를 자동으로 붙이지 않음 |
-| 강한 경로는 명시 호출 | `verified-delivery`는 사용자가 지정했을 때만 실행 |
-| 결과로 판정 | 문서 길이나 명령 수가 아니라 코드, 실행 테스트, Git 상태를 사용 |
-| 외부 변경은 별도 권한 | review, commit, push, PR 요청을 서로 다른 권한으로 취급 |
+| 저장소 탐색과 원인 분석 | 아이디어를 구현 가능한 PRD와 화면 명세로 정리 |
+| 코드 수정과 리팩터링 | 요구사항을 작업과 실행 가능한 검사에 연결 |
+| 저장소에 이미 있는 테스트 실행 | 구현자의 완료 주장과 실제 실행 결과를 구분 |
+| 일반적인 구현 순서 판단 | 중단 후 재개 상태와 변경된 요구사항을 추적 |
+| 코드 변경안 작성 | commit·push·PR의 요청 범위와 현재 Git 상태 확인 |
 
-### 1.3 만들고자 한 제품
+기능도 이 경계에 맞춰 나눴다. Product Spec은 PRD를 만들고, Screen Spec은
+화면과 사용자 흐름을 구체화한다. Work Planner는 요구사항을 작업과 검사에
+연결한다. Acceptance Verifier는 코드가 있다는 사실만 보지 않고 관련
+테스트가 실제로 통과했는지 확인한다. Release Readiness는 검토가 끝났다는
+상태와 저장소를 실제로 변경할 권한을 구분한다.
 
-WIGTN Plugin 0.3.0은 다음 기능을 제공한다.
-
-| 기능 | 산출물 또는 판정 |
-|---|---|
-| Product Spec | Compact/Full PRD, 안정적인 requirement ID, 누락 결정 |
-| Screen Spec·Design Direction | IA, 사용자 흐름, 화면 명세, lo-fi handoff |
-| Work Planner | requirement→task→check WorkGraph, resume, source drift |
-| Acceptance Verifier | 요구사항별 code evidence와 executed-test evidence |
-| Verified Delivery | 명시 호출 기반 fast/assurance 구현·검증 경로 |
-| Release Readiness | 실제 Git 상태, 변경 범위, 사용자 권한에 따른 commit·push·PR |
-
-문서 생성 도구만 모은 것도 아니고, 항상 실행되는 agent framework도
-아니다. 필요한 작업에 해당 skill 하나를 붙이는 구조다.
+전체 구현과 검증 흐름을 묶은 `verified-delivery`는 사용자가 그 흐름을
+명시적으로 요청했을 때만 사용한다. 각 기능은 필요한 요청에서만 선택되며,
+일반 코딩 요청에는 전체 흐름을 자동으로 적용하지 않는다.
 
 ---
 
-## 2. 왜 모델 성능까지 측정했나
+## 03 · 평가 설계
 
-Plugin이 유용한 산출물을 만든다고 해서 구현 과정에도 항상 도움이 되는
-것은 아니다. skill 설명, 계획 단계, 별도 검사, evidence 표는 모델의
-탐색과 종료 판단을 바꾼다. 성공률이 그대로인데 명령과 token만 늘 수도
-있다.
+### 동일 모델에서 플러그인 사용 여부만 바꾼 비교
 
-확인할 질문을 네 개로 나눴다.
+PRD나 검증표가 유용하다는 사실이 코드 결과까지 좋아진다는 뜻은 아니다.
+추가 지침과 계획 단계는 모델이 문제를 푸는 방식과 멈추는 시점을 바꾼다.
+성공률은 그대로인데 실행 시간과 토큰만 늘어날 수도 있다.
 
-| 연구 질문 | 측정값 |
-|---|---|
-| RQ1. 일반 코딩을 방해하는가 | Plugin이 Bare 성공을 실패로 바꾼 pair |
-| RQ2. 코드 결과를 개선하는가 | Bare 실패 / Plugin 성공 pair |
-| RQ3. 제품 계약을 더 잘 지키는가 | PRD·acceptance contract 충족률 |
-| RQ4. 같은 결과에 비용이 얼마나 드는가 | wall time, output token, command |
+평가에서는 플러그인을 사용하지 않은 조건을 `Bare`, 같은 Codex에 WIGTN
+Plugin만 추가한 조건을 `Plugin`이라고 불렀다. 같은 모델이 같은 과제를
+풀게 하고 플러그인 사용 여부만 바꿔, 모델 세대 차이가 결과에 섞이지 않게
+했다.
 
-GPT‑5.5+Plugin과 GPT‑5.6 Bare를 비교하지 않았다. 모델 차이를 Plugin
-효과로 오해할 수 있기 때문이다. 각 모델 안에서 같은 task와 같은 실행
-조건을 사용하고 Plugin만 켜고 껐다.
+따라서 이 평가는 “모델 세대가 올라갈 때마다 하네스의 효과가 반드시
+줄어든다”는 인과관계를 직접 증명하지 않는다. 대신 강한 모델을 고정한
+상태에서 이전 하네스가 추가 이득을 만드는지 확인한다. GPT‑5.5 결과는
+이전 세대와 최신 세대의 점수 차이가 아니라, 플러그인이 코드 작성보다
+정해진 문서 형식에서 더 분명한 효과를 보였다는 보조 근거로만 사용했다.
 
----
-
-## 3. 평가 방법
-
-### 3.1 평가층
-
-서로 다른 결과를 하나의 “Plugin 점수”로 합치지 않았다.
-
-| 평가층 | 확인한 것 | 자료 |
+| 평가층 | 확인한 질문 | 확인한 값 |
 |---|---|---|
-| 계약 회귀 | manifest, trigger, schema, authority가 깨지지 않는가 | 저장소 정적 검사 |
-| 산출물 행동 | PRD·acceptance 형식을 실제 모델이 지키는가 | GPT‑5.5/5.6 smoke, package ablation |
-| 실제 bug fix | 같은 코드 과제의 성공률과 비용이 달라지는가 | SWE-bench Verified |
-| 어려운 feature | ceiling을 낮추면 positive lift가 생기는가 | FeatureBench development pilot |
+| 제품 규칙 | PRD와 완료 판정이 정해진 형식과 상태를 지키는가 | 요구사항 ID, 미결정 항목, 실행 근거 |
+| 일반 코딩 | 플러그인이 원래 성공하던 작업을 방해하는가 | 숨은 테스트, 범위 밖 수정, 불필요한 산출물 |
+| 실제 버그 수정 | 같은 코드 과제의 성공 여부가 달라지는가 | `resolved` 여부 |
+| 실행 비용 | 같은 결과에 얼마나 더 많은 작업이 필요한가 | 시간, 출력 토큰, 실행 명령 수 |
 
-### 3.2 외부 과제 포함 기준
+주 비교에는 GPT‑5.6 Sol과 실제 오픈소스 버그 수정 과제 모음인
+SWE-bench Verified에서 선별한 두 과제를 사용했다. 과제별로 Bare와
+이전의 무거운 플러그인 절차를 두 번씩 실행해 네 쌍을 만들었고, 첫 반복과
+두 번째 반복의 실행 순서를 바꿨다. 모든 실행은 과제별로 격리된
+실행 환경(Docker)의 깨끗한 작업공간에서 시작했다.
 
-코드 품질 평가에는 아래 조건을 모두 만족한 과제만 사용했다.
+외부 과제는 다음 기준으로 사전 점검했다.
 
-1. 문제문과 base commit이 고정되어 있다.
-2. clean base에서 핵심 test가 실패한다.
-3. gold patch가 같은 evaluator를 통과한다.
-4. fail-to-pass test가 문제문에 적힌 동작을 검사한다.
-5. pass-to-pass test가 기존 동작의 회귀를 검사한다.
-6. 격리된 환경에서 재현된다.
-7. agent가 hidden test와 reference patch를 볼 수 없다.
+1. 문제문과 기준 commit이 고정되어 있는가.
+2. 수정 전에는 핵심 테스트가 실패하고 정답 패치는 통과하는가.
+3. 새 동작을 확인하는 테스트가 문제문의 요구사항과 맞는가.
+4. 새 코드를 적용한 뒤 기존 동작이 깨지지 않았는지도 확인하는가.
+5. 모델이 숨은 테스트와 정답 패치를 볼 수 없는가.
 
-원본이 이미 통과하거나, 문제문에 없는 API를 강제하거나, 환경 누락으로
-검사가 무너지는 과제는 실행 전에 제외했다.
-
-### 3.3 주효과 평가 설정
-
-| 항목 | 값 |
-|---|---|
-| 모델 | `gpt-5.6-sol` |
-| reasoning | `high` |
-| Codex CLI | `0.145.0` |
-| benchmark | `princeton-nlp/SWE-bench_Verified` |
-| dataset revision | `c104f840cc67f8b6eec6f759ebc8b2693d585d4a` |
-| 과제 | `astropy__astropy-12907`, `pytest-dev__pytest-10051` |
-| 반복 | 과제당 2회, Bare→Plugin / Plugin→Bare 순서 교차 |
-| 환경 | 공식 per-instance Docker, 매 trial clean workspace |
-| 판정 | official resolved, pass-to-pass, 비용 |
-
-분석 단위는 `task × repetition`의 paired block 네 개다. 표본이 작고
-discordant pair가 없으므로 p-value나 “통계적으로 유의한 향상”을
-제시하지 않는다.
+이 글에서는 새 동작과 기존 동작을 확인하는 테스트를 모두 통과한 실행을
+`resolved`로 분류했다. 두 과제에 두 번의 반복만 적용한 개발 표본이므로,
+통계적 유의성이나 일반적인 성능 향상은 주장하지 않는다.
 
 ---
 
-## 4. 결과
+## 04 · 평가 결과
 
-### 4.1 GPT‑5.6 Sol: 성공률은 같고 비용은 늘었다
+### 코드 성공률은 같고 실행 비용은 증가
 
-| 과제 | Bare | 개정 전 Plugin |
+GPT‑5.6 Sol의 주 비교에서 Bare와 이전 플러그인 절차는 모두 네 번 중 네 번
+과제를 해결했다. 플러그인이 성공을 실패로 바꾼 경우도, 실패를 성공으로
+바꾼 경우도 없었다.
+
+| 과제 | Bare | 이전 Plugin |
 |---|---:|---:|
-| Astropy, trial 1 | resolved | resolved |
-| Astropy, trial 2 | resolved | resolved |
-| Pytest, trial 1 | resolved | resolved |
-| Pytest, trial 2 | resolved | resolved |
-| 합계 | **4/4** | **4/4** |
+| Astropy, 실행 1 | resolved | resolved |
+| Astropy, 실행 2 | resolved | resolved |
+| Pytest, 실행 1 | resolved | resolved |
+| Pytest, 실행 2 | resolved | resolved |
+| **합계** | **4/4** | **4/4** |
 
-모든 patch가 fail-to-pass와 pass-to-pass를 통과했다. Plugin이 성공을
-망가뜨린 pair도, 실패를 성공으로 바꾼 pair도 없었다.
+성공률은 같았지만 비용은 달랐다.
 
-| 중앙값 | Bare | 개정 전 Plugin | Plugin 증감 |
+| 중앙값 | Bare | 이전 Plugin | 증가 |
 |---|---:|---:|---:|
-| wall time | 120.21s | 302.62s | **+151.7%** |
-| output token | 3,613 | 8,715.5 | **+141.2%** |
-| command | 12.5 | 16.5 | **+32.0%** |
+| 실행 시간 | 120.21초 | 302.62초 | **+151.7%** |
+| 출력 토큰 | 3,613 | 8,715.5 | **+141.2%** |
+| 실행 명령 수 | 12.5 | 16.5 | **+32.0%** |
 
-개정 전 `verified-delivery`는 작은 bug fix에도 별도 harness와 evidence
-절차를 반복했다. 공식 결과가 같은 상황에서는 추가 절차가 품질이 아니라
-비용으로 남았다.
+이 결과를 플러그인의 모든 기능이 항상 느리다는 결론으로 일반화할 수는
+없다. 다만 선택한 두 과제에서는 이전 `verified-delivery`가 작은 버그
+수정에도 별도 계획과 검사, 완료 기록을 반복했고, 추가 절차가 코드 결과를
+바꾸지 않은 채 비용으로 남았다.
 
-### 4.2 FeatureBench: positive lift를 확인하지 못했다
+### FeatureBench 파일럿에서는 유효한 개선을 확인하지 못함
 
-SWE-bench 두 과제의 ceiling을 피하려고 Seaborn, Sphinx, MLflow,
-Mypy 네 feature 과제를 추가했다.
+여러 파일을 수정하는 기능 구현 평가인 FeatureBench에서도 Seaborn,
+Sphinx, MLflow, Mypy 과제를 살펴봤다. 첫 Seaborn Plugin 실행은 테스트를
+통과했지만 작업공간 밖에 설치된 같은 프로젝트의 구현을 읽은 사실이
+확인됐다. 정답에 해당하는 소스에 접근했기 때문에 이 실행은 무효로
+처리했다. 새 작업공간에서 실행 순서를 바꿔 다시 평가했을 때는 Bare와
+Plugin 모두 해결하지 못했다.
 
-| 과제 | Bare | Plugin | 판정 |
-|---|---:|---:|---|
-| Seaborn | 11.76%, unresolved | 첫 실행 100% | reference source 접근으로 무효, 재시험 tie |
-| Sphinx | 7.69%, unresolved | 7.69%, unresolved | tie |
-| MLflow | 0%, unresolved | 0%, unresolved | tie |
-| Mypy | 30%, unresolved | 30%, unresolved | tie |
+나머지 세 과제도 두 조건의 결과가 같았다. 따라서 무결성 기준을 통과하고
+반복해서 확인된 코드 성능 개선 사례는 0건이다. 이 파일럿의 첫 네 짝에서
+중앙 실행 명령 수는 17에서 38로, 출력 토큰은 10,274에서 20,663.5로
+늘었다.
 
-Seaborn Plugin 실행은 workspace 밖에 설치된 동일 프로젝트의 함수 본문을
-읽었다. evaluator 성공 여부와 별개로 무효 처리했다. 새 workspace에서
-순서를 바꿔 재시험하자 두 arm 모두 unresolved였다.
+### PRD 평가에서는 문서 형식 준수율이 개선됨
 
-무결성 적격 positive와 재현된 positive는 각각 **0건**이다. 첫 네 pair의
-중앙값은 command 17→38, output token 10,274→20,663.5였다.
+GPT‑5.5로 같은 PRD 요청을 세 번 실행했을 때, WIGTN이 정한 문서 형식의
+충족 횟수는 Bare 0/3, Plugin 3/3이었다. 기능 일부를 빼거나 내용 없는
+지침으로 바꾼 비교 실험에서도 플러그인 미사용 조건과 내용 없는 대조
+지침은 0/2, 핵심 기능과 전체 패키지는 2/2였다.
 
-### 4.3 GPT‑5.5: PRD 계약에는 효과가 있었고 코딩 성공률은 같았다
+이 평가에서 확인한 범위는 문서의 전반적인 품질이 아니라 요구사항 ID,
+미결정 항목, 수용 기준 형식처럼 WIGTN이 미리 정한 항목의 준수 여부다.
 
-| 평가 | Bare | Plugin | 해석 |
-|---|---:|---:|---|
-| PRD smoke, 3회 | 0/3 | 3/3 | 명시한 PRD 계약 충족 |
-| PRD package ablation, 2회 | Bare/Placebo 0/2 | Core/Full 2/2 | 길이가 아닌 skill 내용 효과 |
-| uncertain acceptance, 3회 | 3/3 | 3/3 | 동률 |
-| ordinary coding, 3회 | 3/3 | 3/3 | 동률, 쉬운 과제 |
-| 실제 Pytest 구현, 1회 | resolved | resolved | 탐색적 비간섭 |
-
-이 결과는 “좋은 PRD를 쓴다”는 보편적 평가가 아니다. WIGTN Plugin이
-정의한 requirement ID, 결정 항목, acceptance 형식을 더 안정적으로
-생성했다는 뜻이다. 코드 과제에서는 GPT‑5.5도 positive lift가 없었다.
+> **관찰 결과**
+> 선택한 구현 과제에서는 이전 하네스가 추가 성공 없이 비용을 늘렸다.
+> PRD 평가에서는 미리 정한 문서 항목의 준수율이 높아졌다.
 
 ---
 
-## 5. 실험 뒤 무엇을 바꿨나
+## 05 · 설계 개정
 
-### 5.1 구현 경로를 둘로 나눴다
+### 일반 구현 개입 축소와 고위험 작업의 선택적 검증
+
+평가 결과를 반영해 구현 경로를 작업 위험도에 따라 나눴다.
 
 | 경로 | 사용하는 경우 | 실행 범위 |
 |---|---|---|
-| Fast | 국소 변경, 낮은 위험, 저장소 테스트 실행 가능 | inspect → minimal patch → focused test → 관련 suite 1개 |
-| Assurance | auth, schema, persistence, concurrency, migration, 복수 요구사항 | stable ID, invariant, provenance, evidence artifact |
+| Fast(간단 경로) | 국소 변경, 낮은 위험, 저장소 테스트 실행 가능 | 원인 확인 → 최소 수정 → 집중 테스트 → 관련 검사 |
+| Assurance(강화 검증 경로) | 로그인·권한, 데이터 구조, 저장·동시 처리, 데이터 이전, 복수 요구사항 | 요구사항 ID → 위험 조건 → 코드 위치 → 실행 근거 |
 
-Fast path에서는 다음 작업을 하지 않는다.
+Fast 경로에서는 작은 수정에 WorkGraph나 요구사항 표를 만들지 않는다.
+기존 테스트가 같은 동작을 확인할 수 있다면 별도 테스트 환경을 중복해서
+만들지 않고, 관련 검사가 통과하면 이유 없이 검사를 계속 늘리지 않는다.
 
-- 작은 수정에 requirement matrix나 WorkGraph를 만든다.
-- 저장소 테스트가 있는데 같은 happy path를 별도 harness로 다시 만든다.
-- 사용자가 저장·인계를 요청하지 않았는데 evidence JSON을 생성한다.
-- 관련 suite가 통과한 뒤 근거 없이 검사를 계속 추가한다.
+Assurance 경로는 실패 비용이 큰 작업에만 사용한다. 여기서도 많은 절차를
+수행하는 것 자체를 품질로 보지 않는다. 어떤 요구사항이 어떤 코드로
+구현됐고 어떤 검사를 실제로 통과했는지를 연결하는 데 집중한다.
 
-### 5.2 외부 정답 접근과 무한 탐색을 막았다
+WorkGraph는 이 연결을 세션 사이에 보존해야 할 때 쓰는 선택적 상태
+파일이다. 원본 요구사항이나 연결된 산출물이 바뀌면 관련 작업과 검사를
+`stale`, 즉 다시 확인해야 하는 상태로 바꾼다. 일반 코딩 때 자동으로
+생성하지 않고, 사용자가 저장형 계획이나 중단 후 재개를 요청할 때만 쓴다.
 
-- workspace 밖 동일 프로젝트, package cache, gold/reference source를
-  구현 근거로 사용하지 않는다.
-- 여러 file·symbol·interface가 명시된 작업만 편집 전 coverage census를
-  작성한다.
-- 두 diagnostic cycle 동안 새 증거가 없으면 탐색을 넓히지 않는다.
-- reference leakage가 발생하면 evaluator 성공과 관계없이
-  `Not verifiable`로 판정한다.
+완료 판정도 코드 존재 여부만으로 끝내지 않는다. 정확한 코드 위치와 관련된
+성공 테스트가 함께 있어야 `verified`로 기록할 수 있다. 다만 이 기록
+규칙이 실제 Git 명령을 막는 보안 장치는 아니다. commit, push, PR은
+사용자의 현재 요청이 해당 작업을 허용하는지 별도로 확인한다.
 
-### 5.3 개정 후 한 번의 forward-test
-
-같은 Pytest 과제에서 개정한 Plugin을 한 번 실행했다.
-
-| 지표 | 개정 전 Plugin 중앙값 | 개정 후 1회 |
-|---|---:|---:|
-| official resolved | 2/2 | pass |
-| output token | 10,470.5 | 4,466 |
-| command | 23 | 10 |
-
-output token은 57.3%, command는 56.5% 줄었다. 단일 개발 세트 결과라서
-일반화하지 않는다. 개정 방향이 실제 실행에 반영됐는지 확인한
-forward-test로만 사용한다.
+FeatureBench에서 드러난 문제도 제품 규칙에 반영했다. 작업공간 밖의 같은
+프로젝트, 별도 체크아웃, 패키지 캐시, 정답 패치, 숨은 테스트를 구현
+근거로 사용하지 않는다. 이런 접근이 발견되면 테스트 통과와 관계없이
+검증할 수 없는 실행으로 처리한다.
 
 ---
 
-## 6. WIGTN Plugin 0.3.0의 방향
+## 06 · 개정 구조 검증
 
-### 6.1 코딩을 감싸는 하네스에서 제품 계약을 지키는 Plugin으로
+### 일반 코딩 방해 여부 및 WorkGraph 기능 검사
 
-개정 전에는 `verified-delivery`가 구현 과정 전체를 한 경로로 감쌌다.
-0.3.0은 기능을 다음 위치로 옮겼다.
+이전 구현 절차의 비용을 확인한 실험과 현재 제품 구조의 검증을 섞지 않았다.
+구조를 바꾼 뒤에는 일반 코딩을 방해하지 않는지, 선택 기능이 정해진 상태
+규칙을 지키는지를 별도로 검사했다.
 
-```text
-일반 구현·버그 수정
-  └─ Codex native workflow 또는 Fast path
+**일반 코딩 방해 여부.** Python, JavaScript, Ruby로 만든 합성 버그 수정
+12개를 Bare와 현재 전체 기능 구성으로 각각 실행했다. 숨은 테스트는
+양쪽 모두 12/12를 통과했고, 허용 범위 밖 수정과 요청하지 않은
+PRD·WorkGraph·릴리스 상태 생성, 사용자 초안 손실은 모두 0건이었다.
 
-제품 개발 계약이 필요한 작업
-  ├─ Product Spec        요구사항과 결정
-  ├─ Work Planner        task, check, resume, drift
-  ├─ Acceptance Verifier code·executed-test evidence
-  └─ Release Readiness   Git 상태와 실행 권한
-```
+현재 구성의 중앙 출력 토큰은 Bare보다 10.3% 낮고 실행 시간은 18.8%
+높았다. 표본이 작고 실행 순서와 클라우드 지연의 영향을 받으므로 효율
+개선이나 저하의 근거로 사용하지 않는다. 확인된 것은 이 12개 과제에서
+현재 플러그인이 일반 코딩을 무거운 제품 흐름으로 바꾸지 않았다는 점이다.
 
-### 6.2 0.3.0에 추가한 것
+**WorkGraph 생성.** 인증, 여러 고객의 데이터를 분리하는 멀티테넌시,
+데이터 구조 변경, 웹훅 등 12개 격리
+저장소에서 Work Planner를 명시적으로 호출했다. 12개 저장소가 모두 최종
+형식 검사를 통과했고, 출처·요구사항·작업·검사·위험·보호 경로를
+확인한 144개 항목도 모두 통과했다. 실행하지 않은 작업을 완료로 기록하거나
+삭제되면 안 되는 확인용 파일을 잃은 경우는 없었다.
 
-| 영역 | 구현 |
-|---|---|
-| Evidence Contract | 거짓 `verified`, 누락 gap, source drift, 권한 없는 외부 작업을 validator로 차단 |
-| WorkGraph | requirement→task→check 상태, 중단 재개, source hash 변경 시 stale 전파 |
-| Requirement import | WIGTN Plugin PRD뿐 아니라 Spec Kit, OpenSpec, BMAD 형식을 정규화 |
-| Project context | 선택적 `.wigtn/project.json`으로 검증 명령과 보호 경로 공유 |
-| Screen contract | IA·flow·screen·wireframe·handoff의 연결과 requirement anchor 검사 |
-| Release state | branch, upstream, conflict, staged, unstaged, untracked를 mutation 없이 점검 |
-| Evidence inspection | 파일 변경과 hash drift 뒤 기존 완료 판정을 재검사 |
-| 평가 분리 | 정적 계약, model behavior, 외부 benchmark를 별도 suite로 운영 |
+**고정 입력 회귀 검사.** WorkGraph의 생성·변경 전파·형식 이전·명령행
+도구 67개 사례와 완료 판정의 정상·오류 상태, PRD와 화면 명세 형식,
+Git을 변경하지 않는 릴리스 상태 검사, 자연어 요청에 따른
+`verified-delivery` 선택을 각각 확인했다.
 
-이 상태 파일들은 일반 코딩 때 자동 생성되지 않는다. 사용자가 저장형
-계획, 세션 간 재개, 감사 가능한 handoff를 요청했을 때만 사용한다.
-
-### 6.3 제품 메시지
-
-WIGTN Plugin의 제품 메시지는 다음 한 문장으로 제한한다.
-
-> Codex의 구현 능력은 그대로 사용하고, PRD에서 검증과 안전한 Git
-> 릴리스까지 필요한 제품 개발 계약만 추가한다.
-
-“코드를 더 잘 짜게 한다”, “모델 성능을 높인다”, “모든 저장소에서
-품질이 오른다”는 표현은 현재 근거로 사용하지 않는다.
+검증 범위는 플러그인이 정의한 기능 규칙의 동작까지다. Bare Codex와의
+계획 품질 및 일반 코드 품질 비교는 포함하지 않았다.
 
 ---
 
-## 7. 어디까지 믿을 수 있나
+## 07 · 주장 범위와 한계
 
-### 현재 근거가 지지하는 주장
+### 현재 근거가 지지하는 주장과 아직 검증하지 못한 가설
 
-| 주장 | 판정 | 근거 |
+| 주장 | 현재 판정 | 근거 |
 |---|---|---|
-| WIGTN Plugin이 정해진 PRD 계약의 재현성을 높인다 | 제한적으로 지지 | GPT‑5.5 smoke 0/3→3/3, ablation 0/2→2/2 |
-| 일반 코딩의 성공을 크게 망가뜨리지 않는다 | 개발 표본에서 지지 | ordinary gate와 paired bug fix 동률 |
-| 개정 전 heavy workflow는 같은 성공에 비용을 늘렸다 | 선택한 GPT‑5.6 과제에서 지지 | 4/4 tie, token·wall·command 증가 |
-| WIGTN Plugin이 일반 코드 품질을 높인다 | 지지되지 않음 | 유효하고 재현된 positive lift 0 |
-| 모델이 강할수록 항상 하네스를 줄여야 한다 | 미검증 | 두 모델과 작은 표본만 관측 |
+| WIGTN이 정한 PRD 형식의 재현성을 높인다 | 제한적으로 지지 | GPT‑5.5 0/3→3/3, 기능 제거 비교 0/2→2/2 |
+| 현재 구성이 일반 코딩을 불필요한 제품 흐름으로 바꾸지 않는다 | 개발 표본에서 지지 | 합성 과제 12개에서 비간섭 |
+| 이전의 무거운 구현 절차는 같은 성공에 비용을 늘렸다 | 선택한 과제에서 지지 | GPT‑5.6 Sol 4/4 동률, 시간·토큰·명령 증가 |
+| 모델이 좋아질수록 과한 하네스의 추가 효과가 줄어든다 | 설계 가설과 부합 | 강한 모델에서 추가 성공 없이 비용 증가, 세대 변화의 인과관계는 미검증 |
+| WorkGraph와 완료 판정이 정해진 상태 규칙을 지킨다 | 개발 표본에서 지지 | 모델 파일럿과 고정 입력 회귀 검사 |
+| WIGTN이 일반 코드 품질을 높인다 | 지지되지 않음 | 무결하고 반복 가능한 개선 사례 0건 |
+| 모든 저장소와 모델에서 같은 결과가 나온다 | 확인하지 않음 | 모델·언어·과제 수가 제한적 |
 
-### 한계
+현재 근거로 “모델이 좋아질수록 모든 하네스가 반드시 쓸모없어진다”거나
+“플러그인을 쓰면 Codex가 코드를 더 잘 짠다”, “모든 작업에서 시간과
+토큰이 줄어든다”라고 말할 수 없다. 일부 원시 실행 패킷도 아직 영구
+저장소에 공개되지 않아, 이 자료를 완전한 제3자 재현 패키지라고 부르지
+않는다.
 
-- SWE-bench 주효과는 Python bug fix 두 과제, 네 pair다.
-- FeatureBench 파일럿은 네 과제이며 positive lift가 없다.
-- GPT‑5.5 실제 저장소 복제는 한 과제, 한 반복이다.
-- 독립 oracle 감사자와 blind human reviewer 수가 부족하다.
-- 프론트엔드, 데이터베이스, 대규모 migration 결과는 없다.
-- 0.3.0 개정 후 외부 holdout 반복은 아직 완료하지 않았다.
+가장 강하게 말할 수 있는 결론은 다음과 같다.
 
-현재 가장 강하게 말할 수 있는 결과는 다음과 같다.
-
-> 선택한 GPT‑5.6 Sol bug fix에서 개정 전 WIGTN Plugin은 성공률을
-> 바꾸지 않고 비용을 늘렸다. 이 결과를 반영해 일반 구현 절차를 줄이고
-> 제품별 계약과 검증·릴리스 경계에 기능을 집중했다.
-
----
-
-## 8. 다음 검증
-
-| 우선순위 | 평가 | 종료 조건 |
-|---|---|---|
-| P0 | 개정 후 fresh holdout 20 task | 5개 이상 repo, task당 3회, reference source 격리 |
-| P0 | Fast/Assurance routing 10 task | 잘못된 Assurance 호출 0, median output overhead ≤25% |
-| P1 | GPT‑5.5 실제 저장소 복제 | 2개 과제×2회, 순서 교차 |
-| P1 | 독립 oracle 감사 | 포함·제외 합의 κ≥0.7 |
-| P1 | blind patch review | arm을 숨긴 reviewer 2인 이상 |
-| P2 | PRD→implementation 12 feature | 요구사항 누락, clarification, rework 측정 |
-| P2 | release state 60 fixture | 권한 없는 mutation 0 |
-| P2 | cross-platform | macOS/Linux와 fresh install 재현 |
-
-fresh holdout이 끝나기 전에는 일반 코드 품질 향상을 제품 주장으로 쓰지
-않는다. 0.3.0 릴리스의 합격 기준은 코드 lift가 아니라 다음 세 가지다.
-
-1. 일반 코딩 요청에서 불필요한 heavy workflow를 호출하지 않는다.
-2. 저장형 제품 계약의 drift와 거짓 완료 판정을 결정론적으로 막는다.
-3. commit, push, PR은 사용자가 부여한 권한 안에서만 실행한다.
+> 선택한 GPT‑5.6 Sol 버그 수정 과제에서 이전의 무거운 하네스는 성공률을
+> 바꾸지 않고 비용을 늘렸다. 이 결과를 바탕으로 일반 구현 제어를
+> 축소했다. 모델의 기본 구현 흐름은 그대로 두고, 프로젝트마다 정해야 하는
+> 요구사항·검증·릴리스 규칙에 플러그인의 역할을 집중했다.
 
 ---
 
-## 9. 재현 자료
+## 08 · 후속 평가
 
-- [외부 평가 프로토콜](EXTERNAL-EVAL-PROTOCOL-2026-07-28-KO.md)
-- [SWE-bench machine-readable protocol](../tests/external/protocol-2026-07-28.json)
-- [SWE-bench 결과와 제외 기록](../tests/external/swe-bench-verified/results-2026-07-28.json)
-- [FeatureBench 사전 프로토콜](FEATUREBENCH-LIFT-PROTOCOL-2026-07-28-KO.md)
-- [FeatureBench 파일럿과 leakage 감사](FEATUREBENCH-LIFT-PILOT-2026-07-28-KO.md)
-- [FeatureBench 결과](../tests/external/featurebench/results-2026-07-28.json)
+### 현재 선택적 구조의 외부 과제 검증 계획
+
+다음 외부 평가는 이전의 무거운 하네스가 아니라 현재의 선택적 구조를
+대상으로 한다. 이후 모델 세대에서도 같은 평가를 반복해, 모델 능력이
+달라질 때 적정 하네스의 범위가 실제로 어떻게 변하는지도 추적한다.
+
+1. 최소 다섯 개 저장소의 새 외부 과제 20개를 과제당 세 번 실행하고,
+   정답 소스와 패키지 캐시를 파일시스템 수준에서 격리한다.
+2. 작업 열 개에서 Fast와 Assurance 선택이 적절한지 확인하고, 불필요하게
+   Assurance를 선택한 경우 0건과 출력 비용 중앙값 증가 25% 이하를
+   종료 조건으로 둔다.
+3. PRD에서 구현까지 이어지는 기능 12개에서 요구사항 누락, 추가 질문,
+   재작업을 측정하고, 릴리스 상태 60개에서 권한 없는 Git 변경 0건을
+   확인한다.
+
+새 외부 과제 평가가 끝나기 전에는 일반 코드 품질 향상을 제품 문구로
+사용하지 않는다. 현재 제품의 합격 기준은 일반 코딩을 불필요하게
+무겁게 만들지 않는 것, 실행 근거가 없을 때 완료로 기록하지 않는 것,
+저장소 변경을 사용자가 요청한 범위 안에서만 실행하는 것이다.
+
+---
+
+## 09 · 평가 및 감사 자료
+
+- [외부 평가 프로토콜](https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/docs/EXTERNAL-EVAL-PROTOCOL-2026-07-28-KO.md)
+- [SWE-bench machine-readable protocol](https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/tests/external/protocol-2026-07-28.json)
+- [SWE-bench 결과와 제외 기록](https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/tests/external/swe-bench-verified/results-2026-07-28.json)
+- [FeatureBench 사전 프로토콜](https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/docs/FEATUREBENCH-LIFT-PROTOCOL-2026-07-28-KO.md)
+- [FeatureBench 파일럿과 정답 소스 접근 감사](https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/docs/FEATUREBENCH-LIFT-PILOT-2026-07-28-KO.md)
+- [FeatureBench 결과](https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/tests/external/featurebench/results-2026-07-28.json)
+- [일반 코딩 비간섭 평가](https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/docs/ORDINARY-NONINTERFERENCE-GATE-2026-07-28-KO.md)
+- [WorkGraph 기능 평가](https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/docs/WORKGRAPH-PILOT-2026-07-28-KO.md)
+- [선택적 하네스 후속 연구](https://github.com/wigtn/wigtn-plugins-codex/blob/14ac417c42b6196e6ef2ab3116701828dc9cea4c/docs/RESEARCH-ROUND2-2026-07-28-KO.md)
 - [SWE-bench evaluation reference](https://www.swebench.com/SWE-bench/reference/harness/)
-- [Anthropic, Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)
+- [Anthropic, Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents/)
 - [OpenAI, Separating signal from noise in coding evaluations](https://openai.com/index/separating-signal-from-noise-coding-evaluations/)
 - [Claw-SWE-Bench](https://arxiv.org/abs/2606.12344)
+
+이 자료는 평가 조건과 결과를 확인할 수 있도록 프로토콜, 요약 결과,
+검사 코드를 연결한다. 공개 범위와 재현 한계는 위 한계 절에 함께 적었다.
