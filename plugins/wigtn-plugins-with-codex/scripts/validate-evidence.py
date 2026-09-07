@@ -13,7 +13,7 @@ from typing import Any
 
 PLUGIN_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCHEMA = PLUGIN_ROOT / "schemas" / "evidence-contract.schema.json"
-REQUIREMENT_ID = re.compile(r"^[A-Z][A-Z0-9_-]*-[0-9]{2,}$")
+REQUIREMENT_ID = re.compile(r"^[A-Z][A-Z0-9_]*(?:-[A-Z0-9_]+)+$")
 CHECK_ID = re.compile(r"^CHK-[0-9]{2,}$")
 ARTIFACT_TYPES = {"product-spec", "acceptance", "delivery", "release"}
 REQUIREMENT_STATUSES = {

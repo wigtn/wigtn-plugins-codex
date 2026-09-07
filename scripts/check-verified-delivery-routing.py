@@ -30,7 +30,7 @@ def main() -> int:
         "native oracle non-duplication": "Do not duplicate a passing repository oracle",
         "no default state": "Do not create stable IDs, WorkGraph state, or evidence JSON by default",
         "multi-interface census": "Use a compact coverage census",
-        "reference isolation": "Do not inspect or copy another checkout",
+        "evaluation isolation": "For benchmark or independent evaluation work",
         "leakage invalidates evidence": "A clean evaluator pass does not",
         "matrix suppression": "Do not manufacture a matrix for a one-line fix",
     }

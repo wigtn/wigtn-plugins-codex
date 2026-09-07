@@ -11,7 +11,7 @@ Create a legible diagram whose text survives rendering, including Korean and mix
 
 1. Confirm the system boundary, groups, flow direction, and output location from context. Keep the smallest useful node set.
 2. Author Mermaid with `look: handDrawn`, quoted labels, concise accessible title and description, and semantic colors.
-3. Prefer a repository-installed or already available Mermaid CLI and record `mmdc --version`. Never run a floating `npx -y` download. If no renderer exists, request approval before any exact-version network installation.
+3. Prefer a repository-installed or already available Mermaid CLI and record `mmdc --version`. Never run a floating `npx -y` download. If no renderer exists, use existing authorization for an exact-version installation; ask only if that installation is outside the authorized scope.
 4. Render both SVG and PNG using the [render guide](references/rendering.md).
 5. Run `python3 scripts/verify-artifacts.py <source.mmd> <diagram.svg> <diagram.png>` from this skill directory.
 6. Inspect the PNG visually. Check clipped Korean/English labels, overlaps, contrast, arrow direction, and group meaning. Revise and rerender until legible.

@@ -39,6 +39,7 @@ python3 <plugin-root>/scripts/wigtn.py --json import docs/prd.md
 python3 <plugin-root>/scripts/wigtn.py --json import docs/prd.md --apply
 python3 <plugin-root>/scripts/wigtn.py --json plan
 python3 <plugin-root>/scripts/wigtn.py --json plan --apply
+python3 <plugin-root>/scripts/wigtn.py --json inspect
 python3 <plugin-root>/scripts/wigtn.py --json status
 python3 <plugin-root>/scripts/wigtn.py --json next
 python3 <plugin-root>/scripts/wigtn.py --json diff --check
@@ -54,10 +55,20 @@ python3 <plugin-root>/scripts/wigtn.py --json task depend TASK-ID \
 python3 <plugin-root>/scripts/validate-workgraph.py .wigtn/workgraph.json
 ```
 
+`inspect` validates WorkGraph/project/evidence, reports a drift-adjusted view,
+and lists eligible tasks without writing files or executing saved commands.
+It does not prove evidence is truthful or tests still pass. On invalid/missing
+artifacts it returns nonzero and withholds eligible tasks. `status`/`next` are
+raw saved-state queries; use `inspect` when freshness matters.
+
 Mutation commands are dry-run unless `--apply` is present. Repeating an
 unchanged import, plan, or drift application must not advance the revision.
 Use `--expected-revision <n>` on task mutations when another process could
-change the graph. A mismatch fails instead of overwriting newer work. Adding an
+change the graph. CLI writes hold an OS advisory lock across read, revision check, and save.
+A mismatch fails instead of overwriting newer CLI work. Direct file editors
+do not participate in that lock. The persistent `.wigtn/.write.lock` file
+is coordination state, not a completion artifact; do not remove it while
+writers may be active. Adding an
 unverified dependency automatically returns a `ready` task to `draft`.
 
 ## Planning quality

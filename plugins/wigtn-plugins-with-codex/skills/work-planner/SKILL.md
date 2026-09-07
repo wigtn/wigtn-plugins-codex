@@ -5,52 +5,35 @@ description: Save requirements as a resumable dependency-aware WIGTN WorkGraph w
 
 # Work Planner
 
-Create an implementation plan whose IDs, dependencies, checks, and source
-freshness can be validated. Planning does not authorize implementation or Git
-actions.
+Save a resumable plan whose requirement IDs, dependencies, executable checks,
+and source freshness can be validated. Use the smallest useful graph; ordinary
+conversation does not need lifecycle files.
 
 ## Workflow
 
-1. Read repository instructions and the authoritative PRD, issue, screen spec,
-   or acceptance criteria. Preserve existing requirement IDs.
-2. If `.wigtn/project.json` exists, validate it. If `.wigtn/workgraph.json`
-   exists, run `wigtn.py doctor` and `wigtn.py diff --check` before trusting its
-   status.
-3. For a requested persistent or cross-session plan, show the `init` or
-   `import` dry-run first, then apply it. Do not create lifecycle state for a
-   conversational plan unless the user requests a saved plan or continuing
-   workflow.
-4. Create one task per independently verifiable change, not automatically one
-   task per file. Link every task to at least one requirement. Record intended
-   paths, protected paths, risk, executable checks, artifacts, and real
-   dependencies. Use `wigtn.py task update` and `wigtn.py task depend` with
-   dry-run then `--apply`; do not edit WorkGraph JSON directly when these
-   commands cover the change.
-5. Keep tasks `draft` until their scope and checks are concrete. Mark `ready`
-   only when all dependencies are `verified`. Use `blocked` only with a
-   specific blocker.
-6. Run the WorkGraph validator. Return the next unblocked task IDs, unresolved
-   planning gaps, and validation result.
+- Read authoritative requirements and preserve their IDs. For existing state,
+  use `python3 ../../scripts/wigtn.py --root <repository> --json inspect`
+  from this skill directory. It returns validated state, source drift, and
+  currently eligible tasks in one read-only call. Reinspect after relevant
+  changes or when the result is incomplete; do not repeat unchanged queries.
+- Use [WorkGraph contract](references/workgraph-contract.md) for CLI commands
+  and state semantics. Mutations require `--apply`; preview when the scope or
+  effect is uncertain, rather than duplicating every already-decided command.
+- Define tasks by independently verifiable outcomes. Link requirements,
+  dependencies, intended/protected paths, and relevant checks. Unknown test
+  commands remain unknown, not invented. A seed plan is editable, not a fixed
+  one-task-per-requirement prescription.
+- Use CLI task mutations where supported; preserve concurrent changes with
+  `--expected-revision` when needed. Keep incomplete task definitions `draft`.
+  Only tasks whose dependencies are verified may be `ready`.
 
-Use [the WorkGraph contract](references/workgraph-contract.md) for state
-semantics and commands.
+## State and completion
 
-## Rules
+Source drift invalidates linked artifacts, tasks, checks, and release gates.
+Do not preserve old `verified` claims or grant verification from a plan alone.
+Executed checks and valid evidence are required; a ready release gate does
+not grant Git or deployment permission. Continue other work already authorized.
 
-- Treat source drift as invalidation, not as a documentation warning.
-- Never preserve `verified` after a linked requirement, artifact, dependency,
-  or check becomes stale.
-- Do not mark a task `verified`; only executed evidence handled by
-  `acceptance-verifier` or an explicit delivery workflow may do that.
-- Keep release authority outside task status. A ready release gate does not
-  authorize commit, push, pull request, or deploy.
-- Prefer the smallest dependency graph that preserves real ordering. Do not add
-  ceremonial tasks or dependencies.
-- Do not execute implementation, install dependencies, commit, push, or mutate
-  remote systems.
-
-## Completion
-
-Return the WorkGraph path when saved, its revision, created or changed task
-IDs, next task IDs, source-drift status, and validator result. State explicitly
-when commands or intended paths remain unspecified.
+Return the saved path, revision, actionable next tasks, and unresolved gaps.
+A successful mutation validates graph structure; inspect again when source
+freshness or other saved artifacts may have changed.

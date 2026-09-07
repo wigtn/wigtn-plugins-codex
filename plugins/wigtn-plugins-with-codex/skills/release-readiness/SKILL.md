@@ -27,10 +27,13 @@ When wording is ambiguous about a consequential mutation, stop before that mutat
    status. A ready gate is prerequisite evidence, not permission for Git or
    remote actions.
 1. Read repository instructions. Run
-   `python3 ../../scripts/inspect-release-state.py <repository>` from this skill
-   directory to capture branch, upstream, operations, conflicts, staged,
-   unstaged, and untracked paths without mutation. Then inspect the relevant
-   staged and unstaged diffs.
+   `python3 ../../scripts/inspect-release-state.py <repository> --include-diffs`
+   from this skill directory to capture branch, upstream, operations,
+   conflicts, paths, bounded staged/unstaged patches, and whitespace checks in
+   one read-only call. Do not read untracked file contents automatically. If a
+   patch is marked `truncated`, inspect only the relevant paths needed for the
+   requested scope; otherwise use the collected patches instead of repeating
+   Git diff commands.
 2. Separate task changes from pre-existing or unrelated user work. Never silently include unrelated files.
 3. Review for correctness, regression, security, and missing tests. Findings need severity, confidence, file/line, and impact.
 4. Run relevant repository-defined verification. Record exact commands and results.

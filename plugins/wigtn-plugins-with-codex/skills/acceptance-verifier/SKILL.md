@@ -1,43 +1,37 @@
 ---
 name: acceptance-verifier
-description: Verify PRD requirements or acceptance criteria against code and executed tests. Use for “요구사항 반영됐는지 검증”, PRD coverage, or acceptance verification. Do not use for general code review or when no requirements can be identified.
+description: Verify requirements against inspectable code and tests with canonical evidence statuses. Use for PRD coverage or acceptance verification. For evidence-only chat without inspectable code or tests, answer directly without invoking. Do not use for general code review or when no requirements can be identified.
 ---
 
 # Acceptance Verifier
 
-Produce a read-only requirement matrix unless the user also asks to fix gaps.
+Compare authoritative requirements with code and executed checks; fix gaps only
+when requested. Preserve source IDs and the user's output schema.
 
-## Workflow
+## Evidence
 
-1. Locate the authoritative PRD, acceptance criteria, issue, or user-provided
-   requirements. Treat WIGTN, Spec Kit, OpenSpec, and BMAD documents as inputs,
-   not workflows that must be replayed.
-2. Identify the requested comparison: working tree, commit, branch, PR, or
-   named files. If `.wigtn/project.json` or `.wigtn/workgraph.json` exists,
-   validate it before trusting sources or status; source drift is a gap.
-3. Preserve stable requirement IDs. If none exist, create temporary `AC-01`
-   IDs and label them local to the report.
-4. Inspect implementation and tests. Run the smallest relevant
-   repository-defined checks when authorized and feasible.
-5. Read [evidence matrix](references/evidence-matrix.md), then assign exactly
-   one canonical status per requirement. Cite precise code lines, exact
-   commands, exits, and relevant test names. Never infer that an unexecuted or
-   irrelevant check passed.
-6. Put findings outside the requirement set under `Out-of-scope findings`.
+- Inspect relevant implementation and run proportionate checks. Cite code
+  locations, commands, outcomes, and what remains unobserved.
+- Use one canonical status per requirement: `verified`,
+  `implemented-not-executed`, `partially-verified`, `not-satisfied`,
+  `not-verifiable`, or `not-applicable`.
+- A demonstrated requirement violation is `not-satisfied`, even if other
+  examples pass. `partially-verified` requires a demonstrated subclaim,
+  unresolved subclaims, and no demonstrated violation. Missing evidence alone
+  is not a failure. Read [evidence matrix](references/evidence-matrix.md) for
+  compound claims, contradictory/flaky checks, or external actions.
+- If saved WorkGraph state is relevant, run
+  `python3 ../../scripts/wigtn.py --root <repository> --json inspect`
+  from this skill directory. It validates saved artifacts and previews drift
+  without mutation. Source changes invalidate old completion evidence.
 
 ## Output
 
-| Requirement | Status | Code evidence | Test evidence | Gap |
-|---|---|---|---|---|
+Return the requested report with requirement, status, evidence, and gap.
+Keep unrelated findings separate. Use a file-edit/patch tool when saving
+reports with command examples to avoid nested shell heredoc collisions.
 
-Use the canonical status value in every row. For insufficient evidence, write
-`not-verifiable`; a localized label may follow but must not replace it. A
-missing test does not automatically mean the requirement failed.
-
-Do not create state for an ordinary verification answer. For a requested saved
-artifact, existing `.wigtn/evidence.json`, cross-session handoff, or explicit
-Spec Kit/OpenSpec/BMAD import, read [saved evidence](references/saved-evidence.md).
-
-Finish with executed commands, limitations, prioritized gaps, and any saved
-artifact validation result. Do not change a WorkGraph task to `verified`
-unless its current linked check passed and a valid evidence reference exists.
+Custom JSON needs no WIGTN schema. Read
+[saved evidence](references/saved-evidence.md) only for a requested WIGTN
+handoff or WorkGraph verification. A task becomes `verified` only with its
+current linked passing check and a valid evidence reference.

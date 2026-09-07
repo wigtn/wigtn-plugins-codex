@@ -1,0 +1,3 @@
+# case_id	prompt_path
+prd-create	tests/behavior/prompts/prd-create.txt
+acceptance-uncertain	tests/behavior/prompts/acceptance-uncertain.txt

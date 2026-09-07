@@ -9,6 +9,8 @@ import re
 import sys
 import csv
 
+from codex_usage import read_events
+
 
 FORBIDDEN_IA_HEADINGS = re.compile(
     r"^#{1,6}\s*(?:user flow|사용자 흐름|screen spec|화면 명세|"
@@ -59,6 +61,12 @@ def quality_failures(arm: str, case: str, output: str) -> list[str]:
 
 
 def total_tokens(path: Path) -> int | None:
+    events_path = path.with_name(path.name.replace(".log", ".events.jsonl"))
+    if events_path.is_file():
+        try:
+            return int(read_events(events_path)["output_tokens"])
+        except ValueError:
+            return None
     text = path.read_text(encoding="utf-8", errors="ignore")
     matches = re.findall(r"tokens used\s*\n([\d,]+)", text, re.IGNORECASE)
     return int(matches[-1].replace(",", "")) if matches else None
@@ -95,6 +103,15 @@ def main(root_arg: str) -> int:
         nonempty = bool(output.strip())
         log_path = meta_path.with_name(meta_path.name.replace(".meta.json", ".log"))
         tokens = total_tokens(log_path)
+        events_path = meta_path.with_name(
+            meta_path.name.replace(".meta.json", ".events.jsonl")
+        )
+        tool_items = None
+        if events_path.is_file():
+            try:
+                tool_items = int(read_events(events_path)["tool_items"])
+            except ValueError as error:
+                errors.append(str(error))
         row_key = (meta["arm"], meta["case"], meta["repeat"])
         if row_key in observed:
             errors.append(f"duplicate run metadata: {row_key}")
@@ -128,6 +145,11 @@ def main(root_arg: str) -> int:
                 f"exit={meta['exit_code']}, nonempty={nonempty}"
             )
         token_by_run[row_key] = tokens
+        if meta["case"] in {"acceptance-uncertain", "ia-only"} and tool_items:
+            errors.append(
+                f"{meta['arm']}/{meta['case']}.{meta['repeat']}: "
+                f"prompt prohibited commands but observed {tool_items} tool item(s)"
+            )
         for failure in quality_failures(meta["arm"], meta["case"], output):
             errors.append(
                 f"{meta['arm']}/{meta['case']}.{meta['repeat']}: {failure}"
@@ -161,7 +183,7 @@ def main(root_arg: str) -> int:
         "token gate. It does not establish causal plugin lift or real-repository "
         "generalization.",
         "",
-        "| Pair | Order | Arm | Case | Repeat | Exit | Output | Total tokens | Output bytes | Duration |",
+        "| Pair | Order | Arm | Case | Repeat | Exit | Output | Output tokens | Output bytes | Duration |",
         "|---|---:|---|---|---:|---:|---|---:|---:|---:|",
     ]
     report.extend(

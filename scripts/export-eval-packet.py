@@ -11,7 +11,7 @@ import re
 import shutil
 
 
-ALLOWED_SUFFIXES = {".json", ".log", ".md", ".patch", ".txt", ".csv"}
+ALLOWED_SUFFIXES = {".json", ".jsonl", ".log", ".md", ".patch", ".txt", ".csv"}
 EXCLUDED_PARTS = {"homes", "home", "work", "staging", "prompt-input"}
 SECRET = re.compile(
     r"(?i)(authorization:\s*bearer\s+|api[_-]?key[\"'=:\s]+|token[\"'=:\s]+)"

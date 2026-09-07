@@ -13,11 +13,14 @@ from typing import Iterable
 
 
 FORMATS = {"auto", "wigtn", "spec-kit", "openspec", "bmad", "generic"}
-STABLE_ID = re.compile(r"^[A-Z][A-Z0-9_-]*-[0-9]{2,}$", re.I)
+# Symbolic IDs are uppercase labels; legacy numeric IDs remain case-insensitive.
+# Anchor labels to the start and require a text separator to avoid extracting
+# references inside prose or splitting an ID into an ID plus requirement text.
+ID_TOKEN = r"(?:[A-Z][A-Z0-9_]*(?:-[A-Z0-9_]+)+|(?i:[A-Z][A-Z0-9_]*(?:-[A-Z0-9_]+)*-[0-9]{2,}))"
+STABLE_ID = re.compile(rf"^{ID_TOKEN}$")
 INLINE_ID = re.compile(
-    r"(?:\*\*|`)?(?P<id>[A-Z][A-Z0-9_-]*-[0-9]{2,})(?:\*\*|`)?"
-    r"\s*(?::|[-–—])?\s*(?P<text>.+)",
-    re.I,
+    rf"^(?:\*\*|`)?(?P<id>{ID_TOKEN})(?:\*\*|`)?"
+    r"(?:\s*[:–—]\s*|\s+-\s+|\s+)(?P<text>\S.*)$"
 )
 
 
@@ -59,11 +62,15 @@ def explicit_requirements(text: str) -> list[tuple[str, str]]:
     for line in text.splitlines():
         stripped = line.strip()
         if stripped.startswith("|"):
-            cells = [clean_text(cell) for cell in stripped.strip("|").split("|")]
-            if len(cells) >= 2 and STABLE_ID.fullmatch(cells[0]):
-                results.append((cells[0].upper(), cells[1]))
+            cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+            label = re.sub(r"^(\*\*|__|\*|_|`)(.+)\1$", r"\2", cells[0])
+            if len(cells) >= 2 and STABLE_ID.fullmatch(label):
+                results.append((label.upper(), clean_text(cells[1])))
                 continue
-        match = INLINE_ID.search(stripped.lstrip("#-+ 0123456789."))
+        # Remove Markdown structure, not arbitrary prose before a requirement.
+        label_line = re.sub(r"^(?:#{1,6}\s+|(?:[-*+]|\d+[.)])\s+)", "", stripped)
+        label_line = re.sub(r"^\[[ xX]\]\s+", "", label_line)
+        match = INLINE_ID.search(label_line)
         if match:
             results.append(
                 (match.group("id").upper(), clean_text(match.group("text")))
@@ -131,7 +138,7 @@ def derived_acceptance(
         requirement = clean_text(match.group(1))
         if not requirement or set(requirement) <= {"-", ":"}:
             continue
-        explicit = INLINE_ID.search(requirement)
+        explicit = INLINE_ID.search(match.group(1).strip())
         if explicit:
             requirement_id = explicit.group("id").upper()
             requirement = clean_text(explicit.group("text"))

@@ -1,7 +1,8 @@
 # Saved acceptance evidence
 
-Use only for an explicitly requested machine-readable artifact, an existing
-`.wigtn/evidence.json`, or a cross-session handoff. First read the shared
+Use for WIGTN-format evidence or WorkGraph verification. A user-defined
+report schema is sufficient when no WIGTN state is requested or present.
+For WIGTN evidence, read the shared
 [Evidence Contract](../../../references/evidence-contract.md).
 
 For a new imported handoff, run from the target repository root:

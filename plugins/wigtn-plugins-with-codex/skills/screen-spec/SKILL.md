@@ -35,16 +35,24 @@ Do not produce or propose the other artifacts merely because the skill loaded.
 3. Read only the selected templates in `assets/templates/` and their dependency
    templates. Treat placeholders as shape, never as product facts.
 4. Keep page IDs, roles, routes, states, requirements, and wireframe anchors
-   consistent across the artifacts that exist.
+   consistent across the artifacts that exist. Before validation, ensure every
+   `FR-`, `REQ-`, or `AC-` ID used by screen or handoff also appears in IA.
 5. For screen, wireframe, or handoff, read the compact
    [state contract](references/state-contract.md). For handoff, also read the
    [handoff contract](references/handoff-contract.md).
 6. Keep wireframes grayscale with semantic status colors and one self-contained
    responsive HTML file. If browser control is available, inspect wide and
    narrow layouts, overflow, labels, and links.
-7. Run from this skill directory:
+7. Before validation, replace every template token written as `{...}`. Use
+   colon-prefixed route parameters such as `:organizationId` or `:email`
+   instead of braces so real routes are not mistaken for template residue.
+   Run once from this skill directory:
 
-   `python3 ../../scripts/validate-screen-spec.py <directory> --artifacts <selection|all>`
+   `python3 ../../scripts/validate-screen-spec.py <directory> --artifacts ia,screen --json`
+
+   Replace `ia,screen` with the comma- or space-separated selected closure, or
+   `all`. Use the documented command directly; consult `--help` if the installed
+   interface differs. Rerun after a relevant correction or new evidence.
 
 8. Return file links and deterministic plus visual results without pasting the
    full bundle into chat.

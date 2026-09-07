@@ -3,11 +3,15 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cases_file="$repo_root/tests/behavior/cases.tsv"
-model="${WIGTN_EVAL_MODEL:-gpt-5.6-sol}"
+model="${WIGTN_EVAL_MODEL:-gpt-6-astra}"
 effort="${WIGTN_EVAL_EFFORT:-medium}"
 repeat="${WIGTN_EVAL_REPEAT:-1}"
 run_root="${WIGTN_EVAL_ROOT:-/tmp/wigtn-codex-behavior-eval-$model}"
 seed="${WIGTN_EVAL_SEED:-behavior-smoke-v1}"
+input_rate="${WIGTN_INPUT_USD_PER_M:-}"
+cached_input_rate="${WIGTN_CACHED_INPUT_USD_PER_M:-}"
+cache_write_rate="${WIGTN_CACHE_WRITE_USD_PER_M:-}"
+output_rate="${WIGTN_OUTPUT_USD_PER_M:-}"
 auth_file="${CODEX_AUTH_FILE:-$HOME/.codex/auth.json}"
 
 if [[ -n "${CODEX_BIN:-}" ]]; then
@@ -34,6 +38,16 @@ Behavior smoke plan (no model calls made)
 Run with: scripts/run-behavior-evals.sh --execute
 EOF
   exit 0
+fi
+
+pricing_args=()
+if [[ -n "$input_rate$cached_input_rate$cache_write_rate$output_rate" ]]; then
+  [[ -n "$input_rate" && -n "$cached_input_rate" && -n "$cache_write_rate" && -n "$output_rate" ]] || {
+    echo "Set all four WIGTN pricing rates or leave all unset" >&2
+    exit 2
+  }
+  pricing_args=(--input-per-million "$input_rate" --cached-input-per-million "$cached_input_rate"
+    --cache-write-per-million "$cache_write_rate" --output-per-million "$output_rate")
 fi
 
 [[ "$repeat" =~ ^[1-9][0-9]*$ ]] || {
@@ -109,11 +123,15 @@ PY
   printf 'codex_cli=%s\n' "$("$codex_bin" --version)"
   printf 'model=%s\neffort=%s\nrepetitions=%s\n' "$model" "$effort" "$repeat"
   printf 'schedule_seed=%s\n' "$seed"
+  printf 'input_usd_per_m=%s\ncached_input_usd_per_m=%s\n' "$input_rate" "$cached_input_rate"
+  printf 'cache_write_usd_per_m=%s\noutput_usd_per_m=%s\n' "$cache_write_rate" "$output_rate"
   (
     cd "$repo_root"
     shasum -a 256 \
       scripts/run-behavior-evals.sh \
       scripts/make-eval-schedule.py \
+      scripts/codex_usage.py \
+      scripts/summarize-token-efficiency.py \
       scripts/score-behavior-smoke.py \
       "$run_root/SCHEDULE.tsv" \
       tests/behavior/cases.tsv \
@@ -139,8 +157,8 @@ run_one() {
     -a never -m "$model" -c "model_reasoning_effort=\"$effort\"" \
     -s read-only -C "$run_root/$arm-work" \
     exec --ephemeral --ignore-rules --skip-git-repo-check \
-    -o "$stem.out.md" - < "$repo_root/$prompt_path" \
-    > "$stem.log" 2>&1
+    --json -o "$stem.out.md" - < "$repo_root/$prompt_path" \
+    > "$stem.events.jsonl" 2> "$stem.log"
   rc=$?
   set -e
 
@@ -182,5 +200,8 @@ while IFS=$'\t' read -r pair_id order arm case_id prompt_path rep_index; do
   run_one "$pair_id" "$order" "$arm" "$case_id" "$prompt_path" "$rep_index"
 done < "$run_root/SCHEDULE.tsv"
 
+env PYTHONDONTWRITEBYTECODE=1 python3 \
+  "$repo_root/scripts/summarize-token-efficiency.py" "$run_root" \
+  "${pricing_args[@]}"
 env PYTHONDONTWRITEBYTECODE=1 python3 \
   "$repo_root/scripts/score-behavior-smoke.py" "$run_root"

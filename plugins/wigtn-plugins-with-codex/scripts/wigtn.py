@@ -13,6 +13,7 @@ from typing import Any
 from workgraph_core import (
     atomic_write_json,
     empty_graph,
+    graph_write_lock,
     inspect_drift,
     merge_import,
     plan_graph,
@@ -153,7 +154,7 @@ def run_importer(root: Path, sources: list[Path]) -> dict[str, Any]:
 def command_import(args: argparse.Namespace) -> int:
     root = root_path(args)
     graph = require_graph(root)
-    sources = [path.resolve() for path in args.sources]
+    sources = [(root / path).resolve() for path in args.sources]
     for source in sources:
         repository_relative(source, root)
         if not source.is_file():
@@ -181,11 +182,21 @@ def command_import(args: argparse.Namespace) -> int:
 def command_plan(args: argparse.Namespace) -> int:
     root = root_path(args)
     graph = require_graph(root)
-    project = (
-        read_json(project_path(root))
-        if project_path(root).is_file()
-        else default_project()
-    )
+    context = project_path(root)
+    if context.is_file():
+        validation = subprocess.run(
+            [sys.executable, str(SCRIPT_DIR / "validate-project-context.py"),
+             str(context), "--json"],
+            text=True, capture_output=True, check=False,
+        )
+        if validation.returncode:
+            raise ValueError(
+                "invalid project context: "
+                + (validation.stdout.strip() or validation.stderr.strip())
+            )
+        project = read_json(context)
+    else:
+        project = default_project()
     updated = plan_graph(
         graph,
         verification_commands=list(project.get("verification_commands", [])),
@@ -278,6 +289,43 @@ def command_doctor(args: argparse.Namespace) -> int:
     return 1 if issues else 0
 
 
+def command_inspect(args: argparse.Namespace) -> int:
+    """Read-only validated, drift-adjusted view; never execute saved commands."""
+    root = root_path(args)
+    graph = require_graph(root)
+    current, drift = inspect_drift(graph, root)
+    validations = {}
+    for label, path, script in (
+        ("project", project_path(root), "validate-project-context.py"),
+        ("evidence", evidence_path(root), "validate-evidence.py"),
+    ):
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT_DIR / script), str(path)],
+            text=True, capture_output=True, check=False,
+        )
+        validations[label] = {
+            "valid": result.returncode == 0,
+            "exit_code": result.returncode,
+            "details": result.stdout + result.stderr,
+        }
+    valid = all(item["valid"] for item in validations.values())
+    current_summary = summary(current)
+    if not valid:
+        current_summary["next_task_ids"] = []
+    emit({
+        "operation": "inspect", "read_only": True,
+        "valid_artifacts": valid, "fresh": not drift,
+        "validations": validations, "source_drift": drift,
+        "summary": current_summary, "sources": current["sources"],
+        "requirements": current["requirements"],
+        "tasks": current["tasks"], "checks": current["checks"],
+        "release_gates": current["release_gates"],
+        "next_tasks": ready_tasks(current) if valid else [],
+        "verification_boundary": "Saved evidence validity is structural, not proof of executed behavior. Commands are not executed. Drift is previewed, not persisted.",
+    }, args.json)
+    return 0 if valid and not drift else 1
+
+
 def command_task_update(args: argparse.Namespace) -> int:
     root = root_path(args)
     graph = require_graph(root)
@@ -346,7 +394,7 @@ def parser() -> argparse.ArgumentParser:
     init.add_argument("--apply", action="store_true")
     init.set_defaults(handler=command_init)
     import_command = commands.add_parser("import")
-    import_command.add_argument("sources", nargs="+", type=Path)
+    import_command.add_argument("sources", nargs="+", type=Path, help="source paths relative to --root, or absolute paths inside it")
     import_command.add_argument("--apply", action="store_true")
     import_command.set_defaults(handler=command_import)
     plan = commands.add_parser("plan")
@@ -362,6 +410,8 @@ def parser() -> argparse.ArgumentParser:
     diff.set_defaults(handler=command_diff)
     doctor = commands.add_parser("doctor")
     doctor.set_defaults(handler=command_doctor)
+    inspect = commands.add_parser("inspect", help="validated state, drift preview and eligible tasks; read-only")
+    inspect.set_defaults(handler=command_inspect)
     task = commands.add_parser("task")
     task_commands = task.add_subparsers(dest="task_command", required=True)
     task_update = task_commands.add_parser("update")
@@ -386,6 +436,9 @@ def parser() -> argparse.ArgumentParser:
 def main() -> int:
     args = parser().parse_args()
     try:
+        if getattr(args, "apply", False):
+            with graph_write_lock(root_path(args)):
+                return args.handler(args)
         return args.handler(args)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         if args.json:
