@@ -9,6 +9,9 @@ from pathlib import Path
 import subprocess
 
 
+DEFAULT_MAX_DIFF_BYTES = 64 * 1024
+
+
 def git(root: Path, *args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         ["git", "-C", str(root), *args],
@@ -23,10 +26,51 @@ def names(root: Path, *args: str) -> list[str]:
     return sorted(value for value in result.stdout.split("\0") if value)
 
 
+def bounded_text(value: str, max_bytes: int) -> tuple[str, int, bool]:
+    encoded = value.encode("utf-8")
+    if len(encoded) <= max_bytes:
+        return value, len(encoded), False
+    return encoded[:max_bytes].decode("utf-8", errors="ignore"), len(encoded), True
+
+
+def diff_section(root: Path, *args: str, max_bytes: int) -> dict[str, object]:
+    patch = git(root, "diff", *args).stdout
+    stat = git(root, "diff", *args, "--stat").stdout
+    bounded_patch, byte_count, truncated = bounded_text(patch, max_bytes)
+    return {
+        "bytes": byte_count,
+        "truncated": truncated,
+        "stat": stat,
+        "patch": bounded_patch,
+    }
+
+
+def check_section(root: Path, *args: str) -> dict[str, object]:
+    result = git(root, "diff", *args, "--check", check=False)
+    return {
+        "exit_code": result.returncode,
+        "clean": result.returncode == 0,
+        "output": result.stdout + result.stderr,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("repository", nargs="?", type=Path, default=Path("."))
+    parser.add_argument(
+        "--include-diffs",
+        action="store_true",
+        help="include bounded staged and unstaged patches plus whitespace checks",
+    )
+    parser.add_argument(
+        "--max-diff-bytes",
+        type=int,
+        default=DEFAULT_MAX_DIFF_BYTES,
+        help="maximum UTF-8 bytes returned for each staged/unstaged patch",
+    )
     args = parser.parse_args()
+    if args.max_diff_bytes <= 0:
+        parser.error("--max-diff-bytes must be positive")
     root = args.repository.resolve()
     probe = git(root, "rev-parse", "--is-inside-work-tree", check=False)
     if probe.returncode or probe.stdout.strip() != "true":
@@ -83,6 +127,17 @@ def main() -> int:
             root, "diff", "--name-only", "--diff-filter=U", "-z"
         ),
     }
+    if args.include_diffs:
+        document["diffs"] = {
+            "staged": diff_section(
+                root, "--cached", max_bytes=args.max_diff_bytes
+            ),
+            "unstaged": diff_section(root, max_bytes=args.max_diff_bytes),
+            "check": {
+                "staged": check_section(root, "--cached"),
+                "unstaged": check_section(root),
+            },
+        }
     print(json.dumps(document, indent=2, ensure_ascii=False))
     return 0
 

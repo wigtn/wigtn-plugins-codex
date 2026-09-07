@@ -28,7 +28,6 @@ grep -q 'allow_implicit_invocation: false' "$plugin/skills/verified-delivery/age
 grep -q 'never auto-invoke for ordinary coding' "$plugin/skills/verified-delivery/SKILL.md"
 grep -q '\$wigtn-plugins-with-codex:verified-delivery' "$plugin/skills/verified-delivery/agents/openai.yaml"
 grep -q '커밋해줘' "$plugin/skills/release-readiness/SKILL.md"
-grep -q 'PRD 디깅해줘' "$plugin/skills/product-spec/SKILL.md"
 python3 "$repo_root/scripts/check-verified-delivery-routing.py"
 python3 "$repo_root/scripts/check-external-results.py"
 python3 "$repo_root/scripts/check-featurebench-selection.py"

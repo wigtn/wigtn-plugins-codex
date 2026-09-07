@@ -3,8 +3,8 @@
 Use the renderer already selected by the repository. Check `command -v mmdc`
 and `./node_modules/.bin/mmdc`, then record `mmdc --version`. Do not change a
 project manifest or download a floating package version. If no renderer exists,
-explain the missing dependency and obtain approval before an exact-version
-network installation.
+explain the missing dependency. Use existing authorization for an exact-version
+installation; ask only when it is outside the authorized scope.
 
 Start from this accessible source shape:
 

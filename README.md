@@ -2,9 +2,9 @@
 
 # WIGTN Plugin for Codex
 
-**Codex의 자율성은 그대로. PRD·작업 계획·검증·Git 권한은 필요한 순간에만.**
+**PRD·저장 가능한 작업 계획·요구사항 검증·Git 작업을 위한 선택형 스킬 모음.**
 
-![Version](https://img.shields.io/badge/version-0.5.3-6C5CE7?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.5.4-6C5CE7?style=for-the-badge)
 ![Skills](https://img.shields.io/badge/core_skills-9-00B894?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/platform-Codex-111827?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-Apache--2.0-0984E3?style=for-the-badge)
@@ -120,6 +120,18 @@ release-readiness ──── 안전한 커밋·푸시·PR
 
 ---
 
+## v0.5.4: Astra 지침 정리·검증 정확성·WorkGraph 복구
+
+- 요청 범위에 맞게 스킬·참조 문서를 정리하고, 명시 호출형 Verified Delivery와 일반 코딩의 경계를 유지했습니다.
+- 요구사항 ID·Markdown 목록 처리, 실제 제약 위반 판정, 저장 증거와 보고서 충돌 처리를 개선했습니다.
+- WorkGraph inspect와 import 경로 처리를 개선하고, 동시 CLI 저장의 변경 유실과 잘못된 프로젝트 설정의 계획 저장을 수정했습니다.
+- CLI usage의 미보고 항목을 0으로 채우지 않고, 측정 가능한 항목과 비용 추정의 한계를 구분합니다.
+- 추가 축약 실험본은 채택하지 않았습니다. Knowledge Wiki는 공동 버전 정책에 따른 manifest 변경이며 기능은 그대로입니다.
+
+[변경 내용과 검증 범위](docs/RELEASE-v0.5.4-KO.md). 모델 비교 결과와 최종 runtime의 로컬 검증을 구분하며 일반 성능·비용 우위를 주장하지 않습니다.
+
+---
+
 ## v0.5.3: 하네스 경량화·스택 중립화
 
 - 항상 노출되는 Core 스킬 설명 합계를 2,980자에서 2,162자로 줄여
@@ -230,11 +242,14 @@ python3 plugins/wigtn-plugins-with-codex/scripts/wigtn.py --json init
 python3 plugins/wigtn-plugins-with-codex/scripts/wigtn.py --json init --apply
 python3 plugins/wigtn-plugins-with-codex/scripts/wigtn.py --json import docs/PRD.md --apply
 python3 plugins/wigtn-plugins-with-codex/scripts/wigtn.py --json plan --apply
+python3 plugins/wigtn-plugins-with-codex/scripts/wigtn.py --json inspect
 python3 plugins/wigtn-plugins-with-codex/scripts/wigtn.py --json status
 python3 plugins/wigtn-plugins-with-codex/scripts/wigtn.py --json next
 python3 plugins/wigtn-plugins-with-codex/scripts/wigtn.py --json diff --check
 python3 plugins/wigtn-plugins-with-codex/scripts/wigtn.py --json doctor
 ```
+
+`inspect`는 저장 파일을 검증하고 source drift와 다음 작업을 읽기 전용으로 조회합니다. 저장된 검사 명령을 실행하거나 변경을 적용하지 않습니다. `import`의 상대경로는 `--root` 기준입니다.
 
 mutation 명령은 `--apply`가 없으면 dry-run이며, 동일한 import·plan·drift
 적용은 revision을 올리지 않습니다. 자세한 상태 의미는
@@ -345,8 +360,10 @@ Claude 전용 도구 이름, 고정 서브에이전트 fan-out, 자동 모델 �
 ```
 
 이 suite에는 plugin resource 무결성, 다이어그램·HTML 발표 계약,
-responsive wireframe portability, WorkGraph lifecycle·drift·migration·CLI의
-67개 결정론적 케이스와 paired schedule 무결성 검사도 포함됩니다.
+한국어/영어 화면 제목과 artifact 선택 형식을 포함한 screen contract,
+untracked 내용을 읽지 않는 bounded release diff, WorkGraph
+lifecycle·drift·migration·CLI의 67개 결정론적 케이스와 paired schedule
+무결성 검사도 포함됩니다.
 
 신규 `work-planner`의 모델 기반 capability pilot은 12개 격리 저장소에서
 별도로 실행합니다.
@@ -380,6 +397,16 @@ effect는 [일반 코딩 비간섭 보고서](docs/ORDINARY-NONINTERFERENCE-GATE
 
 ```bash
 ./scripts/run-behavior-evals.sh --execute
+```
+
+커밋된 `HEAD`와 현재 worktree의 Compact PRD·근거 부족 acceptance 경로를
+3회씩 비교하려면 focused ablation을 실행합니다. JSONL에서 input, cached
+input, cache-write, output, reasoning, tool-item을 분리하며 비용은 실제
+구독 청구가 아닌 API 환산 비교치입니다.
+
+```bash
+WIGTN_TOKEN_ABLATION_ROOT=/tmp/fresh-token-ablation \
+  ./scripts/run-token-ablation.sh --execute
 ```
 
 Core 4의 내용 효과와 catalog 길이 효과를 분리하는 package ablation은:

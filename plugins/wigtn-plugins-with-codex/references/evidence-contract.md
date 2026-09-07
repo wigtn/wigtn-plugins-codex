@@ -17,18 +17,20 @@ python3 <plugin-root>/scripts/validate-evidence.py <artifact.json>
 - `verified`: precise implementation evidence and a referenced passing check
 - `implemented-not-executed`: implementation evidence exists; no relevant
   passing check was executed
-- `partially-verified`: only part of the observable requirement is supported
-- `not-satisfied`: evidence shows the requirement is absent or contradicted
+- `partially-verified`: part is supported, the rest is unresolved, and no required
+  behavior is demonstrated false
+- `not-satisfied`: evidence shows required behavior is absent or contradicted;
+  this takes precedence over passing other examples
 - `not-verifiable`: available evidence cannot support a conclusion
 - `not-applicable`: the requirement does not apply to this scope
 
-Never mark a requirement `verified` from documentation, model narration, an
-unexecuted test, a check that is not referenced by ID, or a green-only check
-written by the same agent during the implementation. An agent-authored check
-can support `verified` only when the artifact or accompanying trace records its
-pre-change failure and post-change pass. Until check provenance is represented
-in the machine-readable schema, record that distinction in `limitations` and
-use `partially-verified` when independent evidence is absent.
+Never mark a requirement `verified` from documentation, narration, an
+unexecuted or unrelated test, or a check that is not referenced by ID.
+Judge executed checks by their coverage of the current requirement. Record
+whether they were pre-existing, supplied externally, or authored for this work;
+after-change-only checks are not red/green evidence. Their authorship alone
+neither proves coverage nor requires a downgrade. Use `partially-verified` for
+an actual unresolved subclaim, and `not-satisfied` for a demonstrated violation.
 
 ## Portability and authority
 

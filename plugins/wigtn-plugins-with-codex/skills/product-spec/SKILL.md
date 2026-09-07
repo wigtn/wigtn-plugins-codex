@@ -1,6 +1,6 @@
 ---
 name: product-spec
-description: Create, review, or deep-dive an implementation-ready PRD or product spec. Use for “PRD 뽑아줘”, “PRD 검토해줘”, “PRD 디깅해줘”, requirements, acceptance criteria, and spec feasibility or contradiction review. Do not use for brainstorming without an artifact, implementation, minor fixes, or general code review.
+description: Create, substantively review, or deep-dive an implementation-ready PRD or product spec. Use for explicit PRD creation, requirements or acceptance-criteria audits, and spec feasibility, contradiction, or coverage review. Do not use for proofreading, copyediting, reformatting, renaming, link repair, minor fixes, brainstorming without an artifact, implementation, or general code review.
 ---
 
 # Product Spec
@@ -10,16 +10,34 @@ work a gate for ordinary coding.
 
 ## Mode
 
-- If `.wigtn/project.json` exists, validate it and read
-  [project context](../../references/project-context.md). An explicit user
-  profile overrides `prd_profile`; missing context changes nothing.
-- **Create:** read [create contract](references/create-contract.md). Use Compact
-  by default. Use Full only when the user requests it or the product actually
-  needs multiple route/state contracts, a multi-step lifecycle, evidenced
-  NFRs, phased delivery, or migration planning. Mark Full conditional
-  contracts `Required` or `N/A` with evidence.
+- Inspect `.wigtn/project.json` only when working from a user-provided
+  repository, saving an artifact, or asked for project-native behavior. Do not
+  probe the filesystem for a chat-only brief. When present, validate it and
+  read [project context](../../references/project-context.md). An explicit
+  user profile overrides `prd_profile`.
+- **Create:** use Compact by default with this exact shape:
+
+  ```markdown
+  <!-- wigtn-prd-profile: compact -->
+  # <Feature> PRD
+  ## Problem and scope
+  ## Goals and non-goals
+  ## Users, roles, authorization, and data boundaries
+  ## Functional requirements
+  | ID | Requirement | Priority |
+  ## Acceptance criteria
+  | ID | Requirement | Given | When | Then | Verification |
+  ## Assumptions and open decisions
+  ## Release condition
+  | Requirement IDs | Verifiable exit condition |
+  ```
+
+  Read the [Full create contract](references/create-contract.md) only when the
+  user requests Full or the product actually needs multiple route/state
+  contracts, a multi-step lifecycle, evidenced NFRs, phased delivery, or
+  migration planning.
 - **Review:** read [review contract](references/review-contract.md). Emit its
-  contract-audit table, then at most five material findings. Do not rewrite
+  profile-appropriate contract audit, then material findings by impact. Do not rewrite
   unless asked.
 - **Deep dive:** read the review contract and
   [deep-dive guide](references/deep-dive.md). Inspect repository evidence when
@@ -36,7 +54,9 @@ work a gate for ordinary coding.
   speculative policy, and exhaustive low-impact edge-case catalogs.
 - Respect an explicit request for a concise artifact. Use Compact rather than
   shrinking a Full artifact cosmetically. Compact allows no more than eight
-  material FRs and ten acceptance criteria.
+  material FRs and ten acceptance criteria. If the requested scope exceeds
+  that budget, use Full and keep its prose concise; never drop requirements
+  to fit Compact.
 - Do not promote plausible product choices—identity matching, token rotation,
   retry policy, route shape, or similar—into requirements. Keep unsupported
   choices as compact open decisions.
@@ -46,9 +66,9 @@ work a gate for ordinary coding.
 - In reviews, `Present` means the required artifact exists, not that it is
   flawless. Report defects in that artifact as findings; do not relabel it
   `Missing`.
-- Omit low/nit findings. Group related medium findings and return no more than
-  five material findings, ordered by impact with exact section or requirement
-  IDs.
+- Omit low/nit findings unless requested. Group related findings and lead with
+  the most consequential ones, citing exact sections or requirement IDs. Do
+  not hide material defects to meet a fixed finding count.
 - After saving a PRD, run `python3 scripts/validate-prd.py <path>` from this
   skill directory. The validator reads the profile marker. Report failures;
   never weaken the contract to make it pass.

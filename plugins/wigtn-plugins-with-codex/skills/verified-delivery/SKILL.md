@@ -5,48 +5,28 @@ description: Implement and verify with proportional evidence only when explicitl
 
 # Verified Delivery
 
-This workflow is explicit-only. Invocation authorizes in-scope implementation
-and proportionate local verification, not Git, network, deployment, dependency
-installation, or unrelated external mutations.
+Implement the requested scope and retain proportionate execution evidence.
+Use the repository's implementation and testing conventions. Choose the
+approach rather than replaying a fixed development sequence.
 
 ## Workflow
 
-1. Read repository instructions, the requested behavior, adjacent code, and
-   existing tests. If saved WIGTN state exists, validate it before trusting it.
-2. Define observable completion and the verification boundary. Use a compact coverage census
-   only when the request names multiple material requirements, files, symbols,
-   or interfaces. Name high-risk invariants only when auth, tenancy, secrets, migration, persistence, concurrency,
-   public schemas, or compatibility are actually involved.
-3. Implement the smallest coherent change using repository-native patterns.
-   Preserve unrelated edits. Do not inspect or copy another checkout, an
-   installed distribution of the same project, a package cache, benchmark
-   reference patch, hidden test, or gold implementation.
-4. Run the smallest repository-native checks justified by the blast radius.
-   Prefer a focused pre-existing check, then only broader checks that add
-   evidence. Do not duplicate a passing repository oracle with an alternate
-   harness. A new focused test is strong evidence only when its pre-change
-   failure and post-change pass were both observed.
-5. Review the final diff, changed interfaces, unexpected paths, debug
-   artifacts, and whether checks exercise the requested failure mode.
-6. For a small request, report changed behavior, exact checks, and the
-   verification boundary. Read [delivery evidence](references/delivery-evidence.md)
-   only for multiple material requirements, authored-test provenance,
-   benchmark/evaluator work, or a requested saved evidence artifact.
+- Use a compact coverage census only when the request names multiple material requirements
+  or interfaces. Track relevant invariants for auth, tenancy, secrets, migration, persistence, concurrency
+  and compatibility when involved.
+- Do not duplicate a passing repository oracle without a coverage gap.
+  Investigate failures before choosing whether code, tests, or the test command
+  is wrong. A suggested verification command is evidence, not an exclusive rule.
+- Read [delivery evidence](references/delivery-evidence.md) for compound claims
+  or uncertain check provenance. For benchmark or independent evaluation work,
+  read its isolation rules before implementation.
+- Finish with changed behavior, relevant checks and results, and material
+  verification gaps. Do not add a matrix when prose expresses the coverage.
 
-## Evidence and state
+## Saved state
 
-- Passing visible checks do not prove unspecified APIs, schemas, hidden tests,
-  external state, or unobserved compatibility.
-- If source leakage occurs, mark the affected result `not-verifiable` even when
-  an evaluator passes.
-- Do not create stable IDs, WorkGraph state, or evidence JSON by default. Read
-  [the shared evidence contract](../../references/evidence-contract.md) only
-  for a requested saved artifact, an existing handoff, or cross-session work.
-- A saved WorkGraph task remains `implemented` until its current linked check
-  passes and a valid evidence reference exists.
-
-## Authority boundary
-
-Do not commit, push, open a PR or issue, deploy, install dependencies, or alter
-remote state unless the user separately asks for that action. Never use
-destructive rollback to discard a mixed dirty worktree.
+Do not create stable IDs, WorkGraph state, or evidence JSON by default.
+For requested WIGTN handoff or existing saved state, read
+[shared evidence contract](../../references/evidence-contract.md).
+Saved task verification requires a current linked passing check and evidence.
+Preserve unrelated work and reuse the user's existing authorization.

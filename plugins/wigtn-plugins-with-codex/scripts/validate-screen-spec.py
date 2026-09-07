@@ -38,7 +38,7 @@ REMOTE_RESOURCE = re.compile(
     r'|(?:@import\s+(?:url\(\s*)?|url\(\s*)["\']?\s*(?:(?:https?:)?//)',
     re.I,
 )
-SCREEN_HEADING = re.compile(r"^## Screen:\s*(.+?)\s*$", re.M)
+SCREEN_HEADING = re.compile(r"^## (?:Screen|화면):\s*(.+?)\s*$", re.M)
 
 
 def has_ia_page_map(text: str) -> bool:
@@ -70,17 +70,20 @@ def main() -> int:
     parser.add_argument("directory", type=Path)
     parser.add_argument(
         "--artifacts",
-        default="all",
-        help="Comma-separated ia,flow,screen,wireframe,handoff or all",
+        nargs="+",
+        default=["all"],
+        help="Comma- or space-separated ia,flow,screen,wireframe,handoff or all",
     )
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
     errors: list[str] = []
-    requested = (
-        set(ARTIFACTS)
-        if args.artifacts == "all"
-        else {item.strip() for item in args.artifacts.split(",") if item.strip()}
-    )
+    requested_tokens = {
+        item.strip()
+        for value in args.artifacts
+        for item in value.split(",")
+        if item.strip()
+    }
+    requested = set(ARTIFACTS) if requested_tokens == {"all"} else requested_tokens
     unknown = requested - set(ARTIFACTS)
     if not requested:
         errors.append("--artifacts must select at least one artifact")

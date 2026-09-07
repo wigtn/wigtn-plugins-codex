@@ -12,6 +12,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 VALIDATOR = ROOT / "plugins/wigtn-plugins-with-codex/scripts/validate-screen-spec.py"
 TEMPLATES = ROOT / "plugins/wigtn-plugins-with-codex/skills/screen-spec/assets/templates"
+SCREEN_SKILL = ROOT / "plugins/wigtn-plugins-with-codex/skills/screen-spec/SKILL.md"
 
 
 VALID = {
@@ -47,14 +48,17 @@ KOREAN_IA = """# 조직 관리자 팀원 초대 기능 IA
 """
 
 
-def run(directory: Path, artifacts: str = "all") -> subprocess.CompletedProcess[str]:
+def run(
+    directory: Path, artifacts: str = "all", *, spaced: bool = False
+) -> subprocess.CompletedProcess[str]:
+    selection = artifacts.split(",") if spaced else [artifacts]
     return subprocess.run(
         [
             sys.executable,
             str(VALIDATOR),
             str(directory),
             "--artifacts",
-            artifacts,
+            *selection,
             "--json",
         ],
         text=True,
@@ -63,11 +67,14 @@ def run(directory: Path, artifacts: str = "all") -> subprocess.CompletedProcess[
 
 
 def main() -> int:
+    skill = SCREEN_SKILL.read_text(encoding="utf-8")
     flow_template = (TEMPLATES / "02-USER-FLOW.md").read_text(encoding="utf-8")
     wireframe_template = (TEMPLATES / "04-WIREFRAME.html").read_text(encoding="utf-8")
     assert "## Flow Coverage" in flow_template
     assert '@media (max-width' not in wireframe_template
     assert 'lang="{language-code}"' in wireframe_template
+    assert "`:organizationId` or `:email`" in skill
+    assert "also appears in IA" in skill
 
     with tempfile.TemporaryDirectory() as temp:
         root = Path(temp)
@@ -76,6 +83,8 @@ def main() -> int:
         for name, text in VALID.items():
             (valid / name).write_text(text, encoding="utf-8")
         passed = run(valid)
+        assert passed.returncode == 0 and '"valid": true' in passed.stdout
+        passed = run(valid, "ia,screen", spaced=True)
         assert passed.returncode == 0 and '"valid": true' in passed.stdout
 
         ac_handoff = root / "ac-handoff"
@@ -97,6 +106,18 @@ def main() -> int:
         korean_ia.mkdir()
         (korean_ia / "01-IA.md").write_text(KOREAN_IA, encoding="utf-8")
         passed = run(korean_ia, "ia")
+        assert passed.returncode == 0 and '"valid": true' in passed.stdout
+
+        korean_screen = root / "korean-screen"
+        korean_screen.mkdir()
+        (korean_screen / "01-IA.md").write_text(
+            VALID["01-IA.md"], encoding="utf-8"
+        )
+        (korean_screen / "03-SCREEN-SPEC.md").write_text(
+            VALID["03-SCREEN-SPEC.md"].replace("## Screen:", "## 화면:"),
+            encoding="utf-8",
+        )
+        passed = run(korean_screen, "screen")
         assert passed.returncode == 0 and '"valid": true' in passed.stdout
 
         prose_only = root / "prose-only-ia"

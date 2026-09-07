@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+from contextlib import contextmanager
 from copy import deepcopy
 from hashlib import sha256
 import json
@@ -14,7 +15,7 @@ from typing import Any, Iterable
 
 
 SCHEMA_VERSION = "1.0"
-REQUIREMENT_ID = re.compile(r"^[A-Z][A-Z0-9_-]*-[0-9]{2,}$")
+REQUIREMENT_ID = re.compile(r"^[A-Z][A-Z0-9_]*(?:-[A-Z0-9_]+)+$")
 SOURCE_ID = re.compile(r"^SRC-[A-Z0-9_-]+$")
 ARTIFACT_ID = re.compile(r"^ART-[A-Z0-9_-]+$")
 TASK_ID = re.compile(r"^TASK-[A-Z0-9_-]+$")
@@ -119,6 +120,40 @@ def atomic_write_json(path: Path, document: dict[str, Any]) -> None:
     except Exception:
         temporary_path.unlink(missing_ok=True)
         raise
+
+
+@contextmanager
+def graph_write_lock(root: Path):
+    """Serialize cooperating CLI transactions, including their initial read.
+
+    Keep the lock inode in place: unlinking it could split waiting writers
+    across different locks. OS locks are released if a writer process dies.
+    Direct editors do not participate in this advisory lock.
+    """
+    directory = root / ".wigtn"
+    directory.mkdir(parents=True, exist_ok=True)
+    with (directory / ".write.lock").open("a+b") as handle:
+        if os.name == "nt":
+            import msvcrt
+
+            if handle.seek(0, os.SEEK_END) == 0:
+                handle.write(b"\0")
+                handle.flush()
+            handle.seek(0)
+            msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
+            try:
+                yield
+            finally:
+                handle.seek(0)
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            import fcntl
+
+            fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+            try:
+                yield
+            finally:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
 
 
 class WorkGraphValidator:

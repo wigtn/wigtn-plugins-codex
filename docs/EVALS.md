@@ -29,9 +29,11 @@ like proof of model quality.
 - optional project context rejects unsafe paths and unknown configuration
 - screen bundles reject missing artifacts, unresolved template values, broken
   wireframe anchors, remote resources, missing viewport metadata, and
-  cross-artifact requirement drift
+  cross-artifact requirement drift; validation accepts comma/space artifact
+  selections and English or Korean screen headings
 - release-state inspection distinguishes staged, unstaged, untracked,
-  conflicted, detached, and in-progress Git states without mutation
+  conflicted, detached, and in-progress Git states without mutation; optional
+  bounded patches include whitespace checks but never untracked contents
 - sanitized eval packets redact run roots and secrets, hash membership, exclude
   auth/work homes, and detect tampering
 - WorkGraph schema, ID/reference integrity, dependency cycles, false
@@ -93,6 +95,37 @@ hashes the evaluated plugin and prompts, and stores raw outputs, logs, metadata,
 and a results file outside the repository by default. Its four prompts cover
 PRD creation, uncertain acceptance evidence, IA-only scope, and an ordinary
 coding request. This is deliberately not full skill-router coverage.
+
+Runs use Codex JSONL events to report input, cached input, cache-write input,
+output, reasoning output, and tool-item counts in `TOKEN-EFFICIENCY.md` and
+`TOKEN-EFFICIENCY.json`. API-equivalent cost uses explicit, overridable rate
+variables and is only a normalized comparison metric; it is not a ChatGPT
+subscription charge. The report includes observed cache pricing and a cold
+comparison that prices all input as uncached, so arm order and cache hits are
+visible rather than silently deciding the conclusion. Keep quality gates
+separate from this cost report.
+
+For a focused before/after check, compare the committed `HEAD` plugin with the
+current worktree candidate. The default is three repetitions over Compact PRD
+and evidence-poor acceptance prompts, for 12 model calls:
+
+```bash
+./scripts/run-token-ablation.sh
+WIGTN_TOKEN_ABLATION_ROOT=/tmp/fresh-token-ablation \
+  ./scripts/run-token-ablation.sh --execute
+```
+
+The scorer requires preserved Compact PRD shape, exact `not-verifiable`, zero
+tools where the prompt prohibits commands, and lower candidate PRD median tool
+items and input tokens. This is a targeted development ablation, not a general
+plugin-efficiency claim.
+
+For new token work, inspect command-execution traces before editing prose.
+Prefer one bounded deterministic collector when the model repeatedly fetches
+related state, while keeping judgment in the model. If a path already uses no
+tools or combines its reads in one call, do not claim that shortening files
+alone improves token efficiency; measure a quality-preserving alternative
+first.
 
 The smoke scorer checks execution health only. It deliberately does not turn
 output keywords into a quality score. Publication claims require frozen
@@ -242,3 +275,14 @@ The current release policy is:
 - keep product/screen contracts and validators,
 - use the optional Evidence Contract for explicit cross-workflow handoffs,
 - block release on any unauthorized Git mutation.
+
+## GPT-6 Astra migration pilot
+
+Use `scripts/run-model-migration-eval.py --baseline SNAPSHOT --root FRESH_PATH` to inspect the 24-call plan; add `--execute` only with authorization for model execution and plugin-file transfer. This snapshots the pre-change dirty worktree instead of comparing against HEAD. Run `scripts/score-model-migration-eval.py RUN_ROOT` afterward. Completeness is separate from semantic quality review. The default is Astra/medium; no dollar costs are estimated. See [the release verification scope](RELEASE-v0.5.4-KO.md). The legacy token ablation runner remains Sol-only because its rates are pinned.
+
+The second-pass evaluator adds `--suite targeted` (30 calls at two repetitions) for explicit verified-delivery activation. It uses a fixed implementation oracle, records unexpected worktree changes, rejects empty schedules and failed/duplicate turns, and leaves unknown telemetry as null. This remains a development pilot; consult the report for untested authority and long-running scenarios. No additional external execution is authorized by choosing a suite.
+
+
+## Schema v2 evidence and adjudication
+
+The current migration evaluator verifies sealed inputs and per-run evidence, retains measured consumption from failed attempts, and separates schedule, integrity, execution, review and task pass states. Use `--review-template` to export review forms and `--reviews FILE --require-pass` for the final gate. The new `--suite contracts` adds direct Compact/external-PRD/six-conflict cases (30 calls at repeat=2). See [the release verification scope](RELEASE-v0.5.4-KO.md). Old unsealed packets remain historical data, not v2-qualified results.

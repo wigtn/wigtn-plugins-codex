@@ -1,6 +1,10 @@
 # PRD Review Contract
 
-Emit this table before semantic findings. Use only `Present`, `N/A`, or
+First identify the declared Compact/Full profile and the user’s requested
+review scope. Review Compact against its own sections, requirement IDs and
+acceptance criteria; do not require Full-only artifacts. For an external PRD,
+review the supplied contract unless the user asks for WIGTN conformance.
+For a Full WIGTN contract audit, emit the following table before semantic findings. Use only `Present`, `N/A`, or
 `Missing`; `N/A` requires evidence from the PRD.
 
 | Contract | Status | Evidence |
@@ -34,6 +38,6 @@ Then review universal quality: contradictions, authorization/data boundaries,
 state transitions, failure/recovery, unverifiable acceptance, unsupported
 scope, migration, operations, privacy, and security only where relevant.
 
-Return at most five `blocker`, `high`, or grouped `medium` findings. Omit
-low/nit findings, cite exact sections or IDs, and do not use numeric quality
-scores.
+Report all material `blocker` and `high` findings; group related `medium`
+findings. Omit low/nit findings unless requested, cite exact sections or IDs,
+and do not use numeric quality scores.

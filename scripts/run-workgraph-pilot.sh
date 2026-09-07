@@ -2,7 +2,7 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-model="${WIGTN_EVAL_MODEL:-gpt-5.6-sol}"
+model="${WIGTN_EVAL_MODEL:-gpt-6-astra}"
 effort="${WIGTN_EVAL_EFFORT:-medium}"
 concurrency="${WIGTN_EVAL_CONCURRENCY:-3}"
 run_root="${WIGTN_WORKGRAPH_PILOT_ROOT:-/tmp/wigtn-workgraph-pilot-$model}"
