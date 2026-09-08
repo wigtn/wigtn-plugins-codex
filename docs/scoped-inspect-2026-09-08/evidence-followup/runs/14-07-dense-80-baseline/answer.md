@@ -1,0 +1,26 @@
+{
+  "saved_revision": 17,
+  "fresh": true,
+  "valid_artifacts": true,
+  "drift_paths": [],
+  "tasks": [
+    {
+      "id": "TASK-041",
+      "status": "verified",
+      "eligible": false,
+      "dependency_ids": ["TASK-040"],
+      "requirement_ids": ["FR-041"],
+      "intended_paths": ["src/module_041.py"],
+      "check_commands": ["python3 -m unittest tests.test_module_041"]
+    },
+    {
+      "id": "TASK-080",
+      "status": "ready",
+      "eligible": true,
+      "dependency_ids": ["TASK-079"],
+      "requirement_ids": ["FR-080"],
+      "intended_paths": ["src/module_080.py"],
+      "check_commands": ["python3 -m unittest tests.test_module_080"]
+    }
+  ]
+}

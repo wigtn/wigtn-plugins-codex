@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "requirement_sources": [
+    "docs/requirement-001.md",
+    "docs/requirement-002.md",
+    "docs/requirement-003.md",
+    "docs/requirement-004.md",
+    "docs/requirement-005.md",
+    "docs/requirement-006.md",
+    "docs/requirement-007.md",
+    "docs/requirement-008.md",
+    "docs/requirement-009.md",
+    "docs/requirement-010.md",
+    "docs/requirement-011.md",
+    "docs/requirement-012.md",
+    "docs/requirement-013.md",
+    "docs/requirement-014.md",
+    "docs/requirement-015.md",
+    "docs/requirement-016.md"
+  ],
+  "verification_commands": [
+    "touch NEVER_EXECUTE"
+  ],
+  "protected_paths": [
+    ".git",
+    "user-notes.txt"
+  ],
+  "prd_profile": "auto",
+  "evidence_path": ".wigtn/evidence.json"
+}

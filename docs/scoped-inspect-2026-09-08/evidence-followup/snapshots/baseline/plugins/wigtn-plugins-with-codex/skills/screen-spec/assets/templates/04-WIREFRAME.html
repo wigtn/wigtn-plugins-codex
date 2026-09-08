@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="{language-code}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{feature-name} lo-fi wireframe</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #fafafa; --surface: #fff; --fg: #18181b;
+      --muted: #71717a; --border: #d4d4d8;
+      --error: #fef2f2; --success: #f0fdf4; --warning: #fffbeb;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; }
+    a { color: inherit; }
+    .nav, main { width: min(72rem, calc(100% - 2rem)); margin-inline: auto; }
+    .nav { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; min-height: 3.5rem; }
+    .nav a { text-decoration: underline; }
+    main { display: grid; gap: 3rem; padding-block: 2rem 4rem; }
+    .screen { border: 1px solid var(--border); border-radius: .5rem; padding: clamp(1rem, 2vw, 1.25rem); background: var(--surface); }
+    .screen-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; }
+    h2 { margin: 0; font-size: 1.25rem; }
+    .meta { color: var(--muted); font-size: .8rem; }
+    .layouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr)); gap: 1rem; margin-top: 1rem; }
+    .stack { display: grid; gap: .75rem; }
+    .box { min-height: 3rem; border: 2px dashed var(--border); border-radius: .35rem; padding: .75rem; }
+    .primary { background: #27272a; color: #fff; text-align: center; }
+    .states { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .5rem; margin-top: 1rem; }
+    [data-state="error"] { background: var(--error); }
+    [data-state="success"] { background: var(--success); }
+    [data-state="warning"] { background: var(--warning); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav" aria-label="{screen-list-label}">
+      <strong>{feature-name}</strong>
+      <a href="#screen-{slug-1}">{screen-name}</a>
+    </nav>
+  </header>
+  <main>
+    <!-- Duplicate only for an in-scope screen; keep IDs aligned with 03-SCREEN-SPEC.md. -->
+    <section id="screen-{slug-1}" class="screen" aria-labelledby="screen-{slug-1}-title">
+      <header class="screen-head">
+        <h2 id="screen-{slug-1}-title">{screen-name}</h2>
+        <span class="meta">Audience: {audience} · Auth: {auth}</span>
+      </header>
+      <div class="layouts">
+        <div class="stack" aria-label="Primary layout">
+          <div class="box">[Primary content]</div>
+          <div class="box">[Input or data region]</div>
+          <div class="box primary">[Primary action]</div>
+        </div>
+        <aside class="stack" aria-label="Supporting layout">
+          <div class="box">[Context or secondary action]</div>
+        </aside>
+      </div>
+      <div class="states" aria-label="Applicable states">
+        <div class="box">[{applicable state}]</div>
+        <div class="box" data-state="error">[error + recovery]</div>
+        <div class="box" data-state="success">[success feedback]</div>
+        <div class="box" data-state="warning">[authorization or warning]</div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

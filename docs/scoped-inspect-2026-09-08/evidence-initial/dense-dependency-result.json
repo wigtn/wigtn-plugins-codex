@@ -1,0 +1,7 @@
+{
+  "scenario": "80-task-chain-select-last",
+  "note": "Post-freeze deterministic boundary test, no model calls.",
+  "baseline_bytes": 110172,
+  "candidate_bytes": 112540,
+  "reduction_percent": -2.15
+}

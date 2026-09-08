@@ -1,0 +1,6 @@
+interface:
+  display_name: "WIGTN Presentation"
+  short_description: "Apply WIGTN identity to presentation artifacts"
+  default_prompt: "Use $wigtn-plugins-with-codex:wigtn-presentation to create a WIGTN-branded presentation for this content."
+policy:
+  allow_implicit_invocation: true

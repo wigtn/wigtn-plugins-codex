@@ -1,0 +1,3110 @@
+{
+  "operation": "inspect",
+  "read_only": true,
+  "valid_artifacts": true,
+  "fresh": false,
+  "validations": {
+    "project": {
+      "valid": true,
+      "exit_code": 0,
+      "details": "Project context: PASS\n"
+    },
+    "evidence": {
+      "valid": true,
+      "exit_code": 0,
+      "details": "/private/tmp/wigtn-scoped-study-20260908/fixtures/05-drift-60/.wigtn/evidence.json: PASS\n"
+    }
+  },
+  "source_drift": [
+    {
+      "source_id": "SRC-031",
+      "path": "docs/requirement-031.md",
+      "expected": "9603f1e12ba33be02a66718059d72fa1ed52797b97caf0867cb7a00107f1aa4e",
+      "actual": "514c2bcd338ef222898a8cdf41ae218b7899cb2ad9826445ef51c3fb0668af9c"
+    },
+    {
+      "source_id": "SRC-059",
+      "path": "docs/requirement-059.md",
+      "expected": "3a4994362a13f493a0c93a0dcc601c08ea574c4f76fa95abca26a03f52ccf6f1",
+      "actual": "514c2bcd338ef222898a8cdf41ae218b7899cb2ad9826445ef51c3fb0668af9c"
+    }
+  ],
+  "summary": {
+    "graph_id": "WG-DRIFT-60",
+    "revision": 18,
+    "sources": 60,
+    "requirements": {
+      "active": 58,
+      "stale": 2
+    },
+    "artifacts": {},
+    "tasks": {
+      "ready": 1,
+      "stale": 2,
+      "verified": 57
+    },
+    "checks": {
+      "passed": 57,
+      "pending": 1,
+      "stale": 2
+    },
+    "release_gates": {
+      "stale": 1
+    },
+    "next_task_ids": [
+      "TASK-060"
+    ]
+  },
+  "sources": [
+    {
+      "id": "SRC-001",
+      "kind": "prd",
+      "path": "docs/requirement-001.md",
+      "sha256": "7b6b181a348c0f9d1f81e0c2f36ad7f69b9e0ebb752796bc7871459058c8a388"
+    },
+    {
+      "id": "SRC-002",
+      "kind": "prd",
+      "path": "docs/requirement-002.md",
+      "sha256": "a3c8c398e8fb49807f3a592a8236c8015c76cbec604bb623d585afc4364de91c"
+    },
+    {
+      "id": "SRC-003",
+      "kind": "prd",
+      "path": "docs/requirement-003.md",
+      "sha256": "ee554158bb5c8f08e0441b3744fe8072e3c3dec74710fe123eb36a0cc71bda37"
+    },
+    {
+      "id": "SRC-004",
+      "kind": "prd",
+      "path": "docs/requirement-004.md",
+      "sha256": "d607853cd2ec810b3c57b9c160f3d2f59c679a77f3fb3315c63fe717e1ba5c3d"
+    },
+    {
+      "id": "SRC-005",
+      "kind": "prd",
+      "path": "docs/requirement-005.md",
+      "sha256": "a1f8673708687e6636cda2be3e9a85398dca3990adf17c4250682f3366b3845b"
+    },
+    {
+      "id": "SRC-006",
+      "kind": "prd",
+      "path": "docs/requirement-006.md",
+      "sha256": "68537856a1281ee3c5f20b74ea549a5778229cba9fc83df713b179bac6ba4fd0"
+    },
+    {
+      "id": "SRC-007",
+      "kind": "prd",
+      "path": "docs/requirement-007.md",
+      "sha256": "7dacfa22ade3ae4a816ab20be6e268258fd06512713461a1a6744eb4c04fd531"
+    },
+    {
+      "id": "SRC-008",
+      "kind": "prd",
+      "path": "docs/requirement-008.md",
+      "sha256": "49d06cc53dd3d44c2fb35df0cd2bd43869a9aea76f055a340ba90adea76826d3"
+    },
+    {
+      "id": "SRC-009",
+      "kind": "prd",
+      "path": "docs/requirement-009.md",
+      "sha256": "3abd595b35e031f85e8c0c8c7c1c5b24554ac29beda385501d43ea411b6f776c"
+    },
+    {
+      "id": "SRC-010",
+      "kind": "prd",
+      "path": "docs/requirement-010.md",
+      "sha256": "ffad3df8b21a08c7e6987c265ef5a3aad4e75619cb97052a7225cd473f9db2fe"
+    },
+    {
+      "id": "SRC-011",
+      "kind": "prd",
+      "path": "docs/requirement-011.md",
+      "sha256": "1a182dca0f1297eb4cbb4ad9fbc295e2e8d90f8ab547a108a1f07c75947964dd"
+    },
+    {
+      "id": "SRC-012",
+      "kind": "prd",
+      "path": "docs/requirement-012.md",
+      "sha256": "4d7c7815c266ca020523393819a465c1157f61c4d0aa1801f668dd50a543aa20"
+    },
+    {
+      "id": "SRC-013",
+      "kind": "prd",
+      "path": "docs/requirement-013.md",
+      "sha256": "0624fb011aa5b41fe7356666e6b603ee72e8106c37b6853d04098917caefe2eb"
+    },
+    {
+      "id": "SRC-014",
+      "kind": "prd",
+      "path": "docs/requirement-014.md",
+      "sha256": "8089e49439977e03ab06149147ed9770df860499fc8d6b27fef667593fc37741"
+    },
+    {
+      "id": "SRC-015",
+      "kind": "prd",
+      "path": "docs/requirement-015.md",
+      "sha256": "660eef78ccd67863accac51f6a4d417163a2afc11d39f330e99b0d6b5955fdd3"
+    },
+    {
+      "id": "SRC-016",
+      "kind": "prd",
+      "path": "docs/requirement-016.md",
+      "sha256": "6a8f7a5457dabe28e072c44ab3b8ab62121839e8a7d39ec915dc0db1846045f9"
+    },
+    {
+      "id": "SRC-017",
+      "kind": "prd",
+      "path": "docs/requirement-017.md",
+      "sha256": "89e79cd6873fe7933b4a3a997848b2d4b6bac4d50b24eaa6f0f20ef168846eec"
+    },
+    {
+      "id": "SRC-018",
+      "kind": "prd",
+      "path": "docs/requirement-018.md",
+      "sha256": "20a2cbd65d365b4c602a5c3fb63dcb60da74d3dd6f8f964a72fe409887d3b142"
+    },
+    {
+      "id": "SRC-019",
+      "kind": "prd",
+      "path": "docs/requirement-019.md",
+      "sha256": "0e97709184eb86ac9284de778f0735507228b128a2c49c921e65601a72996271"
+    },
+    {
+      "id": "SRC-020",
+      "kind": "prd",
+      "path": "docs/requirement-020.md",
+      "sha256": "01ded3d9b2364f493431b67d028233202814fa15e2784965022042e4b25c0363"
+    },
+    {
+      "id": "SRC-021",
+      "kind": "prd",
+      "path": "docs/requirement-021.md",
+      "sha256": "95eb3de444e3c097bac03e82b7b14f36ee277acbb64aff908ab6f08259f9ce3c"
+    },
+    {
+      "id": "SRC-022",
+      "kind": "prd",
+      "path": "docs/requirement-022.md",
+      "sha256": "df827bf4207b0f56d942a65ed9cd4e4928ac4dc4854490eeefe3ceab30b6626a"
+    },
+    {
+      "id": "SRC-023",
+      "kind": "prd",
+      "path": "docs/requirement-023.md",
+      "sha256": "7306fc02cd5f39478f3700f8c485a272e4aed91984c3c2c23caa3022410064cb"
+    },
+    {
+      "id": "SRC-024",
+      "kind": "prd",
+      "path": "docs/requirement-024.md",
+      "sha256": "7df420d31046fd0f5550eb165a8e375d86e0924ad58f6a1f74b2b226bf65551e"
+    },
+    {
+      "id": "SRC-025",
+      "kind": "prd",
+      "path": "docs/requirement-025.md",
+      "sha256": "88b043b2816d3053c122a1021d710483d8889a6df19a5b8b96654de877039a6f"
+    },
+    {
+      "id": "SRC-026",
+      "kind": "prd",
+      "path": "docs/requirement-026.md",
+      "sha256": "f246317749ab94fdfc9407bbf376f26915fc34553977658fe286b0f614f5a590"
+    },
+    {
+      "id": "SRC-027",
+      "kind": "prd",
+      "path": "docs/requirement-027.md",
+      "sha256": "b7eb038e0be1e5ffb43eff58e66f32ed4770a33e4808759fa4e0a5672613bc38"
+    },
+    {
+      "id": "SRC-028",
+      "kind": "prd",
+      "path": "docs/requirement-028.md",
+      "sha256": "1a62baa103c92319ca83c95305621845c4a81a2110ad8f2baca92e08e05ef222"
+    },
+    {
+      "id": "SRC-029",
+      "kind": "prd",
+      "path": "docs/requirement-029.md",
+      "sha256": "d4d487d5042841cff70d317cadcd77936a19605ca20ef13ab9b7579c807a64b0"
+    },
+    {
+      "id": "SRC-030",
+      "kind": "prd",
+      "path": "docs/requirement-030.md",
+      "sha256": "97100c5e9b21451d168c229873252659e09cebd18d78f5408d784686cc9f9375"
+    },
+    {
+      "id": "SRC-031",
+      "kind": "prd",
+      "path": "docs/requirement-031.md",
+      "sha256": "9603f1e12ba33be02a66718059d72fa1ed52797b97caf0867cb7a00107f1aa4e"
+    },
+    {
+      "id": "SRC-032",
+      "kind": "prd",
+      "path": "docs/requirement-032.md",
+      "sha256": "d6af6008feac59f3697805c45342747904b7fbea390c8c5a97ba972ae273e0e3"
+    },
+    {
+      "id": "SRC-033",
+      "kind": "prd",
+      "path": "docs/requirement-033.md",
+      "sha256": "1a27e15ae804624cfb5541a970e8f7c1827b4f17ac6709a8a75cfd693fefa052"
+    },
+    {
+      "id": "SRC-034",
+      "kind": "prd",
+      "path": "docs/requirement-034.md",
+      "sha256": "0bae6f0eae07e7726bac657974aad01107cc945eb959ad4dabbb006aaf0bd762"
+    },
+    {
+      "id": "SRC-035",
+      "kind": "prd",
+      "path": "docs/requirement-035.md",
+      "sha256": "6fb67357482b3f41b56331a1b0306bd2971b80680a7aa8c2c2ba03d929dfb64a"
+    },
+    {
+      "id": "SRC-036",
+      "kind": "prd",
+      "path": "docs/requirement-036.md",
+      "sha256": "e8fb237e38cb8c2d47a9a596429b69bd413c448a9c031374a146a2ea6bf7b129"
+    },
+    {
+      "id": "SRC-037",
+      "kind": "prd",
+      "path": "docs/requirement-037.md",
+      "sha256": "5f832b66f56cfe24b553274bd1e7af114177a2481d645392e5ed1ab1dc9ac367"
+    },
+    {
+      "id": "SRC-038",
+      "kind": "prd",
+      "path": "docs/requirement-038.md",
+      "sha256": "5d881427f6ef5af1a7cd1e82a57bafeae7f4f6c8e824ba0a5066500118e477d8"
+    },
+    {
+      "id": "SRC-039",
+      "kind": "prd",
+      "path": "docs/requirement-039.md",
+      "sha256": "c1240234d70c8c839612d6b0e1e9d99f62a9f0a881e04f0b65fd478d8fd750f7"
+    },
+    {
+      "id": "SRC-040",
+      "kind": "prd",
+      "path": "docs/requirement-040.md",
+      "sha256": "76812a50ec4e86bba804f033b006f059d6e4cdca39bbde62c58fce171c68b360"
+    },
+    {
+      "id": "SRC-041",
+      "kind": "prd",
+      "path": "docs/requirement-041.md",
+      "sha256": "d65885ea68f7d8aa42a28ee70aa6939c3c6621fd7a5ed8703c3228fc864f02f5"
+    },
+    {
+      "id": "SRC-042",
+      "kind": "prd",
+      "path": "docs/requirement-042.md",
+      "sha256": "3c563d8ac132a1c58a641f684087573f155bd3ce52745cbcb36e747a68503ca1"
+    },
+    {
+      "id": "SRC-043",
+      "kind": "prd",
+      "path": "docs/requirement-043.md",
+      "sha256": "d9f2272bd8c28aa15246b8abe2730321b1b67a26c175efc2a486ec11d1ef2048"
+    },
+    {
+      "id": "SRC-044",
+      "kind": "prd",
+      "path": "docs/requirement-044.md",
+      "sha256": "979868c9a9f18b6ebdbdcb21d4de3bb024849ffc490924d3a2f86a9425d9cb87"
+    },
+    {
+      "id": "SRC-045",
+      "kind": "prd",
+      "path": "docs/requirement-045.md",
+      "sha256": "d3f805a1561cf17fc44b1fd9d6a35a886034ba3ae84233258292a8367477ecd5"
+    },
+    {
+      "id": "SRC-046",
+      "kind": "prd",
+      "path": "docs/requirement-046.md",
+      "sha256": "9a90a23835d6aba02b498931d695fe4276a0ada2ea731f431fb25e279b2c4e61"
+    },
+    {
+      "id": "SRC-047",
+      "kind": "prd",
+      "path": "docs/requirement-047.md",
+      "sha256": "e3383288c11e9a7d06037199a319ff54967b31003402cb00d9290e0e4e1619da"
+    },
+    {
+      "id": "SRC-048",
+      "kind": "prd",
+      "path": "docs/requirement-048.md",
+      "sha256": "e728132a714bb2832d7709b697c77a5b0b7d5ee04f9603a5d6fa3245b83b678c"
+    },
+    {
+      "id": "SRC-049",
+      "kind": "prd",
+      "path": "docs/requirement-049.md",
+      "sha256": "09abc02a60153e666a7382b72a21ce9ff240024b40c0a9fb79f5414f3fd02648"
+    },
+    {
+      "id": "SRC-050",
+      "kind": "prd",
+      "path": "docs/requirement-050.md",
+      "sha256": "58cebef3f72afc5f48392e8bb70bea7832f4680002da7df8ecb1402010cd3e68"
+    },
+    {
+      "id": "SRC-051",
+      "kind": "prd",
+      "path": "docs/requirement-051.md",
+      "sha256": "b5e5f898b21e1ecfa83f4f8b36f131ce1fb21c5efa2d5af03e1bc45b5f9b7f1a"
+    },
+    {
+      "id": "SRC-052",
+      "kind": "prd",
+      "path": "docs/requirement-052.md",
+      "sha256": "7e2a1492579e8d8c939758da4a28d49ddb3ad641a5ee665f959a2c41b5002964"
+    },
+    {
+      "id": "SRC-053",
+      "kind": "prd",
+      "path": "docs/requirement-053.md",
+      "sha256": "0173dc118d36bfcb46d4a28f5855041a0b38c64a1ab97c180e69dd4713c97115"
+    },
+    {
+      "id": "SRC-054",
+      "kind": "prd",
+      "path": "docs/requirement-054.md",
+      "sha256": "781c0191e289dc6caeeb2ab1914a302ad84cfcbb9e0e427c67b3a23997e05a4b"
+    },
+    {
+      "id": "SRC-055",
+      "kind": "prd",
+      "path": "docs/requirement-055.md",
+      "sha256": "9c96caaef192eb18d76620f5ee6d6245979ec64e8ccf9d23070889fc3c0f4083"
+    },
+    {
+      "id": "SRC-056",
+      "kind": "prd",
+      "path": "docs/requirement-056.md",
+      "sha256": "e3ce96ab53f30324a44e891f1fedf6caf6f05394bc53f14dc92b8356aa83f44a"
+    },
+    {
+      "id": "SRC-057",
+      "kind": "prd",
+      "path": "docs/requirement-057.md",
+      "sha256": "d9c8acdd627affed24bebffe927d9d9b58c234480b0fcce91390cc394697ff95"
+    },
+    {
+      "id": "SRC-058",
+      "kind": "prd",
+      "path": "docs/requirement-058.md",
+      "sha256": "862d59b3ab3603d2e806da7dd6ea65d0aa952ad2e6e7ab5b73f308b84d8b5aa6"
+    },
+    {
+      "id": "SRC-059",
+      "kind": "prd",
+      "path": "docs/requirement-059.md",
+      "sha256": "3a4994362a13f493a0c93a0dcc601c08ea574c4f76fa95abca26a03f52ccf6f1"
+    },
+    {
+      "id": "SRC-060",
+      "kind": "prd",
+      "path": "docs/requirement-060.md",
+      "sha256": "3dfe425c40848d098fb9eb0f778031cca1069e175de7e220d424c2b33adcb02e"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "FR-001",
+      "source_id": "SRC-001",
+      "text": "Preserve receipt retention behavior for module 1. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "7b6b181a348c0f9d1f81e0c2f36ad7f69b9e0ebb752796bc7871459058c8a388",
+      "status": "active"
+    },
+    {
+      "id": "FR-002",
+      "source_id": "SRC-002",
+      "text": "Preserve locale fallback behavior for module 2. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "a3c8c398e8fb49807f3a592a8236c8015c76cbec604bb623d585afc4364de91c",
+      "status": "active"
+    },
+    {
+      "id": "FR-003",
+      "source_id": "SRC-003",
+      "text": "Preserve invoice export behavior for module 3. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "ee554158bb5c8f08e0441b3744fe8072e3c3dec74710fe123eb36a0cc71bda37",
+      "status": "active"
+    },
+    {
+      "id": "FR-004",
+      "source_id": "SRC-004",
+      "text": "Preserve session expiry behavior for module 4. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "d607853cd2ec810b3c57b9c160f3d2f59c679a77f3fb3315c63fe717e1ba5c3d",
+      "status": "active"
+    },
+    {
+      "id": "FR-005",
+      "source_id": "SRC-005",
+      "text": "Preserve retry deduplication behavior for module 5. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "a1f8673708687e6636cda2be3e9a85398dca3990adf17c4250682f3366b3845b",
+      "status": "active"
+    },
+    {
+      "id": "FR-006",
+      "source_id": "SRC-006",
+      "text": "Preserve notification preference behavior for module 6. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "68537856a1281ee3c5f20b74ea549a5778229cba9fc83df713b179bac6ba4fd0",
+      "status": "active"
+    },
+    {
+      "id": "FR-007",
+      "source_id": "SRC-007",
+      "text": "Preserve inventory reservation behavior for module 7. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "7dacfa22ade3ae4a816ab20be6e268258fd06512713461a1a6744eb4c04fd531",
+      "status": "active"
+    },
+    {
+      "id": "FR-008",
+      "source_id": "SRC-008",
+      "text": "Preserve search pagination behavior for module 8. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "49d06cc53dd3d44c2fb35df0cd2bd43869a9aea76f055a340ba90adea76826d3",
+      "status": "active"
+    },
+    {
+      "id": "FR-009",
+      "source_id": "SRC-009",
+      "text": "Preserve receipt retention behavior for module 9. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "3abd595b35e031f85e8c0c8c7c1c5b24554ac29beda385501d43ea411b6f776c",
+      "status": "active"
+    },
+    {
+      "id": "FR-010",
+      "source_id": "SRC-010",
+      "text": "Preserve locale fallback behavior for module 10. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "ffad3df8b21a08c7e6987c265ef5a3aad4e75619cb97052a7225cd473f9db2fe",
+      "status": "active"
+    },
+    {
+      "id": "FR-011",
+      "source_id": "SRC-011",
+      "text": "Preserve invoice export behavior for module 11. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "1a182dca0f1297eb4cbb4ad9fbc295e2e8d90f8ab547a108a1f07c75947964dd",
+      "status": "active"
+    },
+    {
+      "id": "FR-012",
+      "source_id": "SRC-012",
+      "text": "Preserve session expiry behavior for module 12. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "4d7c7815c266ca020523393819a465c1157f61c4d0aa1801f668dd50a543aa20",
+      "status": "active"
+    },
+    {
+      "id": "FR-013",
+      "source_id": "SRC-013",
+      "text": "Preserve retry deduplication behavior for module 13. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "0624fb011aa5b41fe7356666e6b603ee72e8106c37b6853d04098917caefe2eb",
+      "status": "active"
+    },
+    {
+      "id": "FR-014",
+      "source_id": "SRC-014",
+      "text": "Preserve notification preference behavior for module 14. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "8089e49439977e03ab06149147ed9770df860499fc8d6b27fef667593fc37741",
+      "status": "active"
+    },
+    {
+      "id": "FR-015",
+      "source_id": "SRC-015",
+      "text": "Preserve inventory reservation behavior for module 15. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "660eef78ccd67863accac51f6a4d417163a2afc11d39f330e99b0d6b5955fdd3",
+      "status": "active"
+    },
+    {
+      "id": "FR-016",
+      "source_id": "SRC-016",
+      "text": "Preserve search pagination behavior for module 16. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "6a8f7a5457dabe28e072c44ab3b8ab62121839e8a7d39ec915dc0db1846045f9",
+      "status": "active"
+    },
+    {
+      "id": "FR-017",
+      "source_id": "SRC-017",
+      "text": "Preserve receipt retention behavior for module 17. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "89e79cd6873fe7933b4a3a997848b2d4b6bac4d50b24eaa6f0f20ef168846eec",
+      "status": "active"
+    },
+    {
+      "id": "FR-018",
+      "source_id": "SRC-018",
+      "text": "Preserve locale fallback behavior for module 18. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "20a2cbd65d365b4c602a5c3fb63dcb60da74d3dd6f8f964a72fe409887d3b142",
+      "status": "active"
+    },
+    {
+      "id": "FR-019",
+      "source_id": "SRC-019",
+      "text": "Preserve invoice export behavior for module 19. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "0e97709184eb86ac9284de778f0735507228b128a2c49c921e65601a72996271",
+      "status": "active"
+    },
+    {
+      "id": "FR-020",
+      "source_id": "SRC-020",
+      "text": "Preserve session expiry behavior for module 20. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "01ded3d9b2364f493431b67d028233202814fa15e2784965022042e4b25c0363",
+      "status": "active"
+    },
+    {
+      "id": "FR-021",
+      "source_id": "SRC-021",
+      "text": "Preserve retry deduplication behavior for module 21. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "95eb3de444e3c097bac03e82b7b14f36ee277acbb64aff908ab6f08259f9ce3c",
+      "status": "active"
+    },
+    {
+      "id": "FR-022",
+      "source_id": "SRC-022",
+      "text": "Preserve notification preference behavior for module 22. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "df827bf4207b0f56d942a65ed9cd4e4928ac4dc4854490eeefe3ceab30b6626a",
+      "status": "active"
+    },
+    {
+      "id": "FR-023",
+      "source_id": "SRC-023",
+      "text": "Preserve inventory reservation behavior for module 23. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "7306fc02cd5f39478f3700f8c485a272e4aed91984c3c2c23caa3022410064cb",
+      "status": "active"
+    },
+    {
+      "id": "FR-024",
+      "source_id": "SRC-024",
+      "text": "Preserve search pagination behavior for module 24. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "7df420d31046fd0f5550eb165a8e375d86e0924ad58f6a1f74b2b226bf65551e",
+      "status": "active"
+    },
+    {
+      "id": "FR-025",
+      "source_id": "SRC-025",
+      "text": "Preserve receipt retention behavior for module 25. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "88b043b2816d3053c122a1021d710483d8889a6df19a5b8b96654de877039a6f",
+      "status": "active"
+    },
+    {
+      "id": "FR-026",
+      "source_id": "SRC-026",
+      "text": "Preserve locale fallback behavior for module 26. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "f246317749ab94fdfc9407bbf376f26915fc34553977658fe286b0f614f5a590",
+      "status": "active"
+    },
+    {
+      "id": "FR-027",
+      "source_id": "SRC-027",
+      "text": "Preserve invoice export behavior for module 27. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "b7eb038e0be1e5ffb43eff58e66f32ed4770a33e4808759fa4e0a5672613bc38",
+      "status": "active"
+    },
+    {
+      "id": "FR-028",
+      "source_id": "SRC-028",
+      "text": "Preserve session expiry behavior for module 28. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "1a62baa103c92319ca83c95305621845c4a81a2110ad8f2baca92e08e05ef222",
+      "status": "active"
+    },
+    {
+      "id": "FR-029",
+      "source_id": "SRC-029",
+      "text": "Preserve retry deduplication behavior for module 29. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "d4d487d5042841cff70d317cadcd77936a19605ca20ef13ab9b7579c807a64b0",
+      "status": "active"
+    },
+    {
+      "id": "FR-030",
+      "source_id": "SRC-030",
+      "text": "Preserve notification preference behavior for module 30. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "97100c5e9b21451d168c229873252659e09cebd18d78f5408d784686cc9f9375",
+      "status": "active"
+    },
+    {
+      "id": "FR-031",
+      "source_id": "SRC-031",
+      "text": "Preserve inventory reservation behavior for module 31. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "9603f1e12ba33be02a66718059d72fa1ed52797b97caf0867cb7a00107f1aa4e",
+      "status": "stale"
+    },
+    {
+      "id": "FR-032",
+      "source_id": "SRC-032",
+      "text": "Preserve search pagination behavior for module 32. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "d6af6008feac59f3697805c45342747904b7fbea390c8c5a97ba972ae273e0e3",
+      "status": "active"
+    },
+    {
+      "id": "FR-033",
+      "source_id": "SRC-033",
+      "text": "Preserve receipt retention behavior for module 33. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "1a27e15ae804624cfb5541a970e8f7c1827b4f17ac6709a8a75cfd693fefa052",
+      "status": "active"
+    },
+    {
+      "id": "FR-034",
+      "source_id": "SRC-034",
+      "text": "Preserve locale fallback behavior for module 34. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "0bae6f0eae07e7726bac657974aad01107cc945eb959ad4dabbb006aaf0bd762",
+      "status": "active"
+    },
+    {
+      "id": "FR-035",
+      "source_id": "SRC-035",
+      "text": "Preserve invoice export behavior for module 35. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "6fb67357482b3f41b56331a1b0306bd2971b80680a7aa8c2c2ba03d929dfb64a",
+      "status": "active"
+    },
+    {
+      "id": "FR-036",
+      "source_id": "SRC-036",
+      "text": "Preserve session expiry behavior for module 36. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "e8fb237e38cb8c2d47a9a596429b69bd413c448a9c031374a146a2ea6bf7b129",
+      "status": "active"
+    },
+    {
+      "id": "FR-037",
+      "source_id": "SRC-037",
+      "text": "Preserve retry deduplication behavior for module 37. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "5f832b66f56cfe24b553274bd1e7af114177a2481d645392e5ed1ab1dc9ac367",
+      "status": "active"
+    },
+    {
+      "id": "FR-038",
+      "source_id": "SRC-038",
+      "text": "Preserve notification preference behavior for module 38. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "5d881427f6ef5af1a7cd1e82a57bafeae7f4f6c8e824ba0a5066500118e477d8",
+      "status": "active"
+    },
+    {
+      "id": "FR-039",
+      "source_id": "SRC-039",
+      "text": "Preserve inventory reservation behavior for module 39. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "c1240234d70c8c839612d6b0e1e9d99f62a9f0a881e04f0b65fd478d8fd750f7",
+      "status": "active"
+    },
+    {
+      "id": "FR-040",
+      "source_id": "SRC-040",
+      "text": "Preserve search pagination behavior for module 40. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "76812a50ec4e86bba804f033b006f059d6e4cdca39bbde62c58fce171c68b360",
+      "status": "active"
+    },
+    {
+      "id": "FR-041",
+      "source_id": "SRC-041",
+      "text": "Preserve receipt retention behavior for module 41. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "d65885ea68f7d8aa42a28ee70aa6939c3c6621fd7a5ed8703c3228fc864f02f5",
+      "status": "active"
+    },
+    {
+      "id": "FR-042",
+      "source_id": "SRC-042",
+      "text": "Preserve locale fallback behavior for module 42. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "3c563d8ac132a1c58a641f684087573f155bd3ce52745cbcb36e747a68503ca1",
+      "status": "active"
+    },
+    {
+      "id": "FR-043",
+      "source_id": "SRC-043",
+      "text": "Preserve invoice export behavior for module 43. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "d9f2272bd8c28aa15246b8abe2730321b1b67a26c175efc2a486ec11d1ef2048",
+      "status": "active"
+    },
+    {
+      "id": "FR-044",
+      "source_id": "SRC-044",
+      "text": "Preserve session expiry behavior for module 44. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "979868c9a9f18b6ebdbdcb21d4de3bb024849ffc490924d3a2f86a9425d9cb87",
+      "status": "active"
+    },
+    {
+      "id": "FR-045",
+      "source_id": "SRC-045",
+      "text": "Preserve retry deduplication behavior for module 45. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "d3f805a1561cf17fc44b1fd9d6a35a886034ba3ae84233258292a8367477ecd5",
+      "status": "active"
+    },
+    {
+      "id": "FR-046",
+      "source_id": "SRC-046",
+      "text": "Preserve notification preference behavior for module 46. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "9a90a23835d6aba02b498931d695fe4276a0ada2ea731f431fb25e279b2c4e61",
+      "status": "active"
+    },
+    {
+      "id": "FR-047",
+      "source_id": "SRC-047",
+      "text": "Preserve inventory reservation behavior for module 47. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "e3383288c11e9a7d06037199a319ff54967b31003402cb00d9290e0e4e1619da",
+      "status": "active"
+    },
+    {
+      "id": "FR-048",
+      "source_id": "SRC-048",
+      "text": "Preserve search pagination behavior for module 48. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "e728132a714bb2832d7709b697c77a5b0b7d5ee04f9603a5d6fa3245b83b678c",
+      "status": "active"
+    },
+    {
+      "id": "FR-049",
+      "source_id": "SRC-049",
+      "text": "Preserve receipt retention behavior for module 49. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "09abc02a60153e666a7382b72a21ce9ff240024b40c0a9fb79f5414f3fd02648",
+      "status": "active"
+    },
+    {
+      "id": "FR-050",
+      "source_id": "SRC-050",
+      "text": "Preserve locale fallback behavior for module 50. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "58cebef3f72afc5f48392e8bb70bea7832f4680002da7df8ecb1402010cd3e68",
+      "status": "active"
+    },
+    {
+      "id": "FR-051",
+      "source_id": "SRC-051",
+      "text": "Preserve invoice export behavior for module 51. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "b5e5f898b21e1ecfa83f4f8b36f131ce1fb21c5efa2d5af03e1bc45b5f9b7f1a",
+      "status": "active"
+    },
+    {
+      "id": "FR-052",
+      "source_id": "SRC-052",
+      "text": "Preserve session expiry behavior for module 52. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "7e2a1492579e8d8c939758da4a28d49ddb3ad641a5ee665f959a2c41b5002964",
+      "status": "active"
+    },
+    {
+      "id": "FR-053",
+      "source_id": "SRC-053",
+      "text": "Preserve retry deduplication behavior for module 53. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "0173dc118d36bfcb46d4a28f5855041a0b38c64a1ab97c180e69dd4713c97115",
+      "status": "active"
+    },
+    {
+      "id": "FR-054",
+      "source_id": "SRC-054",
+      "text": "Preserve notification preference behavior for module 54. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "781c0191e289dc6caeeb2ab1914a302ad84cfcbb9e0e427c67b3a23997e05a4b",
+      "status": "active"
+    },
+    {
+      "id": "FR-055",
+      "source_id": "SRC-055",
+      "text": "Preserve inventory reservation behavior for module 55. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "9c96caaef192eb18d76620f5ee6d6245979ec64e8ccf9d23070889fc3c0f4083",
+      "status": "active"
+    },
+    {
+      "id": "FR-056",
+      "source_id": "SRC-056",
+      "text": "Preserve search pagination behavior for module 56. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "e3ce96ab53f30324a44e891f1fedf6caf6f05394bc53f14dc92b8356aa83f44a",
+      "status": "active"
+    },
+    {
+      "id": "FR-057",
+      "source_id": "SRC-057",
+      "text": "Preserve receipt retention behavior for module 57. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "d9c8acdd627affed24bebffe927d9d9b58c234480b0fcce91390cc394697ff95",
+      "status": "active"
+    },
+    {
+      "id": "FR-058",
+      "source_id": "SRC-058",
+      "text": "Preserve locale fallback behavior for module 58. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "862d59b3ab3603d2e806da7dd6ea65d0aa952ad2e6e7ab5b73f308b84d8b5aa6",
+      "status": "active"
+    },
+    {
+      "id": "FR-059",
+      "source_id": "SRC-059",
+      "text": "Preserve invoice export behavior for module 59. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "3a4994362a13f493a0c93a0dcc601c08ea574c4f76fa95abca26a03f52ccf6f1",
+      "status": "stale"
+    },
+    {
+      "id": "FR-060",
+      "source_id": "SRC-060",
+      "text": "Preserve session expiry behavior for module 60. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "3dfe425c40848d098fb9eb0f778031cca1069e175de7e220d424c2b33adcb02e",
+      "status": "active"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "title": "Implement receipt retention in module 1",
+      "requirement_ids": [
+        "FR-001"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_001.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-001"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-002",
+      "title": "Implement locale fallback in module 2",
+      "requirement_ids": [
+        "FR-002"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_002.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-002"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-003",
+      "title": "Implement invoice export in module 3",
+      "requirement_ids": [
+        "FR-003"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_003.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-003"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-004",
+      "title": "Implement session expiry in module 4",
+      "requirement_ids": [
+        "FR-004"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_004.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-004"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-005",
+      "title": "Implement retry deduplication in module 5",
+      "requirement_ids": [
+        "FR-005"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_005.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-005"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-006",
+      "title": "Implement notification preference in module 6",
+      "requirement_ids": [
+        "FR-006"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_006.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-006"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-007",
+      "title": "Implement inventory reservation in module 7",
+      "requirement_ids": [
+        "FR-007"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_007.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-007"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-008",
+      "title": "Implement search pagination in module 8",
+      "requirement_ids": [
+        "FR-008"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_008.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-008"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-009",
+      "title": "Implement receipt retention in module 9",
+      "requirement_ids": [
+        "FR-009"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_009.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-009"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-010",
+      "title": "Implement locale fallback in module 10",
+      "requirement_ids": [
+        "FR-010"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_010.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-010"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-011",
+      "title": "Implement invoice export in module 11",
+      "requirement_ids": [
+        "FR-011"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_011.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-011"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-012",
+      "title": "Implement session expiry in module 12",
+      "requirement_ids": [
+        "FR-012"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_012.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-012"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-013",
+      "title": "Implement retry deduplication in module 13",
+      "requirement_ids": [
+        "FR-013"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_013.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-013"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-014",
+      "title": "Implement notification preference in module 14",
+      "requirement_ids": [
+        "FR-014"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_014.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-014"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-015",
+      "title": "Implement inventory reservation in module 15",
+      "requirement_ids": [
+        "FR-015"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_015.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-015"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-016",
+      "title": "Implement search pagination in module 16",
+      "requirement_ids": [
+        "FR-016"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_016.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-016"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-017",
+      "title": "Implement receipt retention in module 17",
+      "requirement_ids": [
+        "FR-017"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_017.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-017"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-018",
+      "title": "Implement locale fallback in module 18",
+      "requirement_ids": [
+        "FR-018"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_018.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-018"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-019",
+      "title": "Implement invoice export in module 19",
+      "requirement_ids": [
+        "FR-019"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_019.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-019"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-020",
+      "title": "Implement session expiry in module 20",
+      "requirement_ids": [
+        "FR-020"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_020.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-020"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-021",
+      "title": "Implement retry deduplication in module 21",
+      "requirement_ids": [
+        "FR-021"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_021.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-021"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-022",
+      "title": "Implement notification preference in module 22",
+      "requirement_ids": [
+        "FR-022"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_022.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-022"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-023",
+      "title": "Implement inventory reservation in module 23",
+      "requirement_ids": [
+        "FR-023"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_023.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-023"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-024",
+      "title": "Implement search pagination in module 24",
+      "requirement_ids": [
+        "FR-024"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_024.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-024"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-025",
+      "title": "Implement receipt retention in module 25",
+      "requirement_ids": [
+        "FR-025"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_025.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-025"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-026",
+      "title": "Implement locale fallback in module 26",
+      "requirement_ids": [
+        "FR-026"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_026.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-026"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-027",
+      "title": "Implement invoice export in module 27",
+      "requirement_ids": [
+        "FR-027"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_027.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-027"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-028",
+      "title": "Implement session expiry in module 28",
+      "requirement_ids": [
+        "FR-028"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_028.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-028"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-029",
+      "title": "Implement retry deduplication in module 29",
+      "requirement_ids": [
+        "FR-029"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_029.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-029"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-030",
+      "title": "Implement notification preference in module 30",
+      "requirement_ids": [
+        "FR-030"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_030.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-030"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-031",
+      "title": "Implement inventory reservation in module 31",
+      "requirement_ids": [
+        "FR-031"
+      ],
+      "artifact_ids": [],
+      "depends_on": [
+        "TASK-001",
+        "TASK-002"
+      ],
+      "intended_paths": [
+        "src/module_031.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "stale",
+      "check_ids": [
+        "CHK-031"
+      ],
+      "blocker": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "TASK-032",
+      "title": "Implement search pagination in module 32",
+      "requirement_ids": [
+        "FR-032"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_032.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-032"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-033",
+      "title": "Implement receipt retention in module 33",
+      "requirement_ids": [
+        "FR-033"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_033.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-033"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-034",
+      "title": "Implement locale fallback in module 34",
+      "requirement_ids": [
+        "FR-034"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_034.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-034"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-035",
+      "title": "Implement invoice export in module 35",
+      "requirement_ids": [
+        "FR-035"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_035.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-035"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-036",
+      "title": "Implement session expiry in module 36",
+      "requirement_ids": [
+        "FR-036"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_036.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-036"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-037",
+      "title": "Implement retry deduplication in module 37",
+      "requirement_ids": [
+        "FR-037"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_037.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-037"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-038",
+      "title": "Implement notification preference in module 38",
+      "requirement_ids": [
+        "FR-038"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_038.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-038"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-039",
+      "title": "Implement inventory reservation in module 39",
+      "requirement_ids": [
+        "FR-039"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_039.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-039"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-040",
+      "title": "Implement search pagination in module 40",
+      "requirement_ids": [
+        "FR-040"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_040.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-040"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-041",
+      "title": "Implement receipt retention in module 41",
+      "requirement_ids": [
+        "FR-041"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_041.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-041"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-042",
+      "title": "Implement locale fallback in module 42",
+      "requirement_ids": [
+        "FR-042"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_042.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-042"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-043",
+      "title": "Implement invoice export in module 43",
+      "requirement_ids": [
+        "FR-043"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_043.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-043"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-044",
+      "title": "Implement session expiry in module 44",
+      "requirement_ids": [
+        "FR-044"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_044.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-044"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-045",
+      "title": "Implement retry deduplication in module 45",
+      "requirement_ids": [
+        "FR-045"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_045.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-045"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-046",
+      "title": "Implement notification preference in module 46",
+      "requirement_ids": [
+        "FR-046"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_046.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-046"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-047",
+      "title": "Implement inventory reservation in module 47",
+      "requirement_ids": [
+        "FR-047"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_047.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-047"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-048",
+      "title": "Implement search pagination in module 48",
+      "requirement_ids": [
+        "FR-048"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_048.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-048"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-049",
+      "title": "Implement receipt retention in module 49",
+      "requirement_ids": [
+        "FR-049"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_049.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-049"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-050",
+      "title": "Implement locale fallback in module 50",
+      "requirement_ids": [
+        "FR-050"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_050.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-050"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-051",
+      "title": "Implement invoice export in module 51",
+      "requirement_ids": [
+        "FR-051"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_051.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-051"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-052",
+      "title": "Implement session expiry in module 52",
+      "requirement_ids": [
+        "FR-052"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_052.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-052"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-053",
+      "title": "Implement retry deduplication in module 53",
+      "requirement_ids": [
+        "FR-053"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_053.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-053"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-054",
+      "title": "Implement notification preference in module 54",
+      "requirement_ids": [
+        "FR-054"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_054.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-054"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-055",
+      "title": "Implement inventory reservation in module 55",
+      "requirement_ids": [
+        "FR-055"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_055.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-055"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-056",
+      "title": "Implement search pagination in module 56",
+      "requirement_ids": [
+        "FR-056"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_056.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-056"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-057",
+      "title": "Implement receipt retention in module 57",
+      "requirement_ids": [
+        "FR-057"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_057.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-057"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-058",
+      "title": "Implement locale fallback in module 58",
+      "requirement_ids": [
+        "FR-058"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_058.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-058"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-059",
+      "title": "Implement invoice export in module 59",
+      "requirement_ids": [
+        "FR-059"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_059.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "stale",
+      "check_ids": [
+        "CHK-059"
+      ],
+      "blocker": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "TASK-060",
+      "title": "Implement session expiry in module 60",
+      "requirement_ids": [
+        "FR-060"
+      ],
+      "artifact_ids": [],
+      "depends_on": [
+        "TASK-001",
+        "TASK-002"
+      ],
+      "intended_paths": [
+        "src/module_060.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "ready",
+      "check_ids": [
+        "CHK-060"
+      ],
+      "blocker": null,
+      "evidence_refs": []
+    }
+  ],
+  "checks": [
+    {
+      "id": "CHK-001",
+      "task_ids": [
+        "TASK-001"
+      ],
+      "requirement_ids": [
+        "FR-001"
+      ],
+      "command": "python3 -m unittest tests.test_module_001",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-002",
+      "task_ids": [
+        "TASK-002"
+      ],
+      "requirement_ids": [
+        "FR-002"
+      ],
+      "command": "python3 -m unittest tests.test_module_002",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-003",
+      "task_ids": [
+        "TASK-003"
+      ],
+      "requirement_ids": [
+        "FR-003"
+      ],
+      "command": "python3 -m unittest tests.test_module_003",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-004",
+      "task_ids": [
+        "TASK-004"
+      ],
+      "requirement_ids": [
+        "FR-004"
+      ],
+      "command": "python3 -m unittest tests.test_module_004",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-005",
+      "task_ids": [
+        "TASK-005"
+      ],
+      "requirement_ids": [
+        "FR-005"
+      ],
+      "command": "python3 -m unittest tests.test_module_005",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-006",
+      "task_ids": [
+        "TASK-006"
+      ],
+      "requirement_ids": [
+        "FR-006"
+      ],
+      "command": "python3 -m unittest tests.test_module_006",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-007",
+      "task_ids": [
+        "TASK-007"
+      ],
+      "requirement_ids": [
+        "FR-007"
+      ],
+      "command": "python3 -m unittest tests.test_module_007",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-008",
+      "task_ids": [
+        "TASK-008"
+      ],
+      "requirement_ids": [
+        "FR-008"
+      ],
+      "command": "python3 -m unittest tests.test_module_008",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-009",
+      "task_ids": [
+        "TASK-009"
+      ],
+      "requirement_ids": [
+        "FR-009"
+      ],
+      "command": "python3 -m unittest tests.test_module_009",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-010",
+      "task_ids": [
+        "TASK-010"
+      ],
+      "requirement_ids": [
+        "FR-010"
+      ],
+      "command": "python3 -m unittest tests.test_module_010",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-011",
+      "task_ids": [
+        "TASK-011"
+      ],
+      "requirement_ids": [
+        "FR-011"
+      ],
+      "command": "python3 -m unittest tests.test_module_011",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-012",
+      "task_ids": [
+        "TASK-012"
+      ],
+      "requirement_ids": [
+        "FR-012"
+      ],
+      "command": "python3 -m unittest tests.test_module_012",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-013",
+      "task_ids": [
+        "TASK-013"
+      ],
+      "requirement_ids": [
+        "FR-013"
+      ],
+      "command": "python3 -m unittest tests.test_module_013",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-014",
+      "task_ids": [
+        "TASK-014"
+      ],
+      "requirement_ids": [
+        "FR-014"
+      ],
+      "command": "python3 -m unittest tests.test_module_014",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-015",
+      "task_ids": [
+        "TASK-015"
+      ],
+      "requirement_ids": [
+        "FR-015"
+      ],
+      "command": "python3 -m unittest tests.test_module_015",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-016",
+      "task_ids": [
+        "TASK-016"
+      ],
+      "requirement_ids": [
+        "FR-016"
+      ],
+      "command": "python3 -m unittest tests.test_module_016",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-017",
+      "task_ids": [
+        "TASK-017"
+      ],
+      "requirement_ids": [
+        "FR-017"
+      ],
+      "command": "python3 -m unittest tests.test_module_017",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-018",
+      "task_ids": [
+        "TASK-018"
+      ],
+      "requirement_ids": [
+        "FR-018"
+      ],
+      "command": "python3 -m unittest tests.test_module_018",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-019",
+      "task_ids": [
+        "TASK-019"
+      ],
+      "requirement_ids": [
+        "FR-019"
+      ],
+      "command": "python3 -m unittest tests.test_module_019",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-020",
+      "task_ids": [
+        "TASK-020"
+      ],
+      "requirement_ids": [
+        "FR-020"
+      ],
+      "command": "python3 -m unittest tests.test_module_020",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-021",
+      "task_ids": [
+        "TASK-021"
+      ],
+      "requirement_ids": [
+        "FR-021"
+      ],
+      "command": "python3 -m unittest tests.test_module_021",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-022",
+      "task_ids": [
+        "TASK-022"
+      ],
+      "requirement_ids": [
+        "FR-022"
+      ],
+      "command": "python3 -m unittest tests.test_module_022",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-023",
+      "task_ids": [
+        "TASK-023"
+      ],
+      "requirement_ids": [
+        "FR-023"
+      ],
+      "command": "python3 -m unittest tests.test_module_023",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-024",
+      "task_ids": [
+        "TASK-024"
+      ],
+      "requirement_ids": [
+        "FR-024"
+      ],
+      "command": "python3 -m unittest tests.test_module_024",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-025",
+      "task_ids": [
+        "TASK-025"
+      ],
+      "requirement_ids": [
+        "FR-025"
+      ],
+      "command": "python3 -m unittest tests.test_module_025",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-026",
+      "task_ids": [
+        "TASK-026"
+      ],
+      "requirement_ids": [
+        "FR-026"
+      ],
+      "command": "python3 -m unittest tests.test_module_026",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-027",
+      "task_ids": [
+        "TASK-027"
+      ],
+      "requirement_ids": [
+        "FR-027"
+      ],
+      "command": "python3 -m unittest tests.test_module_027",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-028",
+      "task_ids": [
+        "TASK-028"
+      ],
+      "requirement_ids": [
+        "FR-028"
+      ],
+      "command": "python3 -m unittest tests.test_module_028",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-029",
+      "task_ids": [
+        "TASK-029"
+      ],
+      "requirement_ids": [
+        "FR-029"
+      ],
+      "command": "python3 -m unittest tests.test_module_029",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-030",
+      "task_ids": [
+        "TASK-030"
+      ],
+      "requirement_ids": [
+        "FR-030"
+      ],
+      "command": "python3 -m unittest tests.test_module_030",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-031",
+      "task_ids": [
+        "TASK-031"
+      ],
+      "requirement_ids": [
+        "FR-031"
+      ],
+      "command": "python3 -m unittest tests.test_module_031",
+      "status": "stale",
+      "evidence_ref": null
+    },
+    {
+      "id": "CHK-032",
+      "task_ids": [
+        "TASK-032"
+      ],
+      "requirement_ids": [
+        "FR-032"
+      ],
+      "command": "python3 -m unittest tests.test_module_032",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-033",
+      "task_ids": [
+        "TASK-033"
+      ],
+      "requirement_ids": [
+        "FR-033"
+      ],
+      "command": "python3 -m unittest tests.test_module_033",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-034",
+      "task_ids": [
+        "TASK-034"
+      ],
+      "requirement_ids": [
+        "FR-034"
+      ],
+      "command": "python3 -m unittest tests.test_module_034",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-035",
+      "task_ids": [
+        "TASK-035"
+      ],
+      "requirement_ids": [
+        "FR-035"
+      ],
+      "command": "python3 -m unittest tests.test_module_035",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-036",
+      "task_ids": [
+        "TASK-036"
+      ],
+      "requirement_ids": [
+        "FR-036"
+      ],
+      "command": "python3 -m unittest tests.test_module_036",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-037",
+      "task_ids": [
+        "TASK-037"
+      ],
+      "requirement_ids": [
+        "FR-037"
+      ],
+      "command": "python3 -m unittest tests.test_module_037",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-038",
+      "task_ids": [
+        "TASK-038"
+      ],
+      "requirement_ids": [
+        "FR-038"
+      ],
+      "command": "python3 -m unittest tests.test_module_038",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-039",
+      "task_ids": [
+        "TASK-039"
+      ],
+      "requirement_ids": [
+        "FR-039"
+      ],
+      "command": "python3 -m unittest tests.test_module_039",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-040",
+      "task_ids": [
+        "TASK-040"
+      ],
+      "requirement_ids": [
+        "FR-040"
+      ],
+      "command": "python3 -m unittest tests.test_module_040",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-041",
+      "task_ids": [
+        "TASK-041"
+      ],
+      "requirement_ids": [
+        "FR-041"
+      ],
+      "command": "python3 -m unittest tests.test_module_041",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-042",
+      "task_ids": [
+        "TASK-042"
+      ],
+      "requirement_ids": [
+        "FR-042"
+      ],
+      "command": "python3 -m unittest tests.test_module_042",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-043",
+      "task_ids": [
+        "TASK-043"
+      ],
+      "requirement_ids": [
+        "FR-043"
+      ],
+      "command": "python3 -m unittest tests.test_module_043",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-044",
+      "task_ids": [
+        "TASK-044"
+      ],
+      "requirement_ids": [
+        "FR-044"
+      ],
+      "command": "python3 -m unittest tests.test_module_044",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-045",
+      "task_ids": [
+        "TASK-045"
+      ],
+      "requirement_ids": [
+        "FR-045"
+      ],
+      "command": "python3 -m unittest tests.test_module_045",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-046",
+      "task_ids": [
+        "TASK-046"
+      ],
+      "requirement_ids": [
+        "FR-046"
+      ],
+      "command": "python3 -m unittest tests.test_module_046",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-047",
+      "task_ids": [
+        "TASK-047"
+      ],
+      "requirement_ids": [
+        "FR-047"
+      ],
+      "command": "python3 -m unittest tests.test_module_047",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-048",
+      "task_ids": [
+        "TASK-048"
+      ],
+      "requirement_ids": [
+        "FR-048"
+      ],
+      "command": "python3 -m unittest tests.test_module_048",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-049",
+      "task_ids": [
+        "TASK-049"
+      ],
+      "requirement_ids": [
+        "FR-049"
+      ],
+      "command": "python3 -m unittest tests.test_module_049",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-050",
+      "task_ids": [
+        "TASK-050"
+      ],
+      "requirement_ids": [
+        "FR-050"
+      ],
+      "command": "python3 -m unittest tests.test_module_050",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-051",
+      "task_ids": [
+        "TASK-051"
+      ],
+      "requirement_ids": [
+        "FR-051"
+      ],
+      "command": "python3 -m unittest tests.test_module_051",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-052",
+      "task_ids": [
+        "TASK-052"
+      ],
+      "requirement_ids": [
+        "FR-052"
+      ],
+      "command": "python3 -m unittest tests.test_module_052",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-053",
+      "task_ids": [
+        "TASK-053"
+      ],
+      "requirement_ids": [
+        "FR-053"
+      ],
+      "command": "python3 -m unittest tests.test_module_053",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-054",
+      "task_ids": [
+        "TASK-054"
+      ],
+      "requirement_ids": [
+        "FR-054"
+      ],
+      "command": "python3 -m unittest tests.test_module_054",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-055",
+      "task_ids": [
+        "TASK-055"
+      ],
+      "requirement_ids": [
+        "FR-055"
+      ],
+      "command": "python3 -m unittest tests.test_module_055",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-056",
+      "task_ids": [
+        "TASK-056"
+      ],
+      "requirement_ids": [
+        "FR-056"
+      ],
+      "command": "python3 -m unittest tests.test_module_056",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-057",
+      "task_ids": [
+        "TASK-057"
+      ],
+      "requirement_ids": [
+        "FR-057"
+      ],
+      "command": "python3 -m unittest tests.test_module_057",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-058",
+      "task_ids": [
+        "TASK-058"
+      ],
+      "requirement_ids": [
+        "FR-058"
+      ],
+      "command": "python3 -m unittest tests.test_module_058",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-059",
+      "task_ids": [
+        "TASK-059"
+      ],
+      "requirement_ids": [
+        "FR-059"
+      ],
+      "command": "python3 -m unittest tests.test_module_059",
+      "status": "stale",
+      "evidence_ref": null
+    },
+    {
+      "id": "CHK-060",
+      "task_ids": [
+        "TASK-060"
+      ],
+      "requirement_ids": [
+        "FR-060"
+      ],
+      "command": "python3 -m unittest tests.test_module_060",
+      "status": "pending",
+      "evidence_ref": null
+    }
+  ],
+  "release_gates": [
+    {
+      "id": "GATE-RELEASE",
+      "requires_task_ids": [
+        "TASK-031",
+        "TASK-060"
+      ],
+      "requires_requirement_ids": [
+        "FR-031",
+        "FR-060"
+      ],
+      "status": "stale",
+      "authority_actions": []
+    }
+  ],
+  "next_tasks": [
+    {
+      "id": "TASK-060",
+      "title": "Implement session expiry in module 60",
+      "requirement_ids": [
+        "FR-060"
+      ],
+      "artifact_ids": [],
+      "depends_on": [
+        "TASK-001",
+        "TASK-002"
+      ],
+      "intended_paths": [
+        "src/module_060.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "ready",
+      "check_ids": [
+        "CHK-060"
+      ],
+      "blocker": null,
+      "evidence_refs": []
+    }
+  ],
+  "verification_boundary": "Saved evidence validity is structural, not proof of executed behavior. Commands are not executed. Drift is previewed, not persisted."
+}
