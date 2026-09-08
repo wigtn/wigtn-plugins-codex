@@ -1,0 +1,169 @@
+{
+  "runs": 16,
+  "unique_session_ids": 16,
+  "completed_turns": 16,
+  "command_items": 43,
+  "manual_review_status": "not performed by this script; see trace-audit.json if present",
+  "rows": [
+    {
+      "run": "01-01-small-8-candidate",
+      "case": "01-small-8",
+      "arm": "candidate",
+      "command_items": 1,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "02-01-small-8-baseline",
+      "case": "01-small-8",
+      "arm": "baseline",
+      "command_items": 3,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": false,
+      "read_workgraph_reference": true
+    },
+    {
+      "run": "03-02-small-16-baseline",
+      "case": "02-small-16",
+      "arm": "baseline",
+      "command_items": 2,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": false,
+      "read_workgraph_reference": true
+    },
+    {
+      "run": "04-02-small-16-candidate",
+      "case": "02-small-16",
+      "arm": "candidate",
+      "command_items": 2,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "05-03-large-40-baseline",
+      "case": "03-large-40",
+      "arm": "baseline",
+      "command_items": 4,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": false,
+      "read_workgraph_reference": true
+    },
+    {
+      "run": "06-03-large-40-candidate",
+      "case": "03-large-40",
+      "arm": "candidate",
+      "command_items": 2,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "07-04-large-140-baseline",
+      "case": "04-large-140",
+      "arm": "baseline",
+      "command_items": 4,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": false,
+      "read_workgraph_reference": true
+    },
+    {
+      "run": "08-04-large-140-candidate",
+      "case": "04-large-140",
+      "arm": "candidate",
+      "command_items": 2,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "09-05-drift-72-candidate",
+      "case": "05-drift-72",
+      "arm": "candidate",
+      "command_items": 1,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "10-05-drift-72-baseline",
+      "case": "05-drift-72",
+      "arm": "baseline",
+      "command_items": 3,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": false,
+      "read_workgraph_reference": true
+    },
+    {
+      "run": "11-06-blocked-90-baseline",
+      "case": "06-blocked-90",
+      "arm": "baseline",
+      "command_items": 5,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": false,
+      "read_workgraph_reference": true
+    },
+    {
+      "run": "12-06-blocked-90-candidate",
+      "case": "06-blocked-90",
+      "arm": "candidate",
+      "command_items": 1,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "13-07-dense-80-candidate",
+      "case": "07-dense-80",
+      "arm": "candidate",
+      "command_items": 3,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "14-07-dense-80-baseline",
+      "case": "07-dense-80",
+      "arm": "baseline",
+      "command_items": 5,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": false,
+      "read_workgraph_reference": true
+    },
+    {
+      "run": "15-08-invalid-80-candidate",
+      "case": "08-invalid-80",
+      "arm": "candidate",
+      "command_items": 2,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "16-08-invalid-80-baseline",
+      "case": "08-invalid-80",
+      "arm": "baseline",
+      "command_items": 3,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": false,
+      "read_workgraph_reference": true
+    }
+  ]
+}

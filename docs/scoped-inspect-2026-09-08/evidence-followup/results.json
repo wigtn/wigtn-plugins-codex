@@ -1,0 +1,314 @@
+{
+  "rows": [
+    {
+      "exit_code": 0,
+      "seconds": 23.154,
+      "case": "01-small-8",
+      "arm": "candidate",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 31095,
+        "cached_input_tokens": 24192,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 362,
+        "reasoning_output_tokens": 0
+      },
+      "command_items": 1,
+      "tool_output_bytes": 8736
+    },
+    {
+      "exit_code": 0,
+      "seconds": 26.936,
+      "case": "01-small-8",
+      "arm": "baseline",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 49759,
+        "cached_input_tokens": 29056,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 486,
+        "reasoning_output_tokens": 0
+      },
+      "command_items": 3,
+      "tool_output_bytes": 19118
+    },
+    {
+      "exit_code": 0,
+      "seconds": 23.966,
+      "case": "02-small-16",
+      "arm": "baseline",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 53321,
+        "cached_input_tokens": 39424,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 446,
+        "reasoning_output_tokens": 0
+      },
+      "command_items": 2,
+      "tool_output_bytes": 29594
+    },
+    {
+      "exit_code": 0,
+      "seconds": 24.346,
+      "case": "02-small-16",
+      "arm": "candidate",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 46258,
+        "cached_input_tokens": 38528,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 436,
+        "reasoning_output_tokens": 0
+      },
+      "command_items": 2,
+      "tool_output_bytes": 11071
+    },
+    {
+      "exit_code": 0,
+      "seconds": 46.156,
+      "case": "03-large-40",
+      "arm": "baseline",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 86192,
+        "cached_input_tokens": 76672,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 928,
+        "reasoning_output_tokens": 19
+      },
+      "command_items": 4,
+      "tool_output_bytes": 62127
+    },
+    {
+      "exit_code": 0,
+      "seconds": 20.422,
+      "case": "03-large-40",
+      "arm": "candidate",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 31694,
+        "cached_input_tokens": 24192,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 437,
+        "reasoning_output_tokens": 0
+      },
+      "command_items": 2,
+      "tool_output_bytes": 11080
+    },
+    {
+      "exit_code": 0,
+      "seconds": 41.872,
+      "case": "04-large-140",
+      "arm": "baseline",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 86881,
+        "cached_input_tokens": 77184,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 769,
+        "reasoning_output_tokens": 0
+      },
+      "command_items": 4,
+      "tool_output_bytes": 195565
+    },
+    {
+      "exit_code": 0,
+      "seconds": 22.719,
+      "case": "04-large-140",
+      "arm": "candidate",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 31739,
+        "cached_input_tokens": 13696,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 487,
+        "reasoning_output_tokens": 41
+      },
+      "command_items": 2,
+      "tool_output_bytes": 11094
+    },
+    {
+      "exit_code": 0,
+      "seconds": 19.893,
+      "case": "05-drift-72",
+      "arm": "candidate",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 31163,
+        "cached_input_tokens": 20992,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 383,
+        "reasoning_output_tokens": 0
+      },
+      "command_items": 1,
+      "tool_output_bytes": 8761
+    },
+    {
+      "exit_code": 0,
+      "seconds": 36.664,
+      "case": "05-drift-72",
+      "arm": "baseline",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 87794,
+        "cached_input_tokens": 77568,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 750,
+        "reasoning_output_tokens": 11
+      },
+      "command_items": 3,
+      "tool_output_bytes": 105601
+    },
+    {
+      "exit_code": 0,
+      "seconds": 42.124,
+      "case": "06-blocked-90",
+      "arm": "baseline",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 116337,
+        "cached_input_tokens": 96256,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 830,
+        "reasoning_output_tokens": 0
+      },
+      "command_items": 5,
+      "tool_output_bytes": 128624
+    },
+    {
+      "exit_code": 0,
+      "seconds": 20.758,
+      "case": "06-blocked-90",
+      "arm": "candidate",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 30689,
+        "cached_input_tokens": 24192,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 360,
+        "reasoning_output_tokens": 0
+      },
+      "command_items": 1,
+      "tool_output_bytes": 7657
+    },
+    {
+      "exit_code": 0,
+      "seconds": 36.631,
+      "case": "07-dense-80",
+      "arm": "candidate",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 70721,
+        "cached_input_tokens": 52096,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 801,
+        "reasoning_output_tokens": 0
+      },
+      "command_items": 3,
+      "tool_output_bytes": 115684
+    },
+    {
+      "exit_code": 0,
+      "seconds": 43.953,
+      "case": "07-dense-80",
+      "arm": "baseline",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 130187,
+        "cached_input_tokens": 110080,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 775,
+        "reasoning_output_tokens": 0
+      },
+      "command_items": 5,
+      "tool_output_bytes": 117290
+    },
+    {
+      "exit_code": 0,
+      "seconds": 22.345,
+      "case": "08-invalid-80",
+      "arm": "candidate",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 31310,
+        "cached_input_tokens": 24192,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 423,
+        "reasoning_output_tokens": 0
+      },
+      "command_items": 2,
+      "tool_output_bytes": 10035
+    },
+    {
+      "exit_code": 0,
+      "seconds": 41.068,
+      "case": "08-invalid-80",
+      "arm": "baseline",
+      "unchanged": true,
+      "pass": true,
+      "failures": [],
+      "usage": {
+        "input_tokens": 85863,
+        "cached_input_tokens": 76160,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 756,
+        "reasoning_output_tokens": 0
+      },
+      "command_items": 3,
+      "tool_output_bytes": 115236
+    }
+  ],
+  "totals": {
+    "baseline": {
+      "runs": 8,
+      "passed": 8,
+      "input_tokens": 696334,
+      "cached_input_tokens": 582400,
+      "output_tokens": 5740,
+      "seconds": 302.739,
+      "command_items": 29,
+      "tool_output_bytes": 773155
+    },
+    "candidate": {
+      "runs": 8,
+      "passed": 8,
+      "input_tokens": 304669,
+      "cached_input_tokens": 222080,
+      "output_tokens": 3689,
+      "seconds": 190.268,
+      "command_items": 14,
+      "tool_output_bytes": 184118
+    }
+  }
+}

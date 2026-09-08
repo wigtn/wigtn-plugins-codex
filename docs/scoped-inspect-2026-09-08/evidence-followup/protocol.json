@@ -1,0 +1,487 @@
+{
+  "model": "gpt-6-astra",
+  "effort": "medium",
+  "max_calls": 16,
+  "suite": "followup",
+  "arms": [
+    "baseline",
+    "candidate"
+  ],
+  "timeout_seconds": 300,
+  "seed": 908731,
+  "design": "Prospective follow-up after first 24-call development pilot: 8 fresh cases including dense dependencies and invalid project settings; two arms (released v0.5.4 versus revised candidate); 16 sequential sessions.",
+  "treatment": "Only plugin arms explicitly invoke work-planner; all arms receive identical saved state and outcome requirements. No penalty for bare avoiding WIGTN tools.",
+  "primary": "All requested semantic fields correct and no file mutation or saved-command execution. Compare total input only if candidate quality is no worse on these 8 cases; do not discard failed or timed-out cases.",
+  "secondary": [
+    "cached input",
+    "output",
+    "command items",
+    "elapsed seconds",
+    "tool output bytes"
+  ],
+  "decision": "Same practical threshold: all 8 candidate cases correct, quality no worse than baseline, >=20% aggregate input reduction. Include dense and invalid cases, all failures and timeouts. No retries or candidate changes after execution begins.",
+  "isolation": "Separate CODEX_HOME and workspaces; instruction-based exclusion of evaluator/sibling folders, not OS isolation of those read paths.",
+  "cli": "codex-cli 0.153.4",
+  "cases": {
+    "01-small-8": {
+      "family": "small",
+      "task_count": 8,
+      "prompt": "Read the existing saved plan in .wigtn and assess only TASK-005, TASK-008 for resuming work. Do not implement anything, execute saved check commands, or modify files. Check actual source freshness across the graph and structural validity of the saved artifacts. A source hash change makes its linked requirements and tasks stale. A task is eligible when its status is draft/ready, all dependencies are verified and linked requirements are active; invalid saved artifacts withhold eligibility. Historical evidence does not prove tests passed in this session.\nReturn only JSON: saved_revision (on disk), fresh (all source hashes match), valid_artifacts, drift_paths (all changed/missing source paths), tasks (only the requested tasks, each with id, effective status, eligible boolean, dependency_ids, requirement_ids, intended_paths, check_commands). Arrays of IDs/paths can be in any order. Use task field name \"status\" for effective status. Do not add claims of current verification. Stay inside this workspace and, if installed, the active plugin directory; do not inspect sibling runs, evaluation scripts, or answers.",
+      "expected": {
+        "saved_revision": 17,
+        "fresh": true,
+        "valid_artifacts": true,
+        "drift_paths": [],
+        "tasks": [
+          {
+            "id": "TASK-005",
+            "status": "ready",
+            "eligible": true,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-005"
+            ],
+            "intended_paths": [
+              "src/module_005.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_005"
+            ]
+          },
+          {
+            "id": "TASK-008",
+            "status": "ready",
+            "eligible": true,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-008"
+            ],
+            "intended_paths": [
+              "src/module_008.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_008"
+            ]
+          }
+        ]
+      }
+    },
+    "02-small-16": {
+      "family": "small",
+      "task_count": 16,
+      "prompt": "Read the existing saved plan in .wigtn and assess only TASK-009, TASK-016 for resuming work. Do not implement anything, execute saved check commands, or modify files. Check actual source freshness across the graph and structural validity of the saved artifacts. A source hash change makes its linked requirements and tasks stale. A task is eligible when its status is draft/ready, all dependencies are verified and linked requirements are active; invalid saved artifacts withhold eligibility. Historical evidence does not prove tests passed in this session.\nReturn only JSON: saved_revision (on disk), fresh (all source hashes match), valid_artifacts, drift_paths (all changed/missing source paths), tasks (only the requested tasks, each with id, effective status, eligible boolean, dependency_ids, requirement_ids, intended_paths, check_commands). Arrays of IDs/paths can be in any order. Use task field name \"status\" for effective status. Do not add claims of current verification. Stay inside this workspace and, if installed, the active plugin directory; do not inspect sibling runs, evaluation scripts, or answers.",
+      "expected": {
+        "saved_revision": 17,
+        "fresh": true,
+        "valid_artifacts": true,
+        "drift_paths": [],
+        "tasks": [
+          {
+            "id": "TASK-009",
+            "status": "ready",
+            "eligible": true,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-009"
+            ],
+            "intended_paths": [
+              "src/module_009.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_009"
+            ]
+          },
+          {
+            "id": "TASK-016",
+            "status": "ready",
+            "eligible": true,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-016"
+            ],
+            "intended_paths": [
+              "src/module_016.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_016"
+            ]
+          }
+        ]
+      }
+    },
+    "03-large-40": {
+      "family": "large",
+      "task_count": 40,
+      "prompt": "Read the existing saved plan in .wigtn and assess only TASK-021, TASK-040 for resuming work. Do not implement anything, execute saved check commands, or modify files. Check actual source freshness across the graph and structural validity of the saved artifacts. A source hash change makes its linked requirements and tasks stale. A task is eligible when its status is draft/ready, all dependencies are verified and linked requirements are active; invalid saved artifacts withhold eligibility. Historical evidence does not prove tests passed in this session.\nReturn only JSON: saved_revision (on disk), fresh (all source hashes match), valid_artifacts, drift_paths (all changed/missing source paths), tasks (only the requested tasks, each with id, effective status, eligible boolean, dependency_ids, requirement_ids, intended_paths, check_commands). Arrays of IDs/paths can be in any order. Use task field name \"status\" for effective status. Do not add claims of current verification. Stay inside this workspace and, if installed, the active plugin directory; do not inspect sibling runs, evaluation scripts, or answers.",
+      "expected": {
+        "saved_revision": 17,
+        "fresh": true,
+        "valid_artifacts": true,
+        "drift_paths": [],
+        "tasks": [
+          {
+            "id": "TASK-021",
+            "status": "ready",
+            "eligible": true,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-021"
+            ],
+            "intended_paths": [
+              "src/module_021.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_021"
+            ]
+          },
+          {
+            "id": "TASK-040",
+            "status": "ready",
+            "eligible": true,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-040"
+            ],
+            "intended_paths": [
+              "src/module_040.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_040"
+            ]
+          }
+        ]
+      }
+    },
+    "04-large-140": {
+      "family": "large",
+      "task_count": 140,
+      "prompt": "Read the existing saved plan in .wigtn and assess only TASK-071, TASK-140 for resuming work. Do not implement anything, execute saved check commands, or modify files. Check actual source freshness across the graph and structural validity of the saved artifacts. A source hash change makes its linked requirements and tasks stale. A task is eligible when its status is draft/ready, all dependencies are verified and linked requirements are active; invalid saved artifacts withhold eligibility. Historical evidence does not prove tests passed in this session.\nReturn only JSON: saved_revision (on disk), fresh (all source hashes match), valid_artifacts, drift_paths (all changed/missing source paths), tasks (only the requested tasks, each with id, effective status, eligible boolean, dependency_ids, requirement_ids, intended_paths, check_commands). Arrays of IDs/paths can be in any order. Use task field name \"status\" for effective status. Do not add claims of current verification. Stay inside this workspace and, if installed, the active plugin directory; do not inspect sibling runs, evaluation scripts, or answers.",
+      "expected": {
+        "saved_revision": 17,
+        "fresh": true,
+        "valid_artifacts": true,
+        "drift_paths": [],
+        "tasks": [
+          {
+            "id": "TASK-071",
+            "status": "ready",
+            "eligible": true,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-071"
+            ],
+            "intended_paths": [
+              "src/module_071.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_071"
+            ]
+          },
+          {
+            "id": "TASK-140",
+            "status": "ready",
+            "eligible": true,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-140"
+            ],
+            "intended_paths": [
+              "src/module_140.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_140"
+            ]
+          }
+        ]
+      }
+    },
+    "05-drift-72": {
+      "family": "drift",
+      "task_count": 72,
+      "prompt": "Read the existing saved plan in .wigtn and assess only TASK-037, TASK-072 for resuming work. Do not implement anything, execute saved check commands, or modify files. Check actual source freshness across the graph and structural validity of the saved artifacts. A source hash change makes its linked requirements and tasks stale. A task is eligible when its status is draft/ready, all dependencies are verified and linked requirements are active; invalid saved artifacts withhold eligibility. Historical evidence does not prove tests passed in this session.\nReturn only JSON: saved_revision (on disk), fresh (all source hashes match), valid_artifacts, drift_paths (all changed/missing source paths), tasks (only the requested tasks, each with id, effective status, eligible boolean, dependency_ids, requirement_ids, intended_paths, check_commands). Arrays of IDs/paths can be in any order. Use task field name \"status\" for effective status. Do not add claims of current verification. Stay inside this workspace and, if installed, the active plugin directory; do not inspect sibling runs, evaluation scripts, or answers.",
+      "expected": {
+        "saved_revision": 17,
+        "fresh": false,
+        "valid_artifacts": true,
+        "drift_paths": [
+          "docs/requirement-037.md",
+          "docs/requirement-071.md"
+        ],
+        "tasks": [
+          {
+            "id": "TASK-037",
+            "status": "stale",
+            "eligible": false,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-037"
+            ],
+            "intended_paths": [
+              "src/module_037.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_037"
+            ]
+          },
+          {
+            "id": "TASK-072",
+            "status": "ready",
+            "eligible": true,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-072"
+            ],
+            "intended_paths": [
+              "src/module_072.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_072"
+            ]
+          }
+        ]
+      }
+    },
+    "06-blocked-90": {
+      "family": "blocked",
+      "task_count": 90,
+      "prompt": "Read the existing saved plan in .wigtn and assess only TASK-046, TASK-090 for resuming work. Do not implement anything, execute saved check commands, or modify files. Check actual source freshness across the graph and structural validity of the saved artifacts. A source hash change makes its linked requirements and tasks stale. A task is eligible when its status is draft/ready, all dependencies are verified and linked requirements are active; invalid saved artifacts withhold eligibility. Historical evidence does not prove tests passed in this session.\nReturn only JSON: saved_revision (on disk), fresh (all source hashes match), valid_artifacts, drift_paths (all changed/missing source paths), tasks (only the requested tasks, each with id, effective status, eligible boolean, dependency_ids, requirement_ids, intended_paths, check_commands). Arrays of IDs/paths can be in any order. Use task field name \"status\" for effective status. Do not add claims of current verification. Stay inside this workspace and, if installed, the active plugin directory; do not inspect sibling runs, evaluation scripts, or answers.",
+      "expected": {
+        "saved_revision": 17,
+        "fresh": true,
+        "valid_artifacts": true,
+        "drift_paths": [],
+        "tasks": [
+          {
+            "id": "TASK-046",
+            "status": "draft",
+            "eligible": false,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-046"
+            ],
+            "intended_paths": [
+              "src/module_046.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_046"
+            ]
+          },
+          {
+            "id": "TASK-090",
+            "status": "draft",
+            "eligible": false,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-090"
+            ],
+            "intended_paths": [
+              "src/module_090.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_090"
+            ]
+          }
+        ]
+      }
+    },
+    "07-dense-80": {
+      "family": "dense",
+      "task_count": 80,
+      "prompt": "Read the existing saved plan in .wigtn and assess only TASK-041, TASK-080 for resuming work. Do not implement anything, execute saved check commands, or modify files. Check actual source freshness across the graph and structural validity of the saved artifacts. A source hash change makes its linked requirements and tasks stale. A task is eligible when its status is draft/ready, all dependencies are verified and linked requirements are active; invalid saved artifacts withhold eligibility. Historical evidence does not prove tests passed in this session.\nReturn only JSON: saved_revision (on disk), fresh (all source hashes match), valid_artifacts, drift_paths (all changed/missing source paths), tasks (only the requested tasks, each with id, effective status, eligible boolean, dependency_ids, requirement_ids, intended_paths, check_commands). Arrays of IDs/paths can be in any order. Use task field name \"status\" for effective status. Do not add claims of current verification. Stay inside this workspace and, if installed, the active plugin directory; do not inspect sibling runs, evaluation scripts, or answers.",
+      "expected": {
+        "saved_revision": 17,
+        "fresh": true,
+        "valid_artifacts": true,
+        "drift_paths": [],
+        "tasks": [
+          {
+            "id": "TASK-041",
+            "status": "verified",
+            "eligible": false,
+            "dependency_ids": [
+              "TASK-040"
+            ],
+            "requirement_ids": [
+              "FR-041"
+            ],
+            "intended_paths": [
+              "src/module_041.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_041"
+            ]
+          },
+          {
+            "id": "TASK-080",
+            "status": "ready",
+            "eligible": true,
+            "dependency_ids": [
+              "TASK-079"
+            ],
+            "requirement_ids": [
+              "FR-080"
+            ],
+            "intended_paths": [
+              "src/module_080.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_080"
+            ]
+          }
+        ]
+      }
+    },
+    "08-invalid-80": {
+      "family": "invalid",
+      "task_count": 80,
+      "prompt": "Read the existing saved plan in .wigtn and assess only TASK-041, TASK-080 for resuming work. Do not implement anything, execute saved check commands, or modify files. Check actual source freshness across the graph and structural validity of the saved artifacts. A source hash change makes its linked requirements and tasks stale. A task is eligible when its status is draft/ready, all dependencies are verified and linked requirements are active; invalid saved artifacts withhold eligibility. Historical evidence does not prove tests passed in this session.\nReturn only JSON: saved_revision (on disk), fresh (all source hashes match), valid_artifacts, drift_paths (all changed/missing source paths), tasks (only the requested tasks, each with id, effective status, eligible boolean, dependency_ids, requirement_ids, intended_paths, check_commands). Arrays of IDs/paths can be in any order. Use task field name \"status\" for effective status. Do not add claims of current verification. Stay inside this workspace and, if installed, the active plugin directory; do not inspect sibling runs, evaluation scripts, or answers.",
+      "expected": {
+        "saved_revision": 17,
+        "fresh": true,
+        "valid_artifacts": false,
+        "drift_paths": [],
+        "tasks": [
+          {
+            "id": "TASK-041",
+            "status": "ready",
+            "eligible": false,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-041"
+            ],
+            "intended_paths": [
+              "src/module_041.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_041"
+            ]
+          },
+          {
+            "id": "TASK-080",
+            "status": "ready",
+            "eligible": false,
+            "dependency_ids": [
+              "TASK-001",
+              "TASK-002"
+            ],
+            "requirement_ids": [
+              "FR-080"
+            ],
+            "intended_paths": [
+              "src/module_080.py"
+            ],
+            "check_commands": [
+              "python3 -m unittest tests.test_module_080"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "schedule": [
+    {
+      "case": "01-small-8",
+      "arm": "candidate"
+    },
+    {
+      "case": "01-small-8",
+      "arm": "baseline"
+    },
+    {
+      "case": "02-small-16",
+      "arm": "baseline"
+    },
+    {
+      "case": "02-small-16",
+      "arm": "candidate"
+    },
+    {
+      "case": "03-large-40",
+      "arm": "baseline"
+    },
+    {
+      "case": "03-large-40",
+      "arm": "candidate"
+    },
+    {
+      "case": "04-large-140",
+      "arm": "baseline"
+    },
+    {
+      "case": "04-large-140",
+      "arm": "candidate"
+    },
+    {
+      "case": "05-drift-72",
+      "arm": "candidate"
+    },
+    {
+      "case": "05-drift-72",
+      "arm": "baseline"
+    },
+    {
+      "case": "06-blocked-90",
+      "arm": "baseline"
+    },
+    {
+      "case": "06-blocked-90",
+      "arm": "candidate"
+    },
+    {
+      "case": "07-dense-80",
+      "arm": "candidate"
+    },
+    {
+      "case": "07-dense-80",
+      "arm": "baseline"
+    },
+    {
+      "case": "08-invalid-80",
+      "arm": "candidate"
+    },
+    {
+      "case": "08-invalid-80",
+      "arm": "baseline"
+    }
+  ],
+  "motivation": "First pilot showed candidate sometimes used full inspection despite known task IDs. Revise the example placement and make reference reading conditional. Retain and report first pilot; do not pool the two candidates."
+}

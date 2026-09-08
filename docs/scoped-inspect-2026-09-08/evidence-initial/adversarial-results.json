@@ -1,0 +1,38 @@
+[
+  {
+    "scenario": "invalid-project",
+    "pass": true,
+    "exit_code": 1,
+    "unchanged": true
+  },
+  {
+    "scenario": "invalid-evidence",
+    "pass": true,
+    "exit_code": 1,
+    "unchanged": true
+  },
+  {
+    "scenario": "unrelated-invalid-task",
+    "pass": true,
+    "exit_code": 2,
+    "unchanged": true
+  },
+  {
+    "scenario": "missing-selected-source",
+    "pass": true,
+    "exit_code": 1,
+    "unchanged": true
+  },
+  {
+    "scenario": "missing-unrelated-source",
+    "pass": true,
+    "exit_code": 1,
+    "unchanged": true
+  },
+  {
+    "scenario": "shared-check-unrelated-requirement",
+    "pass": true,
+    "exit_code": 0,
+    "unchanged": true
+  }
+]

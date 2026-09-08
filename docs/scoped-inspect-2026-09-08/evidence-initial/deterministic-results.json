@@ -1,0 +1,50 @@
+[
+  {
+    "case": "01-small-6",
+    "baseline_bytes": 10362,
+    "candidate_bytes": 8722,
+    "reduction_percent": 15.83
+  },
+  {
+    "case": "02-small-12",
+    "baseline_bytes": 18321,
+    "candidate_bytes": 8729,
+    "reduction_percent": 52.36
+  },
+  {
+    "case": "03-large-80",
+    "baseline_bytes": 108713,
+    "candidate_bytes": 8733,
+    "reduction_percent": 91.97
+  },
+  {
+    "case": "04-large-120",
+    "baseline_bytes": 161924,
+    "candidate_bytes": 8756,
+    "reduction_percent": 94.59
+  },
+  {
+    "case": "05-drift-60",
+    "baseline_bytes": 82060,
+    "candidate_bytes": 8739,
+    "reduction_percent": 89.35
+  },
+  {
+    "case": "06-drift-100",
+    "baseline_bytes": 135226,
+    "candidate_bytes": 8735,
+    "reduction_percent": 93.54
+  },
+  {
+    "case": "07-blocked-60",
+    "baseline_bytes": 81012,
+    "candidate_bytes": 7634,
+    "reduction_percent": 90.58
+  },
+  {
+    "case": "08-blocked-100",
+    "baseline_bytes": 134178,
+    "candidate_bytes": 7630,
+    "reduction_percent": 94.31
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "requirement_sources": [
+    "docs/requirement-001.md",
+    "docs/requirement-002.md",
+    "docs/requirement-003.md",
+    "docs/requirement-004.md",
+    "docs/requirement-005.md",
+    "docs/requirement-006.md"
+  ],
+  "verification_commands": [
+    "touch NEVER_EXECUTE"
+  ],
+  "protected_paths": [
+    ".git",
+    "user-notes.txt"
+  ],
+  "prd_profile": "auto",
+  "evidence_path": ".wigtn/evidence.json"
+}

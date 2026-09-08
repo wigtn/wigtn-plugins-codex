@@ -1,0 +1,308 @@
+{
+  "operation": "inspect",
+  "read_only": true,
+  "saved_revision": 17,
+  "valid_artifacts": true,
+  "fresh": true,
+  "validations": {
+    "project": {
+      "valid": true,
+      "exit_code": 0,
+      "details": "Project context: PASS\n"
+    },
+    "evidence": {
+      "valid": true,
+      "exit_code": 0,
+      "details": "/private/tmp/wigtn-scoped-followup-20260908/fixtures/06-blocked-90/.wigtn/evidence.json: PASS\n"
+    }
+  },
+  "source_drift": [],
+  "summary": {
+    "graph_id": "WG-BLOCKED-90",
+    "revision": 17,
+    "sources": 90,
+    "requirements": {
+      "active": 90
+    },
+    "artifacts": {},
+    "tasks": {
+      "blocked": 1,
+      "draft": 2,
+      "verified": 87
+    },
+    "checks": {
+      "passed": 87,
+      "pending": 3
+    },
+    "release_gates": {
+      "blocked": 1
+    },
+    "next_task_ids": []
+  },
+  "sources": [
+    {
+      "id": "SRC-001",
+      "kind": "prd",
+      "path": "docs/requirement-001.md",
+      "sha256": "7b6b181a348c0f9d1f81e0c2f36ad7f69b9e0ebb752796bc7871459058c8a388"
+    },
+    {
+      "id": "SRC-002",
+      "kind": "prd",
+      "path": "docs/requirement-002.md",
+      "sha256": "a3c8c398e8fb49807f3a592a8236c8015c76cbec604bb623d585afc4364de91c"
+    },
+    {
+      "id": "SRC-046",
+      "kind": "prd",
+      "path": "docs/requirement-046.md",
+      "sha256": "9a90a23835d6aba02b498931d695fe4276a0ada2ea731f431fb25e279b2c4e61"
+    },
+    {
+      "id": "SRC-090",
+      "kind": "prd",
+      "path": "docs/requirement-090.md",
+      "sha256": "2937437a0f47184b613afde0476f3f5a69b426622e9a665c4572973e8cfabb48"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "FR-001",
+      "source_id": "SRC-001",
+      "text": "Preserve receipt retention behavior for module 1. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "7b6b181a348c0f9d1f81e0c2f36ad7f69b9e0ebb752796bc7871459058c8a388",
+      "status": "active"
+    },
+    {
+      "id": "FR-002",
+      "source_id": "SRC-002",
+      "text": "Preserve locale fallback behavior for module 2. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "a3c8c398e8fb49807f3a592a8236c8015c76cbec604bb623d585afc4364de91c",
+      "status": "active"
+    },
+    {
+      "id": "FR-046",
+      "source_id": "SRC-046",
+      "text": "Preserve notification preference behavior for module 46. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "9a90a23835d6aba02b498931d695fe4276a0ada2ea731f431fb25e279b2c4e61",
+      "status": "active"
+    },
+    {
+      "id": "FR-090",
+      "source_id": "SRC-090",
+      "text": "Preserve locale fallback behavior for module 90. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "2937437a0f47184b613afde0476f3f5a69b426622e9a665c4572973e8cfabb48",
+      "status": "active"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "title": "Implement receipt retention in module 1",
+      "requirement_ids": [
+        "FR-001"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_001.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "blocked",
+      "check_ids": [
+        "CHK-001"
+      ],
+      "blocker": "Await upstream interface decision",
+      "evidence_refs": []
+    },
+    {
+      "id": "TASK-002",
+      "title": "Implement locale fallback in module 2",
+      "requirement_ids": [
+        "FR-002"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_002.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-002"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-046",
+      "title": "Implement notification preference in module 46",
+      "requirement_ids": [
+        "FR-046"
+      ],
+      "artifact_ids": [],
+      "depends_on": [
+        "TASK-001",
+        "TASK-002"
+      ],
+      "intended_paths": [
+        "src/module_046.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "draft",
+      "check_ids": [
+        "CHK-046"
+      ],
+      "blocker": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "TASK-090",
+      "title": "Implement locale fallback in module 90",
+      "requirement_ids": [
+        "FR-090"
+      ],
+      "artifact_ids": [],
+      "depends_on": [
+        "TASK-001",
+        "TASK-002"
+      ],
+      "intended_paths": [
+        "src/module_090.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "draft",
+      "check_ids": [
+        "CHK-090"
+      ],
+      "blocker": null,
+      "evidence_refs": []
+    }
+  ],
+  "checks": [
+    {
+      "id": "CHK-001",
+      "task_ids": [
+        "TASK-001"
+      ],
+      "requirement_ids": [
+        "FR-001"
+      ],
+      "command": "python3 -m unittest tests.test_module_001",
+      "status": "pending",
+      "evidence_ref": null
+    },
+    {
+      "id": "CHK-002",
+      "task_ids": [
+        "TASK-002"
+      ],
+      "requirement_ids": [
+        "FR-002"
+      ],
+      "command": "python3 -m unittest tests.test_module_002",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-046",
+      "task_ids": [
+        "TASK-046"
+      ],
+      "requirement_ids": [
+        "FR-046"
+      ],
+      "command": "python3 -m unittest tests.test_module_046",
+      "status": "pending",
+      "evidence_ref": null
+    },
+    {
+      "id": "CHK-090",
+      "task_ids": [
+        "TASK-090"
+      ],
+      "requirement_ids": [
+        "FR-090"
+      ],
+      "command": "python3 -m unittest tests.test_module_090",
+      "status": "pending",
+      "evidence_ref": null
+    }
+  ],
+  "release_gates": [
+    {
+      "id": "GATE-RELEASE",
+      "requires_task_ids": [
+        "TASK-046",
+        "TASK-090"
+      ],
+      "requires_requirement_ids": [
+        "FR-046",
+        "FR-090"
+      ],
+      "status": "blocked",
+      "authority_actions": []
+    }
+  ],
+  "next_tasks": [],
+  "verification_boundary": "Saved evidence validity is structural, not proof of executed behavior. Commands are not executed. Drift is previewed, not persisted.",
+  "artifacts": [],
+  "selection": {
+    "requested_task_ids": [
+      "TASK-046",
+      "TASK-090"
+    ],
+    "included_task_ids": [
+      "TASK-001",
+      "TASK-002",
+      "TASK-046",
+      "TASK-090"
+    ],
+    "records": {
+      "tasks": {
+        "included": 4,
+        "total": 90,
+        "omitted": 86
+      },
+      "artifacts": {
+        "included": 0,
+        "total": 0,
+        "omitted": 0
+      },
+      "checks": {
+        "included": 4,
+        "total": 90,
+        "omitted": 86
+      },
+      "requirements": {
+        "included": 4,
+        "total": 90,
+        "omitted": 86
+      },
+      "sources": {
+        "included": 4,
+        "total": 90,
+        "omitted": 86
+      }
+    },
+    "boundary": "Task records include transitive dependencies, not dependents. Shared check references may name omitted tasks. Validation, source drift, summary and release gates cover the whole graph; next_tasks covers this selection. Use inspect without --task for the full view."
+  }
+}

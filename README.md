@@ -4,7 +4,7 @@
 
 **PRD·저장 가능한 작업 계획·요구사항 검증·Git 작업을 위한 선택형 스킬 모음.**
 
-![Version](https://img.shields.io/badge/version-0.5.4-6C5CE7?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.5.5-6C5CE7?style=for-the-badge)
 ![Skills](https://img.shields.io/badge/core_skills-9-00B894?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/platform-Codex-111827?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-Apache--2.0-0984E3?style=for-the-badge)
@@ -117,6 +117,18 @@ release-readiness ──── 안전한 커밋·푸시·PR
 ### 자동 호출과 명시 호출
 
 대부분의 스킬은 요청 의도가 설명과 일치할 때 Codex가 자동으로 선택합니다. `verified-delivery`만 예외입니다. 일반적인 코딩 요청이 의도치 않게 전체 전달 파이프라인으로 커지는 것을 막기 위해 `$wigtn-plugins-with-codex:verified-delivery`를 명시해야 합니다.
+
+---
+
+## v0.5.5: WorkGraph 선택 조회와 실측 보고서
+
+- `inspect --task TASK-ID`로 지정한 작업·선행 작업과 연결된 기록을 조회합니다. 전체 검증·소스 변경 감지·릴리스 게이트와 생략 개수는 유지합니다.
+- 작업 ID를 알 때 사용할 명령 예제를 스킬에 제시하고, 수정용 참조 문서는 필요한 경우에 읽도록 바꿨습니다.
+- 8개 합성 상태 조회 사례의 후속 비교에서 두 구현 모두 정답 8/8을 기록했고, v0.5.4 대비 총입력 합계는 56.2% 감소했습니다(조건당 8회, 총 16회; 캐시 입력 포함). 일반 코딩 성능이나 청구 비용의 개선율은 아닙니다.
+- 1차 24회와 후속 16회의 결과·실행 로그·고정 스냅샷을 공개합니다. 후보와 사례가 달라 두 실험의 수치를 합산하지 않습니다.
+- Knowledge Wiki는 공동 버전 정책에 따른 manifest 변경만 포함합니다.
+
+[변경 내용과 검증 범위](docs/RELEASE-v0.5.5-KO.md) · [실측 테크리포트](docs/scoped-inspect-2026-09-08/report.ko.md)
 
 ---
 
@@ -249,7 +261,9 @@ python3 plugins/wigtn-plugins-with-codex/scripts/wigtn.py --json diff --check
 python3 plugins/wigtn-plugins-with-codex/scripts/wigtn.py --json doctor
 ```
 
-`inspect`는 저장 파일을 검증하고 source drift와 다음 작업을 읽기 전용으로 조회합니다. 저장된 검사 명령을 실행하거나 변경을 적용하지 않습니다. `import`의 상대경로는 `--root` 기준입니다.
+`inspect`는 저장 파일을 검증하고 source drift와 다음 작업을 읽기 전용으로 조회합니다. v0.5.5부터 특정 작업을 재개할 때 `inspect --task TASK-ID`로 해당 작업·선행 작업과 연결된 기록만 조회할 수 있습니다. 전체 검증·변경 경고와 생략 개수는 유지되며, 전체 그래프는 옵션 없이 조회합니다. 저장된 검사 명령을 실행하거나 변경을 적용하지 않습니다. `import`의 상대경로는 `--root` 기준입니다.
+
+v0.5.5에 반영한 선택 조회의 GPT-6 Astra 후속 평가에서는 **8개 합성 상태 조회 사례에서 정답 8/8을 유지하며 v0.5.4 대비 총입력 합계가 56.2% 감소**했습니다(조건당 8회, 총 16회; 캐시 입력 포함). 과제별 결과와 적용 범위는 [실측 보고서](docs/scoped-inspect-2026-09-08/report.ko.md)에 기록했습니다.
 
 mutation 명령은 `--apply`가 없으면 dry-run이며, 동일한 import·plan·drift
 적용은 revision을 올리지 않습니다. 자세한 상태 의미는

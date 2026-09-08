@@ -1,0 +1,135 @@
+Repository contract: PASS
+Plugin validation passed: /private/tmp/wigtn-codex-scoped-inspect-20260908/plugins/wigtn-plugins-with-codex
+Plugin validation passed: /private/tmp/wigtn-codex-scoped-inspect-20260908/plugins/wigtn-knowledge-wiki
+Skill is valid!
+Skill is valid!
+Skill is valid!
+Skill is valid!
+Skill is valid!
+Skill is valid!
+Skill is valid!
+Skill is valid!
+Skill is valid!
+Skill is valid!
+Verified-delivery routing: PASS (10 contracts)
+External paired results: PASS (8 confirmatory runs, 4 pairs, 2 exploratory replication runs)
+FeatureBench selection: PASS (4 pilot, 8 frozen candidates)
+featurebench-results: ok (4 pairs, 0 eligible positive, 0 replicated positive)
+Knowledge wiki checks: PASS
+run-evals.sh is the compatibility entrypoint for deterministic static contracts.
+Use scripts/run-behavior-evals.sh --execute for model behavior smoke runs.
+Lexical trigger fixture: PASS (49 cases; model routing not tested)
+Plugin resource integrity: PASS (40 markdown files)
+Visual contracts: PASS (diagram/html/presentation-routing)
+Evidence contract: PASS (10 cases)
+Evidence inspector: PASS (health/drift)
+Project context: PASS (valid/invalid)
+PRD contracts: PASS (4 cases)
+Screen contract: PASS (selected/closure/multilingual-ia/bundle/anchor/requirement)
+Release state: PASS (paths, bounded diffs, whitespace checks)
+Requirement import: PASS (3 formats + resume/drift)
+test_acceptance_section_preserves_underscore_ids (__main__.SymbolicIDs.test_acceptance_section_preserves_underscore_ids) ... ok
+test_contracts_accept_same_symbolic_id (__main__.SymbolicIDs.test_contracts_accept_same_symbolic_id) ... ok
+test_explicit_import_preserves_complete_ids (__main__.SymbolicIDs.test_explicit_import_preserves_complete_ids) ... ok
+test_markdown_lists_and_checkboxes_remain_supported (__main__.SymbolicIDs.test_markdown_lists_and_checkboxes_remain_supported) ... ok
+test_prose_and_incomplete_ids_are_not_requirements (__main__.SymbolicIDs.test_prose_and_incomplete_ids_are_not_requirements) ... ok
+test_workgraph_import_plan_and_source_drift (__main__.SymbolicIDs.test_workgraph_import_plan_and_source_drift) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.397s
+
+OK
+WorkGraph contract: PASS (67 deterministic cases)
+Evaluation schedule: PASS (deterministic/block-balanced/paired)
+Ablation builder: PASS (core4/placebo4/full8/full9)
+Ordinary corpus: PASS (12 tasks, 3 languages, fault/reference)
+Ordinary scorer: PASS (positive + hidden-regression rejection)
+Explicit pricing: PASS (unpriced/partial/explicit/nonfinite)
+Codex usage: PASS (JSONL fields + API-equivalent cost)
+test_absent_optional_is_unknown (__main__.UsageMissing.test_absent_optional_is_unknown) ... ok
+test_cli_has_no_assumed_prices (__main__.UsageMissing.test_cli_has_no_assumed_prices) ... ok
+test_explicit_zero_is_known (__main__.UsageMissing.test_explicit_zero_is_known) ... ok
+test_impossible_breakdown_rejected (__main__.UsageMissing.test_impossible_breakdown_rejected) ... ok
+test_invalid_optional_counters_rejected (__main__.UsageMissing.test_invalid_optional_counters_rejected) ... ok
+test_invalid_required_counters_rejected (__main__.UsageMissing.test_invalid_required_counters_rejected) ... ok
+test_missing_cache_prevents_cache_adjusted_price (__main__.UsageMissing.test_missing_cache_prevents_cache_adjusted_price) ... ok
+test_missing_one_turn_propagates (__main__.UsageMissing.test_missing_one_turn_propagates) ... ok
+test_summary_preserves_unknown_without_crashing (__main__.UsageMissing.test_summary_preserves_unknown_without_crashing) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.075s
+
+OK
+Token ablation scorer: PASS (positive + canonical regression)
+Eval packet: PASS (sanitize/hash/tamper)
+Research harness: PASS (8 acceptance, 4 implement, 10 release, 12 WorkGraph + resume, 12 ordinary)
+test_activation_needs_real_trace_reference (__main__.EvidenceTests.test_activation_needs_real_trace_reference) ... ok
+test_adjudicated_packet_passes (__main__.EvidenceTests.test_adjudicated_packet_passes) ... ok
+test_changed_events_rejected (__main__.EvidenceTests.test_changed_events_rejected) ... ok
+test_changed_implementation_is_rejected (__main__.EvidenceTests.test_changed_implementation_is_rejected) ... ok
+test_early_stop_retains_observed_consumption (__main__.EvidenceTests.test_early_stop_retains_observed_consumption) ... ok
+test_empty_schedule_rejected (__main__.EvidenceTests.test_empty_schedule_rejected) ... ok
+test_extra_work_file_rejected (__main__.EvidenceTests.test_extra_work_file_rejected) ... ok
+test_failed_turn_consumption_is_retained (__main__.EvidenceTests.test_failed_turn_consumption_is_retained) ... ok
+test_failure_cost_retained (__main__.EvidenceTests.test_failure_cost_retained) ... ok
+test_input_snapshot_mutation_rejected (__main__.EvidenceTests.test_input_snapshot_mutation_rejected) ... ok
+test_invalid_turn_telemetry_is_not_complete (__main__.EvidenceTests.test_invalid_turn_telemetry_is_not_complete) ... ok
+test_missing_seal_rejected (__main__.EvidenceTests.test_missing_seal_rejected) ... ok
+test_missing_usage_leaves_incomplete_total (__main__.EvidenceTests.test_missing_usage_leaves_incomplete_total) ... ok
+test_new_contract_cases_and_complete_criteria (__main__.EvidenceTests.test_new_contract_cases_and_complete_criteria) ... ok
+test_offline_runner_to_scorer_integration (__main__.EvidenceTests.test_offline_runner_to_scorer_integration) ... ok
+test_oracle_catches_vacuous_test_and_passes_fix (__main__.EvidenceTests.test_oracle_catches_vacuous_test_and_passes_fix) ... ok
+test_review_pending_is_not_pass (__main__.EvidenceTests.test_review_pending_is_not_pass) ... ok
+test_skill_name_without_body_is_not_activation (__main__.EvidenceTests.test_skill_name_without_body_is_not_activation) ... ok
+test_stale_review_rejected (__main__.EvidenceTests.test_stale_review_rejected) ... ok
+test_symlinked_evidence_rejected (__main__.EvidenceTests.test_symlinked_evidence_rejected) ... ok
+test_unknown_reasoning_is_null (__main__.EvidenceTests.test_unknown_reasoning_is_null) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 1.838s
+
+OK
+test_corrupt_evidence_withholds_eligible_tasks (__main__.Inspect.test_corrupt_evidence_withholds_eligible_tasks) ... ok
+test_drift_propagates_to_dependent_tasks_without_mutation (__main__.Inspect.test_drift_propagates_to_dependent_tasks_without_mutation) ... ok
+test_fresh_readonly_and_no_saved_command_execution (__main__.Inspect.test_fresh_readonly_and_no_saved_command_execution) ... ok
+test_invalid_global_evidence_still_blocks_selection (__main__.Inspect.test_invalid_global_evidence_still_blocks_selection) ... ok
+test_invalid_graph_fails_closed (__main__.Inspect.test_invalid_graph_fails_closed) ... ok
+test_invalid_project_withholds_eligible_tasks (__main__.Inspect.test_invalid_project_withholds_eligible_tasks) ... ok
+test_missing_source_has_explicit_drift (__main__.Inspect.test_missing_source_has_explicit_drift) ... ok
+test_repeated_selection_deduplicates (__main__.Inspect.test_repeated_selection_deduplicates) ... ok
+test_selected_drift_is_visible_and_saved_revision_is_not_preview (__main__.Inspect.test_selected_drift_is_visible_and_saved_revision_is_not_preview) ... ok
+test_selection_omits_dependents_but_keeps_global_summary_and_gates (__main__.Inspect.test_selection_omits_dependents_but_keeps_global_summary_and_gates) ... ok
+test_selection_preserves_dependency_records_and_linked_context (__main__.Inspect.test_selection_preserves_dependency_records_and_linked_context) ... ok
+test_transitive_dependencies_and_shared_checks (__main__.Inspect.test_transitive_dependencies_and_shared_checks) ... ok
+test_unknown_selection_fails (__main__.Inspect.test_unknown_selection_fails) ... ok
+test_unrelated_source_drift_is_not_hidden (__main__.Inspect.test_unrelated_source_drift_is_not_hidden) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 1.817s
+
+OK
+test_absolute_inside_allowed_outside_rejected_without_mutation (__main__.ImportRoot.test_absolute_inside_allowed_outside_rejected_without_mutation) ... ok
+test_relative_source_uses_root_and_preserves_dry_run (__main__.ImportRoot.test_relative_source_uses_root_and_preserves_dry_run) ... ok
+test_symlink_escape_rejected_without_mutation (__main__.ImportRoot.test_symlink_escape_rejected_without_mutation) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.475s
+
+OK
+test_dry_run_does_not_create_lock_or_change_state (__main__.Concurrency.test_dry_run_does_not_create_lock_or_change_state) ... ok
+test_killed_writer_releases_lock (__main__.Concurrency.test_killed_writer_releases_lock) ... ok
+test_no_revision_second_writer_merges_latest (__main__.Concurrency.test_no_revision_second_writer_merges_latest) ... ok
+test_same_revision_second_writer_rejected (__main__.Concurrency.test_same_revision_second_writer_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 2.016s
+
+OK
+test_invalid_context_preserves_graph_for_preview_and_apply (__main__.ProjectGuard.test_invalid_context_preserves_graph_for_preview_and_apply) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.679s
+
+OK
+Static contracts: PASS
+Static validation: PASS

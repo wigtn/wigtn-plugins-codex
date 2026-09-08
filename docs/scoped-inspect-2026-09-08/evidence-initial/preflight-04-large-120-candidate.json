@@ -1,0 +1,365 @@
+{
+  "operation": "inspect",
+  "read_only": true,
+  "saved_revision": 17,
+  "valid_artifacts": true,
+  "fresh": true,
+  "validations": {
+    "project": {
+      "valid": true,
+      "exit_code": 0,
+      "details": "Project context: PASS\n"
+    },
+    "evidence": {
+      "valid": true,
+      "exit_code": 0,
+      "details": "/private/tmp/wigtn-scoped-study-20260908/fixtures/04-large-120/.wigtn/evidence.json: PASS\n"
+    }
+  },
+  "source_drift": [],
+  "summary": {
+    "graph_id": "WG-LARGE-120",
+    "revision": 17,
+    "sources": 120,
+    "requirements": {
+      "active": 120
+    },
+    "artifacts": {},
+    "tasks": {
+      "ready": 2,
+      "verified": 118
+    },
+    "checks": {
+      "passed": 118,
+      "pending": 2
+    },
+    "release_gates": {
+      "blocked": 1
+    },
+    "next_task_ids": [
+      "TASK-061",
+      "TASK-120"
+    ]
+  },
+  "sources": [
+    {
+      "id": "SRC-001",
+      "kind": "prd",
+      "path": "docs/requirement-001.md",
+      "sha256": "7b6b181a348c0f9d1f81e0c2f36ad7f69b9e0ebb752796bc7871459058c8a388"
+    },
+    {
+      "id": "SRC-002",
+      "kind": "prd",
+      "path": "docs/requirement-002.md",
+      "sha256": "a3c8c398e8fb49807f3a592a8236c8015c76cbec604bb623d585afc4364de91c"
+    },
+    {
+      "id": "SRC-061",
+      "kind": "prd",
+      "path": "docs/requirement-061.md",
+      "sha256": "be9f6105e04749055d5f2c9abea423ea11edcc8ae5883da95b50751f8a76ef2e"
+    },
+    {
+      "id": "SRC-120",
+      "kind": "prd",
+      "path": "docs/requirement-120.md",
+      "sha256": "4c7acaf2a21f14819bb47cdfbe16140f3068d7f50102fb9709573703e7c0c022"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "FR-001",
+      "source_id": "SRC-001",
+      "text": "Preserve receipt retention behavior for module 1. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "7b6b181a348c0f9d1f81e0c2f36ad7f69b9e0ebb752796bc7871459058c8a388",
+      "status": "active"
+    },
+    {
+      "id": "FR-002",
+      "source_id": "SRC-002",
+      "text": "Preserve locale fallback behavior for module 2. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "a3c8c398e8fb49807f3a592a8236c8015c76cbec604bb623d585afc4364de91c",
+      "status": "active"
+    },
+    {
+      "id": "FR-061",
+      "source_id": "SRC-061",
+      "text": "Preserve retry deduplication behavior for module 61. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "be9f6105e04749055d5f2c9abea423ea11edcc8ae5883da95b50751f8a76ef2e",
+      "status": "active"
+    },
+    {
+      "id": "FR-120",
+      "source_id": "SRC-120",
+      "text": "Preserve search pagination behavior for module 120. Reject invalid input without changing stored values; return a stable result when the request is repeated.",
+      "source_sha256": "4c7acaf2a21f14819bb47cdfbe16140f3068d7f50102fb9709573703e7c0c022",
+      "status": "active"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "title": "Implement receipt retention in module 1",
+      "requirement_ids": [
+        "FR-001"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_001.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-001"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-002",
+      "title": "Implement locale fallback in module 2",
+      "requirement_ids": [
+        "FR-002"
+      ],
+      "artifact_ids": [],
+      "depends_on": [],
+      "intended_paths": [
+        "src/module_002.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "verified",
+      "check_ids": [
+        "CHK-002"
+      ],
+      "blocker": null,
+      "evidence_refs": [
+        ".wigtn/history.txt"
+      ]
+    },
+    {
+      "id": "TASK-061",
+      "title": "Implement retry deduplication in module 61",
+      "requirement_ids": [
+        "FR-061"
+      ],
+      "artifact_ids": [],
+      "depends_on": [
+        "TASK-001",
+        "TASK-002"
+      ],
+      "intended_paths": [
+        "src/module_061.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "ready",
+      "check_ids": [
+        "CHK-061"
+      ],
+      "blocker": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "TASK-120",
+      "title": "Implement search pagination in module 120",
+      "requirement_ids": [
+        "FR-120"
+      ],
+      "artifact_ids": [],
+      "depends_on": [
+        "TASK-001",
+        "TASK-002"
+      ],
+      "intended_paths": [
+        "src/module_120.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "ready",
+      "check_ids": [
+        "CHK-120"
+      ],
+      "blocker": null,
+      "evidence_refs": []
+    }
+  ],
+  "checks": [
+    {
+      "id": "CHK-001",
+      "task_ids": [
+        "TASK-001"
+      ],
+      "requirement_ids": [
+        "FR-001"
+      ],
+      "command": "python3 -m unittest tests.test_module_001",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-002",
+      "task_ids": [
+        "TASK-002"
+      ],
+      "requirement_ids": [
+        "FR-002"
+      ],
+      "command": "python3 -m unittest tests.test_module_002",
+      "status": "passed",
+      "evidence_ref": ".wigtn/history.txt"
+    },
+    {
+      "id": "CHK-061",
+      "task_ids": [
+        "TASK-061"
+      ],
+      "requirement_ids": [
+        "FR-061"
+      ],
+      "command": "python3 -m unittest tests.test_module_061",
+      "status": "pending",
+      "evidence_ref": null
+    },
+    {
+      "id": "CHK-120",
+      "task_ids": [
+        "TASK-120"
+      ],
+      "requirement_ids": [
+        "FR-120"
+      ],
+      "command": "python3 -m unittest tests.test_module_120",
+      "status": "pending",
+      "evidence_ref": null
+    }
+  ],
+  "release_gates": [
+    {
+      "id": "GATE-RELEASE",
+      "requires_task_ids": [
+        "TASK-061",
+        "TASK-120"
+      ],
+      "requires_requirement_ids": [
+        "FR-061",
+        "FR-120"
+      ],
+      "status": "blocked",
+      "authority_actions": []
+    }
+  ],
+  "next_tasks": [
+    {
+      "id": "TASK-061",
+      "title": "Implement retry deduplication in module 61",
+      "requirement_ids": [
+        "FR-061"
+      ],
+      "artifact_ids": [],
+      "depends_on": [
+        "TASK-001",
+        "TASK-002"
+      ],
+      "intended_paths": [
+        "src/module_061.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "ready",
+      "check_ids": [
+        "CHK-061"
+      ],
+      "blocker": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "TASK-120",
+      "title": "Implement search pagination in module 120",
+      "requirement_ids": [
+        "FR-120"
+      ],
+      "artifact_ids": [],
+      "depends_on": [
+        "TASK-001",
+        "TASK-002"
+      ],
+      "intended_paths": [
+        "src/module_120.py"
+      ],
+      "protected_paths": [
+        ".git",
+        "user-notes.txt"
+      ],
+      "risk": "medium",
+      "status": "ready",
+      "check_ids": [
+        "CHK-120"
+      ],
+      "blocker": null,
+      "evidence_refs": []
+    }
+  ],
+  "verification_boundary": "Saved evidence validity is structural, not proof of executed behavior. Commands are not executed. Drift is previewed, not persisted.",
+  "artifacts": [],
+  "selection": {
+    "requested_task_ids": [
+      "TASK-061",
+      "TASK-120"
+    ],
+    "included_task_ids": [
+      "TASK-001",
+      "TASK-002",
+      "TASK-061",
+      "TASK-120"
+    ],
+    "records": {
+      "tasks": {
+        "included": 4,
+        "total": 120,
+        "omitted": 116
+      },
+      "artifacts": {
+        "included": 0,
+        "total": 0,
+        "omitted": 0
+      },
+      "checks": {
+        "included": 4,
+        "total": 120,
+        "omitted": 116
+      },
+      "requirements": {
+        "included": 4,
+        "total": 120,
+        "omitted": 116
+      },
+      "sources": {
+        "included": 4,
+        "total": 120,
+        "omitted": 116
+      }
+    },
+    "boundary": "Task records include transitive dependencies, not dependents. Shared check references may name omitted tasks. Validation, source drift, summary and release gates cover the whole graph; next_tasks covers this selection. Use inspect without --task for the full view."
+  }
+}

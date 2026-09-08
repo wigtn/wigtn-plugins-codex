@@ -1,0 +1,92 @@
+{
+  "review": "Primary agent manually inspected all 43 command-execution records. Not an independent or blinded review.",
+  "observed_saved_check_execution_attempts": [],
+  "observed_out_of_scope_evaluator_reads": [],
+  "workspace_unchanged_runs": 16,
+  "unique_session_ids": 16,
+  "completed_usage_records": 16,
+  "candidate_task_option_usage": [
+    {
+      "run": "01-01-small-8-candidate",
+      "case": "01-small-8",
+      "arm": "candidate",
+      "command_items": 1,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "04-02-small-16-candidate",
+      "case": "02-small-16",
+      "arm": "candidate",
+      "command_items": 2,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "06-03-large-40-candidate",
+      "case": "03-large-40",
+      "arm": "candidate",
+      "command_items": 2,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "08-04-large-140-candidate",
+      "case": "04-large-140",
+      "arm": "candidate",
+      "command_items": 2,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "09-05-drift-72-candidate",
+      "case": "05-drift-72",
+      "arm": "candidate",
+      "command_items": 1,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "12-06-blocked-90-candidate",
+      "case": "06-blocked-90",
+      "arm": "candidate",
+      "command_items": 1,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "13-07-dense-80-candidate",
+      "case": "07-dense-80",
+      "arm": "candidate",
+      "command_items": 3,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    },
+    {
+      "run": "15-08-invalid-80-candidate",
+      "case": "08-invalid-80",
+      "arm": "candidate",
+      "command_items": 2,
+      "completed_turns": 1,
+      "workspace_unchanged": true,
+      "used_task_option": true,
+      "read_workgraph_reference": false
+    }
+  ],
+  "candidate_reference_reads": 0,
+  "boundary": "Observed commands and file hashes only; instruction-based evaluator read exclusion, not OS-enforced isolation."
+}

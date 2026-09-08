@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "artifact_type": "acceptance",
+  "source_artifacts": [],
+  "requirements": [],
+  "checks": [],
+  "release_authority": {
+    "source_request": "",
+    "commit": false,
+    "push": false,
+    "pull_request": false,
+    "deploy": false
+  },
+  "external_actions": [],
+  "limitations": [
+    "Synthetic saved state; this is not evidence of a current test run."
+  ]
+}
