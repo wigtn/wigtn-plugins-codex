@@ -5,60 +5,46 @@ description: Create only the requested IA, user flow, screen spec, lo-fi HTML wi
 
 # Screen Spec
 
-Select the requested artifact and its dependency closure:
+Create the requested artifact at the user's chosen path and in their chosen
+format. Existing IA, screen documents and routes are inputs; do not recreate
+them as additional deliverables. Create the five-file WIGTN bundle only when
+that bundle is requested.
 
-- `ia` → `01-IA.md`
-- `flow` → `02-USER-FLOW.md`
-- `screen` → `03-SCREEN-SPEC.md` plus IA
-- `wireframe` → `04-WIREFRAME.html` plus IA and screen
-- `handoff` → `05-DEV-HANDOFF.md` plus all dependencies
-- explicit complete bundle → all five
+## Scope and evidence
 
-Do not produce or propose the other artifacts merely because the skill loaded.
+- Use a sufficient brief directly. Inspect repository routes, components,
+  permissions and tokens when project-native behavior is requested or sources
+  are named. Preserve source requirement IDs and confirmed routes.
+- For screen behavior or handoff, read the compact
+  [state contract](references/state-contract.md). For implementation handoff,
+  also read [handoff contract](references/handoff-contract.md).
+- Separate confirmed behavior from proposals and unresolved decisions. Do not
+  invent API routes, roles, timing, retry limits or operational promises.
+- Read a matching template in `assets/templates/` only when its format is useful
+  for the requested output. Template dependencies do not authorize more files.
+  Optional templates: [IA](assets/templates/01-IA.md),
+  [flow](assets/templates/02-USER-FLOW.md),
+  [screen](assets/templates/03-SCREEN-SPEC.md),
+  [wireframe](assets/templates/04-WIREFRAME.html),
+  [handoff](assets/templates/05-DEV-HANDOFF.md).
 
-## IA-only or flow-only
+## Validation
 
-- Use a sufficient user brief directly. Inspect repository routes only when
-  project-native behavior is requested or source files are named.
-- For chat-only output, do not read templates, create files, run validators,
-  or perform browser checks.
-- For a file, read only its matching template and validate only that artifact.
-- IA needs assumptions, a page/route map, navigation, roles, and boundaries.
-  Stop after the requested artifact.
+For ordinary chat or custom Markdown, review the requested roles, states,
+transitions, source links and open decisions directly. Do not run the WIGTN
+bundle validator or change the output format merely to satisfy it.
 
-## Multi-artifact workflow
+For an explicitly requested WIGTN artifact set using its numbered filenames,
+run `python3 ../../scripts/validate-screen-spec.py <directory> --artifacts <set> --json`
+from this skill directory. This validator checks the legacy bundle's dependency
+closure and headings; use it only when those companion artifacts are in scope.
+Replace template placeholders and cross-check IDs and links between the
+artifacts that actually exist.
 
-1. Read the requirements and only the existing routes, components,
-   permissions, and tokens needed for the selected artifacts.
-2. Preserve requirement IDs. Mark unsupported routes, policies, breakpoints,
-   APIs, and copy as assumptions or open decisions rather than defaults.
-3. Read only the selected templates in `assets/templates/` and their dependency
-   templates. Treat placeholders as shape, never as product facts.
-4. Keep page IDs, roles, routes, states, requirements, and wireframe anchors
-   consistent across the artifacts that exist. Before validation, ensure every
-   `FR-`, `REQ-`, or `AC-` ID used by screen or handoff also appears in IA.
-5. For screen, wireframe, or handoff, read the compact
-   [state contract](references/state-contract.md). For handoff, also read the
-   [handoff contract](references/handoff-contract.md).
-6. Keep wireframes grayscale with semantic status colors and one self-contained
-   responsive HTML file. If browser control is available, inspect wide and
-   narrow layouts, overflow, labels, and links.
-7. Before validation, replace every template token written as `{...}`. Use
-   colon-prefixed route parameters such as `:organizationId` or `:email`
-   instead of braces so real routes are not mistaken for template residue.
-   Run once from this skill directory:
+For a requested lo-fi wireframe, produce one self-contained responsive grayscale
+HTML file, using color for semantic status when useful.
+Inspect wide and narrow layouts when browser tools are available; report which
+render checks were performed. Do not claim implementation from a screen spec.
 
-   `python3 ../../scripts/validate-screen-spec.py <directory> --artifacts ia,screen --json`
-
-   Replace `ia,screen` with the comma- or space-separated selected closure, or
-   `all`. Use the documented command directly; consult `--help` if the installed
-   interface differs. Rerun after a relevant correction or new evidence.
-
-8. Return file links and deterministic plus visual results without pasting the
-   full bundle into chat.
-
-Use project-native language for microcopy. Prefer explicit action labels and a
-useful recovery action; do not invent timing, policy, ownership, or operational
-promises. Screen artifacts describe intended behavior and never verify its
-implementation. Suggest `design-direction` only for an actual visual-direction
-request.
+Return the requested artifact or file links, material open decisions and the
+checks actually performed. Do not paste a full saved bundle into chat.

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import importlib.util
 from pathlib import Path
 import subprocess
 import sys
@@ -74,7 +75,43 @@ def resume_fixture(name: str) -> dict:
     return json.loads(completed.stdout)
 
 
+def check_literal_requirements() -> None:
+    spec = importlib.util.spec_from_file_location("requirement_importer", IMPORTER)
+    importer = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(importer)
+    literal = "Use `unit_price * quantity`, __version__, ROUND_HALF_UP and *.csv."
+    sources = [
+        "REQ-LITERAL: " + literal,
+        "| ID | Requirement |\n| --- | --- |\n| REQ-LITERAL | " + literal + " |",
+    ]
+    for source in sources:
+        assert importer.explicit_requirements(source) == [("REQ-LITERAL", literal)]
+    assert importer.explicit_requirements("REQ-NEG: -1") == [("REQ-NEG", "-1")]
+    assert importer.explicit_requirements("REQ-SPACE: Match `a  b` exactly.") == [
+        ("REQ-SPACE", "Match `a  b` exactly.")
+    ]
+    for before, after in [
+        ("Use unit_price.", "Use unitprice."),
+        ("Compute x*y.", "Compute xy."),
+        ("Match `a  b`.", "Match `a b`."),
+    ]:
+        existing = {"requirements": [{"id": "REQ-LITERAL", "text": before,
+                    "status": "verified", "check_ids": ["CHK-LITERAL"]}],
+                    "checks": [{"id": "CHK-LITERAL"}]}
+        changed = importer.normalize([(Path("requirements.md"),
+                                       "REQ-LITERAL: " + after, "generic")])
+        importer.resume(changed, existing)
+        assert changed["requirements"][0]["status"] == "not-verifiable"
+        assert changed["checks"] == []
+        unchanged = importer.normalize([(Path("requirements.md"),
+                                         "REQ-LITERAL: " + before, "generic")])
+        importer.resume(unchanged, existing)
+        assert unchanged["requirements"][0]["status"] == "verified"
+        assert len(unchanged["checks"]) == 1
+
+
 def main() -> int:
+    check_literal_requirements()
     expected = {
         "openspec": ("openspec", "OS-", 2),
         "spec-kit": ("spec-kit", "FR-", 2),
@@ -110,7 +147,7 @@ def main() -> int:
         raise AssertionError("orphaned check was retained")
     validate(unchanged)
     validate(changed)
-    print("Requirement import: PASS (3 formats + resume/drift)")
+    print("Requirement import: PASS (3 formats + literal preservation + resume/drift)")
     return 0
 
 

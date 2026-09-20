@@ -44,8 +44,10 @@ def detect_format(path: Path, text: str) -> str:
 
 
 def clean_text(value: str) -> str:
-    value = re.sub(r"[*_`]+", "", value)
-    return re.sub(r"\s+", " ", value).strip(" |:-")
+    # Markdown markers can also be identifier characters, operators or literal
+    # data. Preserve requirement content; structural prefixes are parsed by the
+    # caller. Formatting changes may conservatively invalidate old evidence.
+    return value.strip()
 
 
 def derived_id(prefix: str, source: str, used: set[str]) -> str:

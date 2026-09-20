@@ -1,6 +1,6 @@
 {
   "name": "wigtn-plugins-with-codex",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "Selective product contracts for Codex: compact PRDs, saved WorkGraphs, scoped screen artifacts, acceptance evidence, explicit verified delivery, and safe release actions.",
   "author": {
     "name": "WIGTN"
