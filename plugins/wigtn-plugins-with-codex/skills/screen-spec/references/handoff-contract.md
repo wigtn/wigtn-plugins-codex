@@ -17,6 +17,8 @@ Use only when `handoff` is selected.
 - Report exact open decisions with their implementation impact and owner or
   decision point.
 
-Run the selector-aware validator separately. A passing handoff validates the
-artifact contract, not the implementation, and grants no implementation or Git
-authority.
+Use the bundle validator only for an explicitly requested numbered WIGTN
+artifact set whose companion files are also in scope. For a standalone handoff,
+review these behavior and evidence requirements directly. Neither document
+review nor a passing bundle check verifies the implementation or authorizes
+implementation or Git actions.

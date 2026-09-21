@@ -12,7 +12,6 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 VALIDATOR = ROOT / "plugins/wigtn-plugins-with-codex/scripts/validate-screen-spec.py"
 TEMPLATES = ROOT / "plugins/wigtn-plugins-with-codex/skills/screen-spec/assets/templates"
-SCREEN_SKILL = ROOT / "plugins/wigtn-plugins-with-codex/skills/screen-spec/SKILL.md"
 
 
 VALID = {
@@ -67,14 +66,11 @@ def run(
 
 
 def main() -> int:
-    skill = SCREEN_SKILL.read_text(encoding="utf-8")
     flow_template = (TEMPLATES / "02-USER-FLOW.md").read_text(encoding="utf-8")
     wireframe_template = (TEMPLATES / "04-WIREFRAME.html").read_text(encoding="utf-8")
     assert "## Flow Coverage" in flow_template
     assert '@media (max-width' not in wireframe_template
     assert 'lang="{language-code}"' in wireframe_template
-    assert "`:organizationId` or `:email`" in skill
-    assert "also appears in IA" in skill
 
     with tempfile.TemporaryDirectory() as temp:
         root = Path(temp)

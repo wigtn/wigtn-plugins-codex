@@ -4,7 +4,7 @@
 
 **PRD·저장 가능한 작업 계획·요구사항 검증·Git 작업을 위한 선택형 스킬 모음.**
 
-![Version](https://img.shields.io/badge/version-0.5.5-6C5CE7?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.5.6-6C5CE7?style=for-the-badge)
 ![Skills](https://img.shields.io/badge/core_skills-9-00B894?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/platform-Codex-111827?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-Apache--2.0-0984E3?style=for-the-badge)
@@ -117,6 +117,19 @@ release-readiness ──── 안전한 커밋·푸시·PR
 ### 자동 호출과 명시 호출
 
 대부분의 스킬은 요청 의도가 설명과 일치할 때 Codex가 자동으로 선택합니다. `verified-delivery`만 예외입니다. 일반적인 코딩 요청이 의도치 않게 전체 전달 파이프라인으로 커지는 것을 막기 위해 `$wigtn-plugins-with-codex:verified-delivery`를 명시해야 합니다.
+
+---
+
+## v0.5.6: 요구사항 원문 보존과 단일 문서 범위 수정
+
+- 요구사항 importer가 `unit_price`, `ROUND_HALF_UP`, 곱셈 기호와 본문 내부 공백을 보존합니다. 서로 다른 본문을 같게 정규화해 이전 검증을 재사용하던 문제를 수정했습니다.
+- 단일 화면 명세·개발 인계는 요청한 파일과 형식에 맞춰 작성합니다. WIGTN 묶음 검증기는 해당 묶음과 의존 산출물을 요청한 경우에만 사용합니다.
+- 기존 Core 9개 스킬과 명시 호출형 `verified-delivery`는 유지합니다. Knowledge Wiki는 공동 버전 정책에 따른 manifest 변경만 포함합니다.
+- 이전에 가져온 원문이 손상됐다면 소스를 다시 import하고 검증해야 합니다. 서식 보존으로 자동 생성 ID나 이전 검증의 재사용 여부가 달라질 수 있습니다.
+
+[변경 내용과 검증 범위](docs/RELEASE-v0.5.6-KO.md) · [English release notes](docs/RELEASE-v0.5.6.md)
+
+이번 패치는 정확성과 요청 범위를 수정합니다. 수정본의 GPT-6 성능 향상을 주장하지 않습니다.
 
 ---
 
