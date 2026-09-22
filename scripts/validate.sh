@@ -19,7 +19,7 @@ if test -f "$plugin_validator" && test -f "$skill_validator"; then
     python3 "$skill_validator" "$skill"
     skill_count=$((skill_count + 1))
   done
-  test "$skill_count" -eq 9 || { echo "Expected 9 core skills, found $skill_count"; exit 1; }
+  test "$skill_count" -eq 10 || { echo "Expected 10 core skills, found $skill_count"; exit 1; }
   python3 "$skill_validator" "$wiki_plugin/skills/knowledge-wiki"
 else
   echo "Codex system validators unavailable; repository contract validation used."

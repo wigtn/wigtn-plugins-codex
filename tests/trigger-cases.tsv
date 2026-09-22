@@ -38,7 +38,7 @@ none	이 에러 고쳐줘
 none	README 오타 수정해줘
 none	이 기능 구현해줘
 none	이 기능 작업 완료해줘
-none	일반 회사 발표자료 만들어줘
+visual-craft	일반 회사 발표자료 만들어줘
 none	Devpost 제출용 깔끔한 시스템 다이어그램 만들어줘
 none	WIGTN 로고를 웹사이트 푸터에 넣어줘
 none	코드 리팩터링해줘
@@ -48,3 +48,19 @@ none	오늘 할 일 체크리스트를 간단히 만들어줘
 none	이 기능 구현 계획을 대화로만 정리해줘
 none	이 기능을 구현하고 검증까지 해줘
 none	세션 내용을 짧게 요약해줘
+visual-craft	프론트 UI 만들어줘
+visual-craft	우리 제품 랜딩 페이지 만들어줘
+visual-craft	이 내용으로 문서 만들어줘
+visual-craft	이번 실험 테크리포트 작성해줘
+visual-craft	첨부 자료를 바탕으로 보고서 작성해줘
+visual-craft	문서 레이아웃 다듬어줘
+visual-craft	이 UI의 AI 티 좀 줄여줘
+visual-craft	Create a frontend UI for this product
+visual-craft	Draft a report from these experiment results
+visual-craft	Create a document explaining our onboarding process
+visual-craft	Refine this document layout without changing the facts
+none	문서 다운로드 API의 인증 오류 고쳐줘
+none	이 문서에서 오타 하나만 수정해줘
+none	UI 테스트의 mock 응답만 수정해줘
+none	이 보고서의 합계만 계산해줘
+none	React의 상태 관리가 뭔지 설명해줘

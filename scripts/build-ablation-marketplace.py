@@ -20,6 +20,8 @@ CORE = (
     "verified-delivery",
     "release-readiness",
 )
+HISTORICAL_FULL9 = frozenset((*CORE, "screen-spec", "design-direction",
+                              "handdrawn-diagram", "wigtn-presentation", "work-planner"))
 PLACEBO_NAMES = (
     "control-catalog",
     "control-index",
@@ -114,12 +116,12 @@ def build(destination: Path, variant: str) -> None:
         shutil.rmtree(skills)
         skills.mkdir()
         create_placebo(skills)
-    elif variant == "full8":
-        shutil.rmtree(skills / "work-planner")
-        # Historical evaluation shape: the current core nine minus work-planner.
-    elif variant == "full9":
-        # Current core-nine catalog without the separately installed Wiki plugin.
-        pass
+    elif variant in {"full8", "full9"}:
+        # Preserve the historical catalog even as new production skills are added.
+        keep = HISTORICAL_FULL9 - ({"work-planner"} if variant == "full8" else set())
+        for path in skills.iterdir():
+            if path.is_dir() and path.name not in keep:
+                shutil.rmtree(path)
     else:
         raise ValueError(f"unsupported variant: {variant}")
 

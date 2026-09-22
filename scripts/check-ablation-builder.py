@@ -44,6 +44,15 @@ def main() -> int:
                 )
             records[variant] = record
 
+        historical = {
+            "product-spec", "acceptance-verifier", "verified-delivery",
+            "release-readiness", "screen-spec", "design-direction",
+            "handdrawn-diagram", "wigtn-presentation", "work-planner",
+        }
+        for variant, expected in (("full9", historical), ("full8", historical - {"work-planner"})):
+            if set(records[variant]["skills"]) != expected:
+                raise AssertionError(f"{variant}: historical inventory changed")
+
         core_chars = records["core4"]["description_characters"]
         placebo_chars = records["placebo4"]["description_characters"]
         if core_chars != placebo_chars:
