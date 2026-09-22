@@ -1,0 +1,6 @@
+interface:
+  display_name: "WIGTN Visual Craft"
+  short_description: "Clear UI and documents without template clutter"
+  default_prompt: "Use $wigtn-plugins-with-codex:visual-craft to create or refine this UI or document with clear hierarchy and natural copy."
+policy:
+  allow_implicit_invocation: true

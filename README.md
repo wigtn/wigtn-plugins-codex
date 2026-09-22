@@ -4,8 +4,8 @@
 
 **PRD·저장 가능한 작업 계획·요구사항 검증·Git 작업을 위한 선택형 스킬 모음.**
 
-![Version](https://img.shields.io/badge/version-0.5.6-6C5CE7?style=for-the-badge)
-![Skills](https://img.shields.io/badge/core_skills-9-00B894?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.5.7-6C5CE7?style=for-the-badge)
+![Skills](https://img.shields.io/badge/core_skills-10-00B894?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/platform-Codex-111827?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-Apache--2.0-0984E3?style=for-the-badge)
 
@@ -58,6 +58,8 @@ Codex 앱에서는 Plugins를 열어 WIGTN 마켓플레이스를 선택한 뒤 �
 ```text
 "OAuth 로그인 기능 PRD 뽑아줘"
 "이 PRD로 화면정의서 만들어줘"
+"프론트 UI 만들어줘"
+"이번 실험을 테크리포트 문서로 작성해줘"
 "요구사항이 실제 구현에 반영됐는지 검증해줘"
 "변경사항 검증하고 커밋해줘"
 ```
@@ -96,11 +98,13 @@ acceptance-verifier ── 요구사항 ↔ 코드·테스트 증거 매핑
 release-readiness ──── 안전한 커밋·푸시·PR
 ```
 
+UI·문서 제작에는 `visual-craft`가 구성과 문구를 보조합니다. 파일 생성·렌더링은 해당 형식의 워크플로를 따릅니다. 오타 수정이나 백엔드 작업에는 적용하지 않습니다.
+
 문서나 발표가 필요할 때는 `handdrawn-diagram`, `wigtn-presentation`을 독립적으로 사용할 수 있습니다.
 
 ---
 
-## 포함된 9개 Core 스킬
+## 포함된 10개 Core 스킬
 
 | 스킬 | 하는 일 | 자연어 호출 예시 | 호출 정책 |
 |---|---|---|---|
@@ -108,6 +112,7 @@ release-readiness ──── 안전한 커밋·푸시·PR
 | `screen-spec` | 요청한 IA, User Flow, 화면 명세, self-contained lo-fi HTML 와이어프레임 또는 개발 핸드오프 | “화면정의서 만들어줘” | 자동 |
 | `work-planner` | 요구사항을 저장·재개 가능한 dependency-aware WorkGraph로 변환 | “이 계획을 WorkGraph로 저장해줘” | 자동·저장형 전용 |
 | `acceptance-verifier` | PRD 요구사항과 코드·실행 테스트 증거를 연결해 충족 여부 판정 | “요구사항 반영됐는지 검증해줘” | 자동 |
+| `visual-craft` | UI·문서 제작 시 정보 구조, 자연스러운 문구, 줄바꿈과 과도한 장식 검수 | “프론트 UI 만들어줘”, “문서 만들어줘” | 자동·제작 및 실질적 수정 |
 | `design-direction` | 기존 디자인 시스템을 먼저 읽고 신규 UI 방향 제안 | “이 UI 디자인 방향 잡아줘” | 자동·제한적 |
 | `verified-delivery` | 구현에 비례적인 requirement→code→executed-check 근거 추가 | `$verified-delivery로 구현해줘` | **명시 호출 전용** |
 | `release-readiness` | 변경 범위를 보존하며 검증, 커밋, 푸시, PR 수행 | “커밋해줘”, “PR 올려줘” | 자동·제한적 |
@@ -117,6 +122,20 @@ release-readiness ──── 안전한 커밋·푸시·PR
 ### 자동 호출과 명시 호출
 
 대부분의 스킬은 요청 의도가 설명과 일치할 때 Codex가 자동으로 선택합니다. `verified-delivery`만 예외입니다. 일반적인 코딩 요청이 의도치 않게 전체 전달 파이프라인으로 커지는 것을 막기 위해 `$wigtn-plugins-with-codex:verified-delivery`를 명시해야 합니다.
+
+---
+
+## v0.5.7: Visual Craft와 자동 검사
+
+`visual-craft`를 추가해 Core 스킬이 9개에서 10개로 늘었습니다. UI·문서 제작과 실질적인 수정에 적용하며, 기존 9개 스킬의 호출 정책은 유지합니다.
+
+- 프론트 UI와 문서·보고서·발표자료 제작 요청에서 자동 선택을 허용합니다. `$wigtn-plugins-with-codex:visual-craft`로 명시할 수도 있습니다.
+- 공통 기준만 먼저 읽고, UI 배치와 문서 구성에 필요한 참조를 선택해 읽습니다. 기존 디자인 시스템·브랜드·출처·요구사항을 보존합니다.
+- 실제 산출물의 줄바꿈·과밀 구성·장식·가독성을 검수합니다. 모든 작업에 별도 디자인 계획이나 도구 설치를 요구하지 않습니다.
+- HTML·Markdown 소스 검사와 브라우저의 읽기 전용 배치 검사를 제공합니다. 확실한 오류와 문맥 검토 항목을 나누며, 검사 통과를 디자인 품질 점수로 취급하지 않습니다.
+- 자동 선택 허용과 정적 검증은 실제 모델의 호출 성공률이나 디자인 품질 개선을 보장하지 않습니다.
+
+[변경 내용과 검증 범위](docs/RELEASE-v0.5.7-KO.md) · [English release notes](docs/RELEASE-v0.5.7.md) · [설계 근거](docs/VISUAL-CRAFT.md)
 
 ---
 

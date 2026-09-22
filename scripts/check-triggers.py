@@ -17,6 +17,12 @@ RULES = {
     ),
     "acceptance-verifier": ("요구사항을 만족", "요구사항 반영", "acceptance criteria", "fr별"),
     "design-direction": ("ui 디자인 방향", "visual direction"),
+    "visual-craft": (
+        "프론트 ui 만들어", "랜딩 페이지 만들어", "문서 만들어",
+        "테크리포트 작성", "보고서 작성", "문서 레이아웃",
+        "ui의 ai 티", "일반 회사 발표자료 만들어", "create a frontend ui",
+        "draft a report", "create a document", "refine this document layout",
+    ),
     "handdrawn-diagram": (
         "손그림",
         "스케치 아키텍처",

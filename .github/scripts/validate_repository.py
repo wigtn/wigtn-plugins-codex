@@ -16,6 +16,7 @@ EXPECTED_SKILLS = {
     "screen-spec",
     "acceptance-verifier",
     "design-direction",
+    "visual-craft",
     "verified-delivery",
     "release-readiness",
     "handdrawn-diagram",
